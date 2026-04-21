@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clon Digital Profesional | PAM Audiovisual</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Inter:wght@300;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --naranja: #E8943A;
+    --negro: #0d0d0d;
+    --gris: #1a1a1a;
+    --gris2: #2a2a2a;
+    --blanco: #f5f5f0;
+    --texto: #aaaaaa;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--negro);
+    color: var(--blanco);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,148,58,0.08) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .logo-wrap {
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards;
+  }
+
+  .logo-wrap svg { width: 210px; height: auto; }
+
+  .hero-tag {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: var(--naranja);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.1s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px, 10vw, 120px);
+    line-height: 0.95;
+    color: var(--blanco);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-title span { color: var(--naranja); }
+
+  .hero-sub {
+    font-size: clamp(15px, 2vw, 18px);
+    color: var(--texto);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.3s forwards;
+  }
+
+  .hero-cta {
+    display: inline-block;
+    padding: 16px 40px;
+    background: var(--naranja);
+    color: var(--negro);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: transform 0.2s, background 0.2s;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+
+  .hero-cta:hover { background: var(--blanco); transform: translateY(-2px); }
+
+  /* PROPUESTA */
+  .propuesta {
+    padding: 100px 24px;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .section-tag {
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: var(--naranja);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 6vw, 64px);
+    color: var(--blanco);
+    margin-bottom: 24px;
+    line-height: 1;
+  }
+
+  .section-text {
+    font-size: 16px;
+    color: var(--texto);
+    line-height: 1.8;
+    max-width: 620px;
+    margin: 0 auto 60px;
+  }
+
+  /* PASOS */
+  .pasos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2px;
+    background: var(--gris2);
+    margin-bottom: 2px;
+  }
+
+  .paso {
+    background: var(--gris);
+    padding: 40px 32px;
+    text-align: left;
+  }
+
+  .paso-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--naranja);
+    opacity: 0.4;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .paso-titulo {
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--blanco);
+    margin-bottom: 10px;
+  }
+
+  .paso-texto {
+    font-size: 15px;
+    color: var(--texto);
+    line-height: 1.7;
+  }
+
+  /* PAQUETES */
+  .paquetes-section {
+    padding: 100px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .paquetes-header {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+
+  .paquetes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2px;
+    background: var(--gris2);
+  }
+
+  .paquete {
+    background: var(--gris);
+    padding: 48px 36px;
+    position: relative;
+    transition: transform 0.2s;
+    cursor: default;
+  }
+
+  .paquete:hover { transform: translateY(-4px); background: #222; }
+
+  .paquete.destacado {
+    background: var(--naranja);
+  }
+
+  .paquete.destacado .paq-nombre,
+  .paquete.destacado .paq-divider,
+  .paquete.destacado .paq-feature { color: var(--negro); }
+
+  .paquete.destacado .paq-precio { color: var(--negro); -webkit-font-smoothing: antialiased; }
+
+  .paquete.destacado .paq-desc { color: rgba(0,0,0,0.6); }
+  .paquete.destacado .paq-feature-icon { color: var(--negro); }
+
+  .paq-badge {
+    position: absolute;
+    top: -1px;
+    right: 24px;
+    background: var(--negro);
+    color: var(--naranja);
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 12px;
+  }
+
+  .paq-nombre {
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--naranja);
+    margin-bottom: 20px;
+  }
+
+  .paquete.destacado .paq-nombre { color: var(--negro); opacity: 0.7; }
+
+  .paq-precio {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    color: var(--blanco);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .paq-precio sup {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 300;
+    vertical-align: super;
+    margin-right: 2px;
+  }
+
+  .paq-mes {
+    font-size: 14px;
+    color: var(--texto);
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+  }
+
+  .paquete.destacado .paq-mes { color: rgba(0,0,0,0.5); }
+
+  .paq-divider {
+    height: 1px;
+    background: var(--gris2);
+    margin-bottom: 28px;
+    color: var(--gris2);
+  }
+
+  .paquete.destacado .paq-divider { background: rgba(0,0,0,0.15); }
+
+  .paq-desc {
+    font-size: 15px;
+    color: var(--texto);
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+
+  .paq-features { list-style: none; }
+
+  .paq-feature {
+    font-size: 15px;
+    color: var(--blanco);
+    padding: 8px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .paquete.destacado .paq-feature { border-bottom-color: rgba(0,0,0,0.1); }
+
+  .paq-feature-icon {
+    color: var(--naranja);
+    font-size: 16px;
+    line-height: 1.3;
+    flex-shrink: 0;
+  }
+
+  .paquete.destacado .paq-feature-icon { color: var(--negro); }
+
+  /* NOTA */
+  .nota {
+    padding: 60px 24px;
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .nota-box {
+    border: 1px solid var(--gris2);
+    padding: 40px;
+  }
+
+  .nota-titulo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--naranja);
+    margin-bottom: 16px;
+  }
+
+  .nota-texto {
+    font-size: 15px;
+    color: var(--texto);
+    line-height: 1.8;
+  }
+
+  /* CONTACTO */
+  .contacto {
+    padding: 100px 24px;
+    background: var(--gris);
+    text-align: center;
+  }
+
+  .contacto-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 7vw, 80px);
+    color: var(--blanco);
+    margin-bottom: 16px;
+    line-height: 1;
+  }
+
+  .contacto-sub {
+    font-size: 15px;
+    color: var(--texto);
+    margin-bottom: 40px;
+  }
+
+  .contacto-email {
+    display: inline-block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(20px, 4vw, 36px);
+    color: var(--naranja);
+    text-decoration: none;
+    border-bottom: 2px solid var(--naranja);
+    padding-bottom: 4px;
+    transition: color 0.2s, border-color 0.2s;
+    letter-spacing: 1px;
+  }
+
+  .contacto-email:hover { color: var(--blanco); border-color: var(--blanco); }
+
+  /* FOOTER */
+  footer {
+    padding: 32px 24px;
+    text-align: center;
+    border-top: 1px solid var(--gris2);
+  }
+
+  footer p {
+    font-size: 14px;
+    color: #444;
+    letter-spacing: 1px;
+  }
+
+  footer span { color: var(--naranja); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="logo-wrap">
+    <svg viewBox="0 0 408 300" xmlns="http://www.w3.org/2000/svg">
+      <text x="201" y="147" font-family="Inter,sans-serif" font-size="94" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="-4">PAM</text>
+      <path d="M57 163 A147 147 0 0 1 351 163" fill="none" stroke="#E8943A" stroke-width="1.5"/>
+      <line x1="57" y1="162" x2="127" y2="162" stroke="#E8943A" stroke-width="1.5"/>
+      <line x1="281" y1="162" x2="351" y2="162" stroke="#E8943A" stroke-width="1.5"/>
+      <text x="204" y="188" font-family="Inter,sans-serif" font-size="14" font-weight="300" fill="#E8943A" text-anchor="middle" letter-spacing="7">AUDIOVISUAL</text>
+    </svg>
+  </div>
+  <p class="hero-tag">Servicio profesional de clon digital</p>
+  <h1 class="hero-title">Tu empresa,<br><span>en vídeo.</span><br>Cada semana.</h1>
+  <p class="hero-sub">Venimos a tu empresa, te grabamos en croma y en tu propio escenario, y creamos tu clon digital. Nos envías el texto, nos encargamos del resto. En cualquier idioma.</p>
+  <a href="#paquetes" class="hero-cta">Ver paquetes y precios</a>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section class="propuesta">
+  <p class="section-tag reveal">Cómo funciona</p>
+  <h2 class="section-title reveal">Sencillo.<br>Efectivo.</h2>
+  <p class="section-text reveal">No necesitas estudio, equipo ni experiencia en vídeo. Solo tu mensaje. Nosotros hacemos el resto.</p>
+
+  <div class="pasos reveal">
+    <div class="paso">
+      <div class="paso-num">01</div>
+      <div class="paso-titulo">Grabación única</div>
+      <div class="paso-texto">Venimos a tu empresa con equipo profesional. Te grabamos en croma verde y en tu propio escenario. Tres escenas distintas. Solo una vez.</div>
+    </div>
+    <div class="paso">
+      <div class="paso-num">02</div>
+      <div class="paso-titulo">Nos envías el texto</div>
+      <div class="paso-texto">Cada semana nos envías el mensaje que quieres transmitir. Sin más complicaciones.</div>
+    </div>
+    <div class="paso">
+      <div class="paso-num">03</div>
+      <div class="paso-titulo">Nosotros lo producimos</div>
+      <div class="paso-texto">Tu clon digital lo dice en vídeo, en el idioma que quieras, con el fondo que necesites. Listo para publicar.</div>
+    </div>
+    <div class="paso">
+      <div class="paso-num">04</div>
+      <div class="paso-titulo">Presencia constante</div>
+      <div class="paso-texto">Cuatro u ocho vídeos al mes. Porque la visibilidad no se construye con un gran vídeo, sino con constancia.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PAQUETES -->
+<section class="paquetes-section" id="paquetes">
+  <div class="paquetes-header">
+    <p class="section-tag reveal">Tarifas</p>
+    <h2 class="section-title reveal">Elige tu plan</h2>
+    <p class="section-text reveal">Sin permanencia. Sin letra pequeña. Precio fijo mensual, todo incluido.</p>
+  </div>
+
+  <div class="paquetes-grid reveal">
+
+    <!-- BÁSICO -->
+    <div class="paquete">
+      <p class="paq-nombre">Básico</p>
+      <div class="paq-precio"><sup>€</sup>200</div>
+      <p class="paq-mes">/ mes</p>
+      <div class="paq-divider"></div>
+      <p class="paq-desc">Ideal para empezar. Tu clon digital, tu mensaje, cada semana.</p>
+      <ul class="paq-features">
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>4 vídeos al mes</li>
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>Hasta 1 minuto por vídeo</li>
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>Clon digital hablando en cámara</li>
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>Cualquier idioma</li>
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>Cambio de fondo incluido</li>
+      </ul>
+    </div>
+
+    <!-- BÁSICO + -->
+    <div class="paquete destacado">
+      <div class="paq-badge">Popular</div>
+      <p class="paq-nombre">Básico +</p>
+      <div class="paq-precio"><sup>€</sup>300</div>
+      <p class="paq-mes">/ mes</p>
+      <div class="paq-divider"></div>
+      <p class="paq-desc">Todo lo del Básico más la posibilidad de mostrar tus productos y servicios.</p>
+      <ul class="paq-features">
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>4 vídeos al mes</li>
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>Hasta 1 minuto por vídeo</li>
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>Clon digital hablando en cámara</li>
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>Cualquier idioma</li>
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>Cambio de fondo incluido</li>
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>Ventana de productos (noticiero)</li>
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>Pantalla completa de producto</li>
+      </ul>
+    </div>
+
+    <!-- PRO -->
+    <div class="paquete">
+      <p class="paq-nombre">Pro</p>
+      <div class="paq-precio"><sup>€</sup>350</div>
+      <p class="paq-mes">/ mes</p>
+      <div class="paq-divider"></div>
+      <p class="paq-desc">Para quienes quieren publicar dos veces por semana y maximizar su presencia.</p>
+      <ul class="paq-features">
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>8 vídeos al mes</li>
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>Hasta 1 minuto por vídeo</li>
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>Clon digital hablando en cámara</li>
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>Cualquier idioma</li>
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>Cambio de fondo incluido</li>
+      </ul>
+    </div>
+
+    <!-- PRO + -->
+    <div class="paquete">
+      <p class="paq-nombre">Pro +</p>
+      <div class="paq-precio"><sup>€</sup>500</div>
+      <p class="paq-mes">/ mes</p>
+      <div class="paq-divider"></div>
+      <p class="paq-desc">Máxima presencia con tus productos integrados en cada vídeo.</p>
+      <ul class="paq-features">
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>8 vídeos al mes</li>
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>Hasta 1 minuto por vídeo</li>
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>Clon digital hablando en cámara</li>
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>Cualquier idioma</li>
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>Cambio de fondo incluido</li>
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>Ventana de productos (noticiero)</li>
+        <li class="paq-feature"><span class="paq-feature-icon">—</span>Pantalla completa de producto</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- NOTA -->
+<div class="nota">
+  <div class="nota-box reveal">
+    <p class="nota-titulo">¿Qué incluye la grabación inicial?</p>
+    <p class="nota-texto">La sesión de grabación profesional incluye: equipo de cámara 4K, iluminación profesional de 3 puntos, croma verde con iluminación de croma y microfonía de alta calidad Sennheiser con grabación en 32 bits. El resultado son 3 escenas distintas para tu clon digital. Coste único, aparte de la suscripción mensual. Escríbenos y te lo detallamos sin compromiso.</p>
+  </div>
+</div>
+
+<!-- CONTACTO -->
+<section class="contacto">
+  <h2 class="contacto-title reveal">¿Hablamos?</h2>
+  <p class="contacto-sub reveal">Escríbenos y te contamos cómo funciona, sin compromiso.</p>
+  <a href="mailto:clon.digital@pam-audiovisual.com" class="contacto-email reveal">clon.digital@pam-audiovisual.com</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 <span>PAM Audiovisual</span> · Ramon Sales · pam-audiovisual.com</p>
+</footer>
+
+<script>
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  // Reveal on scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
