@@ -198,6 +198,24 @@
 
 <script>
   function toggleChip(el) { el.classList.toggle('on'); }
+  
+  // Convertir URLs pegadas en enlaces clicables
+  document.querySelectorAll('input[type="text"]').forEach(input => {
+    input.addEventListener('blur', function() {
+      const val = this.value.trim();
+      if (val.startsWith('http')) {
+        let link = this.nextElementSibling;
+        if (!link || link.tagName !== 'A') {
+          link = document.createElement('a');
+          link.target = '_blank';
+          link.style.cssText = 'color:var(--naranja);font-size:12px;display:block;margin-top:4px;word-break:break-all;';
+          this.parentNode.insertBefore(link, this.nextSibling);
+        }
+        link.href = val;
+        link.textContent = val;
+      }
+    });
+  });
 </script>
 </body>
 </html>
