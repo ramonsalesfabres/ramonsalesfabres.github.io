@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha de Evento | PAM Audiovisual</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Inter:wght@300;700&display=swap" rel="stylesheet">
+<style>
+  :root { --naranja: #E8943A; --negro: #0d0d0d; --gris: #1a1a1a; --gris2: #2a2a2a; --blanco: #f5f5f0; --texto: #aaaaaa; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--negro); color: var(--blanco); font-family: 'DM Sans', sans-serif; font-weight: 300; }
+
+  .header { padding: 32px 48px 24px; border-bottom: 1px solid var(--gris2); display: flex; align-items: center; justify-content: space-between; }
+  .logo svg { width: 90px; height: auto; }
+  .header-tag { font-size: 13px; letter-spacing: 4px; color: var(--naranja); text-transform: uppercase; text-align: right; line-height: 2; }
+  .header-tag em { color: #555; font-style: italic; display: block; }
+
+  .fila { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2px; background: var(--gris2); margin-bottom: 2px; }
+  .bloque { background: var(--gris); padding: 24px 28px; }
+
+  .etiqueta { font-size: 14px; letter-spacing: 2px; color: var(--naranja); text-transform: uppercase; margin-bottom: 10px; }
+  .etiqueta em { color: #555; font-style: italic; font-size: 13px; letter-spacing: 1px; }
+
+  input, textarea {
+    width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--gris2);
+    color: var(--blanco); font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 300;
+    padding: 10px 0; outline: none; resize: none; transition: border-color 0.2s;
+  }
+  input + input { margin-top: 10px; }
+  input:focus, textarea:focus { border-bottom-color: var(--naranja); }
+  input::placeholder, textarea::placeholder { color: #333; font-size: 15px; }
+  textarea { min-height: 70px; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .chip { padding: 8px 18px; border: 1px solid var(--gris2); font-size: 14px; color: var(--texto); cursor: pointer; transition: all 0.2s; user-select: none; }
+  .chip:hover { border-color: var(--naranja); color: var(--blanco); }
+  .chip.on { background: var(--naranja); border-color: var(--naranja); color: var(--negro); font-weight: 500; }
+
+  .aviso { background: var(--gris); border-left: 3px solid var(--naranja); padding: 18px 28px; margin-bottom: 2px; font-size: 15px; color: var(--texto); line-height: 1.8; }
+  .aviso strong { color: var(--blanco); }
+  .aviso em { color: #555; font-style: italic; }
+
+  .submit-section { padding: 32px 48px; text-align: center; background: var(--gris); }
+  .submit-btn { padding: 16px 56px; background: var(--naranja); color: var(--negro); font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 15px; letter-spacing: 2px; text-transform: uppercase; border: none; cursor: pointer; transition: background 0.2s; }
+  .submit-btn:hover { background: var(--blanco); }
+
+  footer { padding: 24px 48px; border-top: 1px solid var(--gris2); display: flex; justify-content: space-between; }
+  footer p { font-size: 12px; color: #333; letter-spacing: 1px; }
+  footer span { color: var(--naranja); }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">
+    <svg viewBox="0 0 408 300" xmlns="http://www.w3.org/2000/svg">
+      <text x="204" y="147" font-family="Inter,sans-serif" font-size="94" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="-4">PAM</text>
+      <path d="M57 163 A147 147 0 0 1 351 163" fill="none" stroke="#E8943A" stroke-width="1.5"/>
+      <line x1="57" y1="162" x2="127" y2="162" stroke="#E8943A" stroke-width="1.5"/>
+      <line x1="281" y1="162" x2="351" y2="162" stroke="#E8943A" stroke-width="1.5"/>
+      <text x="204" y="188" font-family="Inter,sans-serif" font-size="14" font-weight="300" fill="#E8943A" text-anchor="middle" letter-spacing="7">AUDIOVISUAL</text>
+    </svg>
+  </div>
+  <div class="header-tag">
+    Ficha de Evento
+    <em>Event Briefing</em>
+  </div>
+</header>
+
+<form id="ficha-form" action="https://formspree.io/f/xyklrydn" method="POST">
+<div style="padding: 40px 48px 0;">
+
+  <!-- FILA 1: DATOS BÁSICOS -->
+  <div class="fila">
+    <div class="bloque">
+      <div class="etiqueta">Empresa / Contacto <em>· Company / Contact</em></div>
+      <input name="campo_1" type="text" placeholder="Nombre y empresa"/>
+    </div>
+    <div class="bloque">
+      <div class="etiqueta">Fecha y lugar <em>· Date & Venue</em></div>
+      <input name="campo_2" type="text" placeholder="Fecha y lugar del evento"/>
+    </div>
+  </div>
+
+  <!-- FILA 2: TIPO Y DURACIÓN -->
+  <div class="fila">
+    <div class="bloque">
+      <div class="etiqueta">Tipo de evento <em>· Event Type</em></div>
+      <input name="campo_3" type="text" placeholder="Describe brevemente el tipo de evento / Briefly describe the event type"/>
+    </div>
+    <div class="bloque">
+      <div class="etiqueta">Duración del vídeo final <em>· Final Video Length</em></div>
+      <input name="campo_4" type="text" placeholder="¿Cuánto quieres que dure el vídeo? / How long should the video be?"/>
+    </div>
+    <div class="bloque">
+      <div class="etiqueta">Ritmo <em>· Pace</em></div>
+      <div class="chips">
+        <div class="chip" onclick="toggleChip(this)">Tranquilo</div>
+        <div class="chip" onclick="toggleChip(this)">Dinámico</div>
+        <div class="chip" onclick="toggleChip(this)">Muy dinámico</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILA 3: MOMENTOS -->
+  <div class="fila">
+    <div class="bloque">
+      <div class="etiqueta">Momentos clave <em>· Key Moments</em></div>
+      <textarea name="campo_27" placeholder="¿Qué momentos son imprescindibles en el vídeo? / Which moments are essential in the video?"></textarea>
+    </div>
+    <div class="bloque">
+      <div class="etiqueta">Cosas a evitar <em>· Things to Avoid</em></div>
+      <textarea name="campo_28" placeholder="¿Hay algo que no quieres que aparezca? / Is there anything you don't want to appear?"></textarea>
+    </div>
+  </div>
+
+  <!-- FILA 4: PARTICIPANTES -->
+  <div class="fila">
+    <div class="bloque" style="grid-column: 1 / -1;">
+      <div class="etiqueta">Participantes con rótulo <em>· People needing lower thirds</em></div>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 24px; margin-top:8px;">
+        <div>
+          <input name="campo_5" type="text" placeholder="Nombre completo / Full name"/>
+          <input name="campo_6" type="text" placeholder="Cargo / Position"/>
+          <input name="campo_7" type="text" placeholder="Empresa / Company"/>
+        </div>
+        <div>
+          <input name="campo_8" type="text" placeholder="Nombre completo / Full name"/>
+          <input name="campo_9" type="text" placeholder="Cargo / Position"/>
+          <input name="campo_10" type="text" placeholder="Empresa / Company"/>
+        </div>
+        <div>
+          <input name="campo_11" type="text" placeholder="Nombre completo / Full name"/>
+          <input name="campo_12" type="text" placeholder="Cargo / Position"/>
+          <input name="campo_13" type="text" placeholder="Empresa / Company"/>
+        </div>
+      </div>
+      <input name="campo_14" type="text" placeholder="Si hay más participantes, añade el enlace a una lista / If there are more participants, add a link to a list" style="margin-top:16px"/>
+    </div>
+  </div>
+
+  <!-- ARCHIVOS -->
+  <div class="aviso">
+    <strong>Archivos · Files</strong> — Deja aquí los enlaces a tu material: logo, fotos de participantes, programa del evento, material gráfico de marca. <em>· Leave here the links to your material: logo, participant photos, event programme, brand graphic material.</em>
+  </div>
+
+  <div class="fila">
+    <div class="bloque">
+      <div class="etiqueta">Enlace a tu material <em>· Link to your material</em></div>
+      <input name="campo_15" type="text" placeholder="Google Drive, Dropbox, WeTransfer..."/>
+    </div>
+    <div class="bloque">
+      <div class="etiqueta">Tipografía <em>· Font</em></div>
+      <input name="campo_16" type="text" placeholder="Nombre de la fuente corporativa / Corporate font name"/>
+    </div>
+    <div class="bloque">
+      <div class="etiqueta">Colores corporativos <em>· Brand Colors</em></div>
+      <input name="campo_17" type="text" placeholder="HEX: #000000, #FFFFFF..."/>
+    </div>
+  </div>
+
+  <!-- REFERENCIAS -->
+  <div class="aviso">
+    <strong>Referencias · References</strong> — Las palabras engañan, los vídeos no. Tres vídeos y tres músicas que te gusten nos dicen más que cualquier descripción. <em>· Words can mislead, videos cannot. Three videos and three tracks you like tell us more than any description.</em>
+  </div>
+
+  <div class="fila" style="margin-bottom: 40px;">
+    <div class="bloque">
+      <div class="etiqueta">Nuestros ejemplos <em>· Our Examples</em></div>
+      <input name="campo_18" type="text" placeholder="Ejemplo 1 / Example 1" value="https://youtu.be/_DV1X5qSAB4?si=yMgqNrqjnExzamsD"/>
+      <input name="campo_19" type="text" placeholder="Ejemplo 2 / Example 2" value="https://youtu.be/K9OW1F9PuWo?si=uZoSgVIZZyUqzb8I"/>
+      <input name="campo_20" type="text" placeholder="Ejemplo 3 / Example 3" value="https://youtu.be/yBrKXbYP57M?si=xVFs9T4wQB8fOyJi"/>
+    </div>
+    <div class="bloque">
+      <div class="etiqueta">Tus vídeos <em>· Your Videos</em></div>
+      <input name="campo_21" type="text" placeholder="Vídeo 1 / Video 1"/>
+      <input name="campo_22" type="text" placeholder="Vídeo 2 / Video 2"/>
+      <input name="campo_23" type="text" placeholder="Vídeo 3 / Video 3"/>
+    </div>
+    <div class="bloque">
+      <div class="etiqueta">Tus músicas <em>· Your Tracks</em></div>
+      <input name="campo_24" type="text" placeholder="Música 1 / Music 1"/>
+      <input name="campo_25" type="text" placeholder="Música 2 / Music 2"/>
+      <input name="campo_26" type="text" placeholder="Música 3 / Music 3"/>
+    </div>
+  </div>
+
+</div>
+
+<div class="submit-section">
+  <button class="submit-btn" onclick="alert('Ficha enviada. ¡Gracias!\nForm submitted. Thank you!')">Enviar · Submit</button>
+</div>
+
+<footer>
+  <p>© 2026 <span>PAM Audiovisual</span> · Ramon Sales</p>
+  <p style="color:#333;font-size:12px;letter-spacing:1px">VÍDEO DE EVENTO · EVENT VIDEO</p>
+</footer>
+
+<script>
+  function toggleChip(el) { el.classList.toggle('on'); }
+</script>
+</body>
+</html>
