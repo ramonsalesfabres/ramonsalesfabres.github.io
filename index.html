@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clon Digital Profesional | PAM Audiovisual</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Inter:wght@300;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --naranja: #E8943A;
@@ -27,69 +27,104 @@
 
   /* HERO */
   .hero {
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 60px 24px;
-    position: relative;
-    overflow: hidden;
+    padding: 56px 24px 48px;
   }
 
-  .hero::before {
-    content: '';
-    position: absolute;
-    width: 600px;
-    height: 600px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(232,148,58,0.08) 0%, transparent 70%);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
-
-  .logo-wrap {
-    margin-bottom: 48px;
-    opacity: 0;
-    animation: fadeUp 0.8s ease forwards;
-  }
-
-  .logo-wrap svg { width: 210px; height: auto; }
+  .logo-wrap { margin-bottom: 32px; }
+  .logo-wrap svg { width: 160px; height: auto; }
 
   .hero-tag {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
+    font-size: 11px;
     letter-spacing: 4px;
     color: var(--naranja);
     text-transform: uppercase;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     opacity: 0;
-    animation: fadeUp 0.8s ease 0.1s forwards;
+    animation: fadeUp 0.7s ease 0.1s forwards;
   }
 
   .hero-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(56px, 10vw, 120px);
-    line-height: 0.95;
+    font-size: clamp(52px, 14vw, 88px);
+    line-height: 0.92;
     color: var(--blanco);
     margin-bottom: 32px;
     opacity: 0;
-    animation: fadeUp 0.8s ease 0.2s forwards;
+    animation: fadeUp 0.7s ease 0.2s forwards;
   }
 
   .hero-title span { color: var(--naranja); }
 
-  .hero-sub {
-    font-size: clamp(15px, 2vw, 18px);
-    color: var(--texto);
-    max-width: 560px;
-    line-height: 1.7;
-    margin-bottom: 48px;
+  /* VIDEO THUMBNAIL */
+  .video-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto 32px;
+    cursor: pointer;
     opacity: 0;
-    animation: fadeUp 0.8s ease 0.3s forwards;
+    animation: fadeUp 0.7s ease 0.3s forwards;
+  }
+
+  .video-thumb-inner {
+    position: relative;
+    width: 100%;
+    padding-bottom: 177.78%;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+  }
+
+  .video-thumb-inner img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .video-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .video-wrap:hover .video-overlay { background: rgba(0,0,0,0.05); }
+
+  .play-btn {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--naranja);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 28px rgba(232,148,58,0.6);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .video-wrap:hover .play-btn {
+    transform: scale(1.08);
+    box-shadow: 0 4px 40px rgba(232,148,58,0.8);
+  }
+
+  .hero-sub {
+    font-size: 15px;
+    color: var(--texto);
+    line-height: 1.7;
+    max-width: 360px;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.4s forwards;
   }
 
   .hero-cta {
@@ -97,155 +132,152 @@
     padding: 16px 40px;
     background: var(--naranja);
     color: var(--negro);
-    font-family: 'DM Sans', sans-serif;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 13px;
     letter-spacing: 1px;
-    text-decoration: none;
     text-transform: uppercase;
-    transition: transform 0.2s, background 0.2s;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
     opacity: 0;
-    animation: fadeUp 0.8s ease 0.4s forwards;
+    animation: fadeUp 0.7s ease 0.5s forwards;
   }
 
   .hero-cta:hover { background: var(--blanco); transform: translateY(-2px); }
 
-  /* PROPUESTA */
+  /* COMO FUNCIONA */
   .propuesta {
-    padding: 100px 24px;
-    max-width: 900px;
+    padding: 72px 24px;
+    max-width: 640px;
     margin: 0 auto;
     text-align: center;
   }
 
   .section-tag {
-    font-size: 13px;
+    font-size: 11px;
     letter-spacing: 4px;
     color: var(--naranja);
     text-transform: uppercase;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 
   .section-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(36px, 6vw, 64px);
+    font-size: clamp(40px, 10vw, 64px);
     color: var(--blanco);
-    margin-bottom: 24px;
+    margin-bottom: 16px;
     line-height: 1;
   }
 
   .section-text {
-    font-size: 16px;
+    font-size: 15px;
     color: var(--texto);
     line-height: 1.8;
-    max-width: 620px;
-    margin: 0 auto 60px;
+    margin-bottom: 48px;
   }
 
-  /* PASOS */
   .pasos {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 2px;
     background: var(--gris2);
-    margin-bottom: 2px;
   }
 
   .paso {
     background: var(--gris);
-    padding: 40px 32px;
+    padding: 28px 24px;
     text-align: left;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
   }
 
   .paso-num {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 48px;
+    font-size: 40px;
     color: var(--naranja);
-    opacity: 0.4;
+    opacity: 0.35;
     line-height: 1;
-    margin-bottom: 16px;
+    flex-shrink: 0;
   }
 
   .paso-titulo {
     font-weight: 500;
     font-size: 15px;
     color: var(--blanco);
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 
   .paso-texto {
-    font-size: 15px;
+    font-size: 14px;
     color: var(--texto);
     line-height: 1.7;
   }
 
   /* PAQUETES */
   .paquetes-section {
-    padding: 100px 24px;
-    max-width: 1100px;
+    padding: 72px 24px;
+    max-width: 900px;
     margin: 0 auto;
   }
 
   .paquetes-header {
     text-align: center;
-    margin-bottom: 64px;
+    margin-bottom: 48px;
   }
 
   .paquetes-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: 1fr;
     gap: 2px;
     background: var(--gris2);
   }
 
+  @media (min-width: 560px) {
+    .paquetes-grid { grid-template-columns: 1fr 1fr; }
+  }
+
   .paquete {
     background: var(--gris);
-    padding: 48px 36px;
+    padding: 36px 28px;
     position: relative;
-    transition: transform 0.2s;
-    cursor: default;
+    transition: background 0.2s;
   }
 
-  .paquete:hover { transform: translateY(-4px); background: #222; }
+  .paquete:hover { background: #222; }
+  .paquete.destacado { background: var(--naranja); }
+  .paquete.destacado:hover { background: #f09a3e; }
 
-  .paquete.destacado {
-    background: var(--naranja);
-  }
-
-  .paquete.destacado .paq-nombre,
-  .paquete.destacado .paq-divider,
+  .paquete.destacado .paq-nombre { color: rgba(0,0,0,0.6); }
+  .paquete.destacado .paq-precio,
   .paquete.destacado .paq-feature { color: var(--negro); }
-
-  .paquete.destacado .paq-precio { color: var(--negro); -webkit-font-smoothing: antialiased; }
-
   .paquete.destacado .paq-desc { color: rgba(0,0,0,0.6); }
   .paquete.destacado .paq-feature-icon { color: var(--negro); }
+  .paquete.destacado .paq-divider { background: rgba(0,0,0,0.15); }
+  .paquete.destacado .paq-mes { color: rgba(0,0,0,0.5); }
 
   .paq-badge {
     position: absolute;
     top: -1px;
-    right: 24px;
+    right: 20px;
     background: var(--negro);
     color: var(--naranja);
-    font-size: 12px;
+    font-size: 11px;
     letter-spacing: 2px;
     text-transform: uppercase;
-    padding: 6px 12px;
+    padding: 5px 10px;
   }
 
   .paq-nombre {
-    font-size: 13px;
+    font-size: 11px;
     letter-spacing: 3px;
     text-transform: uppercase;
     color: var(--naranja);
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
-
-  .paquete.destacado .paq-nombre { color: var(--negro); opacity: 0.7; }
 
   .paq-precio {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 72px;
+    font-size: 64px;
     color: var(--blanco);
     line-height: 1;
     margin-bottom: 4px;
@@ -253,43 +285,38 @@
 
   .paq-precio sup {
     font-family: 'DM Sans', sans-serif;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 300;
     vertical-align: super;
     margin-right: 2px;
   }
 
   .paq-mes {
-    font-size: 14px;
+    font-size: 13px;
     color: var(--texto);
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     letter-spacing: 1px;
   }
-
-  .paquete.destacado .paq-mes { color: rgba(0,0,0,0.5); }
 
   .paq-divider {
     height: 1px;
     background: var(--gris2);
-    margin-bottom: 28px;
-    color: var(--gris2);
+    margin-bottom: 24px;
   }
 
-  .paquete.destacado .paq-divider { background: rgba(0,0,0,0.15); }
-
   .paq-desc {
-    font-size: 15px;
+    font-size: 14px;
     color: var(--texto);
     line-height: 1.7;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
   }
 
   .paq-features { list-style: none; }
 
   .paq-feature {
-    font-size: 15px;
+    font-size: 14px;
     color: var(--blanco);
-    padding: 8px 0;
+    padding: 7px 0;
     display: flex;
     align-items: flex-start;
     gap: 10px;
@@ -300,104 +327,188 @@
 
   .paq-feature-icon {
     color: var(--naranja);
-    font-size: 16px;
-    line-height: 1.3;
+    font-size: 14px;
+    line-height: 1.4;
     flex-shrink: 0;
   }
 
-  .paquete.destacado .paq-feature-icon { color: var(--negro); }
-
   /* NOTA */
   .nota {
-    padding: 60px 24px;
-    max-width: 700px;
+    padding: 48px 24px;
+    max-width: 680px;
     margin: 0 auto;
-    text-align: center;
   }
 
   .nota-box {
     border: 1px solid var(--gris2);
-    padding: 40px;
+    padding: 32px 24px;
   }
 
   .nota-titulo {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
+    font-size: 22px;
     color: var(--naranja);
     margin-bottom: 16px;
+    line-height: 1.2;
   }
 
   .nota-texto {
-    font-size: 15px;
+    font-size: 14px;
     color: var(--texto);
-    line-height: 1.8;
+    line-height: 1.85;
   }
 
   /* CONTACTO */
   .contacto {
-    padding: 100px 24px;
+    padding: 72px 24px;
     background: var(--gris);
     text-align: center;
   }
 
   .contacto-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(40px, 7vw, 80px);
+    font-size: clamp(40px, 12vw, 72px);
     color: var(--blanco);
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     line-height: 1;
   }
 
   .contacto-sub {
-    font-size: 15px;
+    font-size: 14px;
     color: var(--texto);
-    margin-bottom: 40px;
+    margin-bottom: 32px;
   }
 
   .contacto-email {
     display: inline-block;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(20px, 4vw, 36px);
+    font-size: clamp(16px, 3.5vw, 26px);
     color: var(--naranja);
     text-decoration: none;
     border-bottom: 2px solid var(--naranja);
     padding-bottom: 4px;
-    transition: color 0.2s, border-color 0.2s;
     letter-spacing: 1px;
+    word-break: break-all;
+    transition: color 0.2s, border-color 0.2s;
   }
 
   .contacto-email:hover { color: var(--blanco); border-color: var(--blanco); }
 
   /* FOOTER */
   footer {
-    padding: 32px 24px;
+    padding: 28px 24px;
     text-align: center;
     border-top: 1px solid var(--gris2);
   }
 
-  footer p {
-    font-size: 14px;
-    color: #444;
-    letter-spacing: 1px;
+  footer p { font-size: 13px; color: #444; letter-spacing: 1px; }
+  footer span { color: var(--naranja); }
+
+  /* LIGHTBOX */
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.93);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: lbIn 0.2s ease;
   }
 
-  footer span { color: var(--naranja); }
+  .lightbox.open { display: flex; }
+  @keyframes lbIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .lb-inner {
+    position: relative;
+    width: 100%;
+    max-width: 360px;
+    background: #111;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.9);
+  }
+
+  .lb-video-wrap {
+    position: relative;
+    width: 100%;
+    padding-bottom: 177.78%;
+    background: #000;
+  }
+
+  .lb-video-wrap iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .lb-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.65);
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+
+  .lb-bottom {
+    padding: 20px 24px;
+    text-align: center;
+  }
+
+  .lb-bottom p { font-size: 13px; color: var(--texto); margin-bottom: 12px; }
+
+  .lb-cta {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: var(--naranja);
+    color: var(--negro);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s;
+  }
+
+  .lb-cta:hover { background: var(--blanco); }
 
   /* ANIMATIONS */
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   .reveal {
     opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
   }
 
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* DESKTOP */
+  @media (min-width: 768px) {
+    .hero { padding: 80px 40px 64px; }
+    .video-wrap { max-width: 260px; }
+    .propuesta { padding: 100px 40px; }
+    .pasos { flex-direction: row; }
+    .paso { flex-direction: column; gap: 12px; }
+    .paquetes-section { padding: 100px 40px; }
   }
 </style>
 </head>
@@ -405,22 +516,56 @@
 
 <!-- HERO -->
 <section class="hero">
+
   <div class="logo-wrap">
-    <svg viewBox="0 0 408 300" xmlns="http://www.w3.org/2000/svg">
-      <text x="201" y="147" font-family="Inter,sans-serif" font-size="94" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="-4">PAM</text>
-      <path d="M57 163 A147 147 0 0 1 351 163" fill="none" stroke="#E8943A" stroke-width="1.5"/>
-      <line x1="57" y1="162" x2="127" y2="162" stroke="#E8943A" stroke-width="1.5"/>
-      <line x1="281" y1="162" x2="351" y2="162" stroke="#E8943A" stroke-width="1.5"/>
-      <text x="204" y="188" font-family="Inter,sans-serif" font-size="14" font-weight="300" fill="#E8943A" text-anchor="middle" letter-spacing="7">AUDIOVISUAL</text>
+    <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+      <text x="100" y="72" font-family="'DM Sans', sans-serif" font-size="52" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="-2">PAM</text>
+      <path d="M28 80 A72 72 0 0 1 172 80" fill="none" stroke="#E8943A" stroke-width="1.5"/>
+      <line x1="28" y1="80" x2="62" y2="80" stroke="#E8943A" stroke-width="1.5"/>
+      <line x1="138" y1="80" x2="172" y2="80" stroke="#E8943A" stroke-width="1.5"/>
+      <text x="100" y="96" font-family="'DM Sans', sans-serif" font-size="8" font-weight="300" fill="#E8943A" text-anchor="middle" letter-spacing="5">AUDIOVISUAL</text>
     </svg>
   </div>
+
   <p class="hero-tag">Servicio profesional de clon digital</p>
+
   <h1 class="hero-title">Tu empresa,<br><span>en vídeo.</span><br>Cada semana.</h1>
-  <p class="hero-sub">Venimos a tu empresa, te grabamos en croma y en tu propio escenario, y creamos tu clon digital. Nos envías el texto, nos encargamos del resto. En cualquier idioma.</p>
+
+  <div class="video-wrap" onclick="openLightbox()">
+    <div class="video-thumb-inner">
+      <img
+        src="https://img.youtube.com/vi/DS8oBKAm2n8/maxresdefault.jpg"
+        alt="Ver vídeo Clon Digital"
+        onerror="this.src='https://img.youtube.com/vi/DS8oBKAm2n8/hqdefault.jpg'">
+      <div class="video-overlay">
+        <div class="play-btn">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="#0d0d0d"><polygon points="5,3 19,12 5,21"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="hero-sub">Venimos a grabarte una sola vez. Nos envías el texto. Tu clon digital lo dice en vídeo, en cualquier idioma, listo para publicar.</p>
+
   <a href="#paquetes" class="hero-cta">Ver paquetes y precios</a>
+
 </section>
 
-<!-- CÓMO FUNCIONA -->
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="handleLBClick(event)">
+  <div class="lb-inner" id="lb-inner">
+    <button class="lb-close" onclick="closeLightbox()">✕</button>
+    <div class="lb-video-wrap">
+      <iframe id="lb-iframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+    <div class="lb-bottom">
+      <p>¿Te interesa? Descubre los paquetes</p>
+      <button class="lb-cta" onclick="closeLightbox(); document.getElementById('paquetes').scrollIntoView({behavior:'smooth'})">Ver paquetes y precios →</button>
+    </div>
+  </div>
+</div>
+
+<!-- COMO FUNCIONA -->
 <section class="propuesta">
   <p class="section-tag reveal">Cómo funciona</p>
   <h2 class="section-title reveal">Sencillo.<br>Efectivo.</h2>
@@ -429,23 +574,31 @@
   <div class="pasos reveal">
     <div class="paso">
       <div class="paso-num">01</div>
-      <div class="paso-titulo">Grabación única</div>
-      <div class="paso-texto">Venimos a tu empresa con equipo profesional. Te grabamos en croma verde y en tu propio escenario. Tres escenas distintas. Solo una vez.</div>
+      <div>
+        <div class="paso-titulo">Grabación única</div>
+        <div class="paso-texto">Venimos a tu empresa con equipo profesional. Te grabamos en los rincones más representativos de tus instalaciones. Tres escenas distintas. Solo una vez.</div>
+      </div>
     </div>
     <div class="paso">
       <div class="paso-num">02</div>
-      <div class="paso-titulo">Nos envías el texto</div>
-      <div class="paso-texto">Cada semana nos envías el mensaje que quieres transmitir. Sin más complicaciones.</div>
+      <div>
+        <div class="paso-titulo">Nos envías el texto</div>
+        <div class="paso-texto">Cada semana nos envías el mensaje que quieres transmitir. Sin más complicaciones.</div>
+      </div>
     </div>
     <div class="paso">
       <div class="paso-num">03</div>
-      <div class="paso-titulo">Nosotros lo producimos</div>
-      <div class="paso-texto">Tu clon digital lo dice en vídeo, en el idioma que quieras, con el fondo que necesites. Listo para publicar.</div>
+      <div>
+        <div class="paso-titulo">Nosotros lo producimos</div>
+        <div class="paso-texto">Tu clon digital lo dice en vídeo, en el idioma que quieras, con el fondo que necesites. Listo para publicar.</div>
+      </div>
     </div>
     <div class="paso">
       <div class="paso-num">04</div>
-      <div class="paso-titulo">Presencia constante</div>
-      <div class="paso-texto">Cuatro u ocho vídeos al mes. Porque la visibilidad no se construye con un gran vídeo, sino con constancia.</div>
+      <div>
+        <div class="paso-titulo">Presencia constante</div>
+        <div class="paso-texto">Cuatro u ocho vídeos al mes. Porque la visibilidad no se construye con un gran vídeo, sino con constancia.</div>
+      </div>
     </div>
   </div>
 </section>
@@ -460,7 +613,6 @@
 
   <div class="paquetes-grid reveal">
 
-    <!-- BÁSICO -->
     <div class="paquete">
       <p class="paq-nombre">Básico</p>
       <div class="paq-precio"><sup>€</sup>200</div>
@@ -476,7 +628,6 @@
       </ul>
     </div>
 
-    <!-- BÁSICO + -->
     <div class="paquete destacado">
       <div class="paq-badge">Popular</div>
       <p class="paq-nombre">Básico +</p>
@@ -495,7 +646,6 @@
       </ul>
     </div>
 
-    <!-- PRO -->
     <div class="paquete">
       <p class="paq-nombre">Pro</p>
       <div class="paq-precio"><sup>€</sup>350</div>
@@ -511,7 +661,6 @@
       </ul>
     </div>
 
-    <!-- PRO + -->
     <div class="paquete">
       <p class="paq-nombre">Pro +</p>
       <div class="paq-precio"><sup>€</sup>500</div>
@@ -535,8 +684,8 @@
 <!-- NOTA -->
 <div class="nota">
   <div class="nota-box reveal">
-    <p class="nota-titulo">¿Qué incluye la grabación inicial?</p>
-    <p class="nota-texto">La sesión de grabación profesional incluye: equipo de cámara 4K, iluminación profesional de 3 puntos, croma verde con iluminación de croma y microfonía de alta calidad Sennheiser con grabación en 32 bits. El resultado son 3 escenas distintas para tu clon digital. Coste único, aparte de la suscripción mensual. Escríbenos y te lo detallamos sin compromiso.</p>
+    <p class="nota-titulo">¿Qué incluye la grabación inicial? · 350€ · coste único</p>
+    <p class="nota-texto">Venimos a tus instalaciones con equipo profesional completo: cámara 4K con grabación en ProRes, iluminación de 3-4 puntos y microfonía Sennheiser + Rode Wireless Pro con captura en 32 bits.<br><br>Grabamos 3 escenas en los rincones más representativos de tu empresa — sin estudio, sin croma. Tú en tu entorno real.<br><br>El material pasa por postproducción profesional: normalización de color, tratamiento facial para que te veas en tu mejor versión, y mezcla de audio optimizada para distribución en redes.<br><br><strong style="color:var(--naranja);">Grabación incluida en la provincia de Barcelona. Para otras ubicaciones, consultar condiciones.</strong></p>
   </div>
 </div>
 
@@ -553,7 +702,11 @@
 </footer>
 
 <script>
-  // Smooth scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
       e.preventDefault();
@@ -561,12 +714,28 @@
     });
   });
 
-  // Reveal on scroll
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.1 });
+  const YT_ID = 'DS8oBKAm2n8';
 
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  function openLightbox() {
+    document.getElementById('lb-iframe').src =
+      'https://www.youtube.com/embed/' + YT_ID + '?autoplay=1&rel=0&modestbranding=1';
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    document.getElementById('lb-iframe').src = '';
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function handleLBClick(e) {
+    if (e.target === document.getElementById('lightbox')) closeLightbox();
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox();
+  });
 </script>
 
 </body>
