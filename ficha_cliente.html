@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha Clon Digital | PAM Audiovisual</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Inter:wght@300;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --naranja: #E8943A;
+    --negro:   #0d0d0d;
+    --gris:    #1a1a1a;
+    --gris2:   #2a2a2a;
+    --gris3:   #333;
+    --blanco:  #f5f5f0;
+    --texto:   #aaaaaa;
+    --verde:   #4caf7d;
+    --rojo:    #e85555;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--negro); color: var(--blanco); font-family: 'DM Sans', sans-serif; font-weight: 300; }
+
+  /* ── Access overlay ── */
+  #access-overlay {
+    position: fixed; inset: 0; background: var(--negro);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 999; flex-direction: column; gap: 24px;
+  }
+  #access-overlay svg { width: 100px; }
+  #access-overlay h2 { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; color: var(--naranja); }
+  #access-overlay p  { font-size: 14px; color: var(--texto); text-align: center; line-height: 1.8; }
+  #code-input {
+    background: var(--gris); border: 1px solid var(--gris2); color: var(--blanco);
+    font-family: 'DM Sans', sans-serif; font-size: 18px; letter-spacing: 6px;
+    text-align: center; padding: 14px 32px; outline: none; width: 220px;
+    text-transform: uppercase;
+  }
+  #code-input:focus { border-color: var(--naranja); }
+  #access-btn {
+    padding: 14px 48px; background: var(--naranja); color: var(--negro);
+    border: none; font-family: 'DM Sans', sans-serif; font-size: 13px;
+    font-weight: 500; letter-spacing: 3px; text-transform: uppercase;
+    cursor: pointer; transition: background 0.2s;
+  }
+  #access-btn:hover { background: var(--blanco); }
+  #access-error { color: var(--rojo); font-size: 13px; display: none; }
+
+  /* ── Main layout ── */
+  #main { display: none; }
+
+  .header { padding: 40px 60px 28px; border-bottom: 1px solid var(--gris2); display: flex; align-items: center; justify-content: space-between; }
+  .logo svg { width: 100px; height: auto; }
+  .header-tag { font-size: 13px; letter-spacing: 4px; color: var(--naranja); text-transform: uppercase; text-align: right; line-height: 2; }
+  .header-tag em { color: #555; font-style: italic; display: block; }
+
+  .hero { padding: 48px 60px 36px; border-bottom: 1px solid var(--gris2); }
+  .hero-tag { font-size: 11px; letter-spacing: 4px; color: var(--naranja); text-transform: uppercase; margin-bottom: 12px; }
+  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px, 5vw, 60px); line-height: 1; margin-bottom: 10px; }
+  .hero-title span { color: var(--naranja); }
+  .hero-sub { font-size: 14px; color: var(--texto); max-width: 540px; line-height: 1.8; }
+
+  /* ── Section headers ── */
+  .section { margin-bottom: 2px; }
+  .section-head {
+    background: var(--gris2); padding: 18px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; user-select: none;
+  }
+  .section-head:hover { background: #2f2f2f; }
+  .section-label { font-size: 11px; letter-spacing: 4px; color: var(--naranja); text-transform: uppercase; }
+  .section-arrow { color: var(--naranja); font-size: 18px; transition: transform 0.2s; }
+  .section-arrow.open { transform: rotate(90deg); }
+  .section-body { display: none; }
+  .section-body.open { display: block; }
+
+  /* ── Grid / bloques ── */
+  .fila { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2px; background: var(--gris2); margin-bottom: 2px; }
+  .bloque { background: var(--gris); padding: 28px; }
+  .etiqueta { font-size: 13px; letter-spacing: 2px; color: var(--naranja); text-transform: uppercase; margin-bottom: 10px; }
+  .etiqueta em { color: #555; font-style: italic; font-size: 12px; letter-spacing: 1px; }
+
+  input, textarea {
+    width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--gris2);
+    color: var(--blanco); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 300;
+    padding: 10px 0; outline: none; resize: none; transition: border-color 0.2s;
+  }
+  input + input { margin-top: 10px; }
+  input:focus, textarea:focus { border-bottom-color: var(--naranja); }
+  textarea { min-height: 70px; }
+  input::placeholder, textarea::placeholder { color: #444; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .chip {
+    padding: 7px 16px; border: 1px solid var(--gris2); font-size: 13px;
+    color: var(--texto); cursor: pointer; transition: all 0.2s; user-select: none;
+  }
+  .chip:hover { border-color: var(--naranja); color: var(--blanco); }
+  .chip.on { background: var(--naranja); border-color: var(--naranja); color: var(--negro); font-weight: 500; }
+
+  /* ── Botón guardar datos ── */
+  .save-bar {
+    background: var(--gris); padding: 24px 60px;
+    display: flex; align-items: center; gap: 20px; margin-bottom: 2px;
+  }
+  .btn-save {
+    padding: 13px 40px; background: var(--naranja); color: var(--negro);
+    border: none; font-family: 'DM Sans', sans-serif; font-size: 13px;
+    font-weight: 500; letter-spacing: 2px; text-transform: uppercase;
+    cursor: pointer; transition: background 0.2s; flex-shrink: 0;
+  }
+  .btn-save:hover { background: var(--blanco); }
+  #save-status { font-size: 13px; color: var(--texto); }
+  #save-status.ok  { color: var(--verde); }
+  #save-status.err { color: var(--rojo); }
+
+  /* ── Upload areas ── */
+  .upload-area {
+    border: 1px dashed var(--gris2); padding: 28px; text-align: center;
+    cursor: pointer; transition: all 0.2s; margin-top: 14px;
+  }
+  .upload-area:hover, .upload-area.drag { border-color: var(--naranja); background: rgba(232,148,58,0.04); }
+  .upload-area p { font-size: 13px; color: var(--texto); line-height: 1.8; }
+  .upload-area strong { color: var(--naranja); }
+  .upload-area input[type=file] { display: none; }
+
+  .semana-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2px; background: var(--gris2); }
+  .semana-bloque { background: var(--gris); padding: 22px; }
+  .semana-label { font-size: 11px; letter-spacing: 3px; color: var(--naranja); text-transform: uppercase; margin-bottom: 12px; }
+
+  /* ── File list ── */
+  .file-list { margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
+  .file-item {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--gris2); padding: 10px 14px; font-size: 13px;
+  }
+  .file-item span { color: var(--texto); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+  .file-item a {
+    color: var(--naranja); text-decoration: none; font-size: 12px; letter-spacing: 1px;
+    flex-shrink: 0; margin-left: 12px; border: 1px solid var(--naranja); padding: 4px 12px;
+    transition: all 0.2s;
+  }
+  .file-item a:hover { background: var(--naranja); color: var(--negro); }
+  .file-empty { font-size: 13px; color: #444; margin-top: 10px; font-style: italic; }
+
+  /* ── Videos terminados ── */
+  .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 2px; background: var(--gris2); }
+  .video-card { background: var(--gris); padding: 24px; }
+  .video-card-name { font-size: 14px; color: var(--blanco); margin-bottom: 8px; word-break: break-word; }
+  .video-card-date { font-size: 11px; color: #555; margin-bottom: 16px; }
+  .video-card a {
+    display: inline-block; padding: 10px 24px; background: var(--naranja); color: var(--negro);
+    text-decoration: none; font-size: 12px; letter-spacing: 2px; font-weight: 500; text-transform: uppercase;
+    transition: background 0.2s;
+  }
+  .video-card a:hover { background: var(--blanco); }
+
+  /* ── Upload progress ── */
+  .upload-progress { margin-top: 8px; font-size: 12px; color: var(--naranja); display: none; }
+
+  /* ── Footer ── */
+  footer { padding: 28px 60px; border-top: 1px solid var(--gris2); display: flex; justify-content: space-between; margin-top: 2px; }
+  footer p { font-size: 12px; color: #333; letter-spacing: 1px; }
+  footer span { color: var(--naranja); }
+
+  /* ── Loader ── */
+  .loading { text-align: center; padding: 40px; color: var(--texto); font-size: 13px; letter-spacing: 2px; }
+
+  @media (max-width: 640px) {
+    .header, .hero, .save-bar { padding-left: 24px; padding-right: 24px; }
+    .section-head { padding: 16px 24px; }
+    .bloque { padding: 20px 24px; }
+    .semana-bloque { padding: 18px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PANTALLA DE ACCESO
+     ═══════════════════════════════════════════════════════════ -->
+<div id="access-overlay">
+  <svg viewBox="0 0 408 300" xmlns="http://www.w3.org/2000/svg">
+    <text x="204" y="147" font-family="Inter,sans-serif" font-size="94" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="-4">PAM</text>
+    <path d="M57 163 A147 147 0 0 1 351 163" fill="none" stroke="#E8943A" stroke-width="1.5"/>
+    <line x1="57" y1="162" x2="127" y2="162" stroke="#E8943A" stroke-width="1.5"/>
+    <line x1="281" y1="162" x2="351" y2="162" stroke="#E8943A" stroke-width="1.5"/>
+    <text x="204" y="188" font-family="Inter,sans-serif" font-size="14" font-weight="300" fill="#E8943A" text-anchor="middle" letter-spacing="7">AUDIOVISUAL</text>
+  </svg>
+  <h2>Área de Cliente</h2>
+  <p>Introduce el código que te ha facilitado PAM Audiovisual.<br><em style="color:#444;font-size:12px">Enter the access code provided by PAM Audiovisual.</em></p>
+  <input id="code-input" type="text" placeholder="• • • • • •" maxlength="12" autocomplete="off"/>
+  <button id="access-btn" onclick="acceder()">Acceder · Enter</button>
+  <p id="access-error">Código incorrecto. Contacta con PAM Audiovisual.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     CONTENIDO PRINCIPAL
+     ═══════════════════════════════════════════════════════════ -->
+<div id="main">
+
+  <header class="header">
+    <div class="logo">
+      <svg viewBox="0 0 408 300" xmlns="http://www.w3.org/2000/svg">
+        <text x="204" y="147" font-family="Inter,sans-serif" font-size="94" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="-4">PAM</text>
+        <path d="M57 163 A147 147 0 0 1 351 163" fill="none" stroke="#E8943A" stroke-width="1.5"/>
+        <line x1="57" y1="162" x2="127" y2="162" stroke="#E8943A" stroke-width="1.5"/>
+        <line x1="281" y1="162" x2="351" y2="162" stroke="#E8943A" stroke-width="1.5"/>
+        <text x="204" y="188" font-family="Inter,sans-serif" font-size="14" font-weight="300" fill="#E8943A" text-anchor="middle" letter-spacing="7">AUDIOVISUAL</text>
+      </svg>
+    </div>
+    <div class="header-tag">
+      Clon Digital
+      <em id="header-empresa">Client Portal</em>
+    </div>
+  </header>
+
+  <div class="hero">
+    <p class="hero-tag">Portal de Cliente · Clon Digital</p>
+    <h1 class="hero-title">Tu espacio<br><span>PAM.</span></h1>
+    <p class="hero-sub">Aquí gestionas tus datos, envías guiones cada mes y descargas tus vídeos terminados. Todo en un solo sitio.</p>
+  </div>
+
+  <!-- ── SECCIÓN 1: DATOS DEL CLIENTE ── -->
+  <div class="section">
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="section-label">01 · Tus datos <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Your details</em></span>
+      <span class="section-arrow open">›</span>
+    </div>
+    <div class="section-body open">
+      <div class="fila">
+        <div class="bloque">
+          <div class="etiqueta">Nombre <em>· Name</em></div>
+          <input id="d-nombre" type="text" placeholder="Tu nombre completo"/>
+        </div>
+        <div class="bloque">
+          <div class="etiqueta">Empresa <em>· Company</em></div>
+          <input id="d-empresa" type="text" placeholder="Nombre de tu empresa"/>
+        </div>
+      </div>
+      <div class="fila">
+        <div class="bloque">
+          <div class="etiqueta">Email <em>· Email</em></div>
+          <input id="d-email" type="email" placeholder="email@empresa.com"/>
+        </div>
+        <div class="bloque">
+          <div class="etiqueta">Teléfono <em>· Phone</em></div>
+          <input id="d-telefono" type="tel" placeholder="+34 600 000 000"/>
+        </div>
+        <div class="bloque">
+          <div class="etiqueta">Dirección fiscal <em>· Billing address</em></div>
+          <input id="d-direccion" type="text" placeholder="Calle, número, ciudad, CP"/>
+        </div>
+      </div>
+      <div class="fila">
+        <div class="bloque">
+          <div class="etiqueta">Paquete contratado <em>· Package</em></div>
+          <div class="chips" id="chips-paquete">
+            <div class="chip" onclick="toggleChipSingle(this, 'paquete')">Básico</div>
+            <div class="chip" onclick="toggleChipSingle(this, 'paquete')">Básico+</div>
+            <div class="chip" onclick="toggleChipSingle(this, 'paquete')">Pro</div>
+            <div class="chip" onclick="toggleChipSingle(this, 'paquete')">Pro+</div>
+          </div>
+        </div>
+        <div class="bloque">
+          <div class="etiqueta">Idioma/s de los vídeos <em>· Language/s</em></div>
+          <input id="d-idiomas" type="text" placeholder="Español, inglés, ambos..."/>
+        </div>
+      </div>
+      <div class="fila">
+        <div class="bloque">
+          <div class="etiqueta">Tipografía de marca <em>· Brand typeface</em></div>
+          <input id="d-tipografia" type="text" placeholder="Montserrat, Helvetica..."/>
+        </div>
+        <div class="bloque">
+          <div class="etiqueta">Colores corporativos <em>· Brand colors (HEX)</em></div>
+          <input id="d-colores" type="text" placeholder="#FF0000, #000000..."/>
+        </div>
+      </div>
+      <div class="fila">
+        <div class="bloque">
+          <div class="etiqueta">Rótulo / Cairón <em>· Lower third</em></div>
+          <div class="chips" id="chips-rotulo">
+            <div class="chip" onclick="toggleChipSingle(this, 'rotulo')">Sí</div>
+            <div class="chip" onclick="toggleChipSingle(this, 'rotulo')">No</div>
+          </div>
+        </div>
+        <div class="bloque">
+          <div class="etiqueta">Nombre en rótulo <em>· Name on lower third</em></div>
+          <input id="d-nombre-rotulo" type="text" placeholder="Juan García"/>
+        </div>
+        <div class="bloque">
+          <div class="etiqueta">Cargo en rótulo <em>· Title on lower third</em></div>
+          <input id="d-cargo-rotulo" type="text" placeholder="CEO · Empresa ABC"/>
+        </div>
+      </div>
+
+      <!-- Botón guardar -->
+      <div class="save-bar">
+        <button class="btn-save" onclick="guardarDatos()">Guardar datos · Save</button>
+        <span id="save-status"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 2: GUIONES MENSUALES ── -->
+  <div class="section">
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="section-label">02 · Guiones del mes <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Monthly scripts</em></span>
+      <span class="section-arrow open">›</span>
+    </div>
+    <div class="section-body open">
+      <div style="background:var(--gris); padding: 20px 60px; margin-bottom:2px;">
+        <p style="font-size:13px; color:var(--texto); line-height:1.8;">
+          Sube un PDF o Word por cada vídeo del mes, en su semana correspondiente. Cada texto debe poder leerse en voz alta en menos de 1 minuto.<br>
+          <em style="color:#444">Upload one PDF or Word file per video, in the correct week slot. Each script must be readable in under 1 minute.</em>
+        </p>
+      </div>
+      <div class="semana-grid" style="background:var(--gris2); gap:2px; display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr));">
+        <div class="semana-bloque" id="sem1-block">
+          <div class="semana-label">Semana 1 <em style="color:#444;font-style:italic">· Week 1</em></div>
+          <div class="upload-area" id="upload-sem1" onclick="document.getElementById('file-sem1').click()"
+               ondragover="dragOver(event,'upload-sem1')" ondragleave="dragLeave('upload-sem1')" ondrop="dropFile(event,1)">
+            <p>📄 Arrastra el guión aquí<br><strong>PDF o Word</strong><br><em style="font-size:11px;color:#444">Drag script here</em></p>
+            <input type="file" id="file-sem1" accept=".pdf,.doc,.docx" onchange="uploadGuion(this, 1)"/>
+          </div>
+          <div class="upload-progress" id="prog-sem1">Subiendo...</div>
+          <div class="file-list" id="files-sem1"></div>
+        </div>
+        <div class="semana-bloque" id="sem2-block">
+          <div class="semana-label">Semana 2 <em style="color:#444;font-style:italic">· Week 2</em></div>
+          <div class="upload-area" id="upload-sem2" onclick="document.getElementById('file-sem2').click()"
+               ondragover="dragOver(event,'upload-sem2')" ondragleave="dragLeave('upload-sem2')" ondrop="dropFile(event,2)">
+            <p>📄 Arrastra el guión aquí<br><strong>PDF o Word</strong><br><em style="font-size:11px;color:#444">Drag script here</em></p>
+            <input type="file" id="file-sem2" accept=".pdf,.doc,.docx" onchange="uploadGuion(this, 2)"/>
+          </div>
+          <div class="upload-progress" id="prog-sem2">Subiendo...</div>
+          <div class="file-list" id="files-sem2"></div>
+        </div>
+        <div class="semana-bloque" id="sem3-block">
+          <div class="semana-label">Semana 3 <em style="color:#444;font-style:italic">· Week 3</em></div>
+          <div class="upload-area" id="upload-sem3" onclick="document.getElementById('file-sem3').click()"
+               ondragover="dragOver(event,'upload-sem3')" ondragleave="dragLeave('upload-sem3')" ondrop="dropFile(event,3)">
+            <p>📄 Arrastra el guión aquí<br><strong>PDF o Word</strong><br><em style="font-size:11px;color:#444">Drag script here</em></p>
+            <input type="file" id="file-sem3" accept=".pdf,.doc,.docx" onchange="uploadGuion(this, 3)"/>
+          </div>
+          <div class="upload-progress" id="prog-sem3">Subiendo...</div>
+          <div class="file-list" id="files-sem3"></div>
+        </div>
+        <div class="semana-bloque" id="sem4-block">
+          <div class="semana-label">Semana 4 <em style="color:#444;font-style:italic">· Week 4</em></div>
+          <div class="upload-area" id="upload-sem4" onclick="document.getElementById('file-sem4').click()"
+               ondragover="dragOver(event,'upload-sem4')" ondragleave="dragLeave('upload-sem4')" ondrop="dropFile(event,4)">
+            <p>📄 Arrastra el guión aquí<br><strong>PDF o Word</strong><br><em style="font-size:11px;color:#444">Drag script here</em></p>
+            <input type="file" id="file-sem4" accept=".pdf,.doc,.docx" onchange="uploadGuion(this, 4)"/>
+          </div>
+          <div class="upload-progress" id="prog-sem4">Subiendo...</div>
+          <div class="file-list" id="files-sem4"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 3: MATERIAL GRÁFICO ── -->
+  <div class="section">
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="section-label">03 · Material gráfico <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Brand & visual assets</em></span>
+      <span class="section-arrow">›</span>
+    </div>
+    <div class="section-body">
+      <div style="background:var(--gris); padding: 20px 60px; margin-bottom:2px;">
+        <p style="font-size:13px; color:var(--texto); line-height:1.8;">
+          Logos, fotos, vídeos de productos o servicios y cualquier material visual que quieras que usemos.<br>
+          <em style="color:#444">Logos, photos, product/service videos and any visual material you'd like us to use.</em>
+        </p>
+      </div>
+      <div class="fila">
+        <div class="bloque">
+          <div class="etiqueta">Logos <em>· Logos</em></div>
+          <div class="upload-area" id="upload-logos" onclick="document.getElementById('file-logos').click()"
+               ondragover="dragOver(event,'upload-logos')" ondragleave="dragLeave('upload-logos')" ondrop="dropMaterial(event,'Logos')">
+            <p>🖼 Arrastra tus logos aquí<br><strong>PNG, SVG, PDF, AI</strong><br><em style="font-size:11px;color:#444">Drag logos here</em></p>
+            <input type="file" id="file-logos" multiple accept=".png,.svg,.pdf,.ai,.eps,.jpg" onchange="uploadMaterial(this,'Logos')"/>
+          </div>
+          <div class="upload-progress" id="prog-logos">Subiendo...</div>
+          <div class="file-list" id="files-logos"></div>
+        </div>
+        <div class="bloque">
+          <div class="etiqueta">Fotos y vídeos <em>· Photos & videos</em></div>
+          <div class="upload-area" id="upload-material" onclick="document.getElementById('file-material').click()"
+               ondragover="dragOver(event,'upload-material')" ondragleave="dragLeave('upload-material')" ondrop="dropMaterial(event,'Material-Grafico')">
+            <p>📷 Fotos, vídeos, imágenes de producto<br><strong>JPG, PNG, MP4, MOV</strong><br><em style="font-size:11px;color:#444">Photos, videos, product images</em></p>
+            <input type="file" id="file-material" multiple accept=".jpg,.jpeg,.png,.mp4,.mov,.gif,.webp" onchange="uploadMaterial(this,'Material-Grafico')"/>
+          </div>
+          <div class="upload-progress" id="prog-material">Subiendo...</div>
+          <div class="file-list" id="files-material"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 4: VÍDEOS TERMINADOS ── -->
+  <div class="section">
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="section-label">04 · Tus vídeos listos <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Your finished videos</em></span>
+      <span class="section-arrow open">›</span>
+    </div>
+    <div class="section-body open">
+      <div style="background:var(--gris); padding:28px 60px;">
+        <div id="videos-container">
+          <div class="loading">Cargando vídeos... · Loading videos...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 <span>PAM Audiovisual</span> · Ramon Sales · El Masnou</p>
+    <p style="color:#333;font-size:12px;letter-spacing:1px">CLON DIGITAL</p>
+  </footer>
+
+</div><!-- #main -->
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════════════════════
+const WORKER = 'https://pam-backblaze.ramon-301.workers.dev';
+
+let CLIENT_ID   = '';
+let CLIENT_CODE = '';
+
+// ═══════════════════════════════════════════════════════════════
+// ACCESO
+// ═══════════════════════════════════════════════════════════════
+function getUrlParam(k) {
+  return new URLSearchParams(window.location.search).get(k) || '';
+}
+
+async function acceder() {
+  CLIENT_ID   = getUrlParam('id');
+  CLIENT_CODE = document.getElementById('code-input').value.trim().toUpperCase();
+
+  if (!CLIENT_ID) {
+    alert('URL sin ID de cliente. Contacta con PAM Audiovisual.');
+    return;
+  }
+  if (!CLIENT_CODE) return;
+
+  document.getElementById('access-btn').textContent = '...';
+  document.getElementById('access-error').style.display = 'none';
+
+  try {
+    const res = await api('datos', 'GET');
+    if (res.error) throw new Error(res.error);
+
+    // Acceso correcto
+    document.getElementById('access-overlay').style.display = 'none';
+    document.getElementById('main').style.display = 'block';
+    cargarDatos(res);
+    cargarArchivos();
+    cargarVideos();
+  } catch (e) {
+    document.getElementById('access-error').style.display = 'block';
+    document.getElementById('access-btn').textContent = 'Acceder · Enter';
+  }
+}
+
+// Enter key en el input de código
+document.getElementById('code-input').addEventListener('keyup', e => {
+  if (e.key === 'Enter') acceder();
+  // Uppercase en tiempo real
+  e.target.value = e.target.value.toUpperCase();
+});
+
+// ═══════════════════════════════════════════════════════════════
+// DATOS DEL CLIENTE
+// ═══════════════════════════════════════════════════════════════
+function cargarDatos(d) {
+  if (!d || !Object.keys(d).length) return;
+  set('d-nombre', d.nombre);
+  set('d-empresa', d.empresa);
+  set('d-email', d.email);
+  set('d-telefono', d.telefono);
+  set('d-direccion', d.direccion);
+  set('d-idiomas', d.idiomas);
+  set('d-tipografia', d.tipografia);
+  set('d-colores', d.colores);
+  set('d-nombre-rotulo', d.nombre_rotulo);
+  set('d-cargo-rotulo', d.cargo_rotulo);
+  if (d.empresa) document.getElementById('header-empresa').textContent = d.empresa;
+  if (d.paquete) activarChip('chips-paquete', d.paquete);
+  if (d.rotulo !== undefined) activarChip('chips-rotulo', d.rotulo === true || d.rotulo === 'Sí' ? 'Sí' : 'No');
+}
+
+async function guardarDatos() {
+  const status = document.getElementById('save-status');
+  status.className = '';
+  status.textContent = 'Guardando...';
+
+  const datos = {
+    nombre:        get('d-nombre'),
+    empresa:       get('d-empresa'),
+    email:         get('d-email'),
+    telefono:      get('d-telefono'),
+    direccion:     get('d-direccion'),
+    paquete:       chipActivo('chips-paquete'),
+    idiomas:       get('d-idiomas'),
+    tipografia:    get('d-tipografia'),
+    colores:       get('d-colores'),
+    rotulo:        chipActivo('chips-rotulo') === 'Sí',
+    nombre_rotulo: get('d-nombre-rotulo'),
+    cargo_rotulo:  get('d-cargo-rotulo'),
+  };
+
+  const res = await api('datos', 'POST', datos);
+  if (res.ok) {
+    status.className = 'ok';
+    status.textContent = res.cambiosDetectados > 0
+      ? `✓ Guardado — ${res.cambiosDetectados} cambio(s) notificado(s) a PAM`
+      : '✓ Datos guardados correctamente';
+    if (datos.empresa) document.getElementById('header-empresa').textContent = datos.empresa;
+  } else {
+    status.className = 'err';
+    status.textContent = '✕ Error al guardar. Inténtalo de nuevo.';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SUBIDA DE GUIONES
+// ═══════════════════════════════════════════════════════════════
+async function uploadGuion(input, semana) {
+  if (!input.files.length) return;
+  const prog = document.getElementById(`prog-sem${semana}`);
+  prog.style.display = 'block';
+  prog.textContent = `Subiendo semana ${semana}...`;
+
+  for (const file of input.files) {
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('semana', semana);
+    const res = await apiForm('upload', fd, `Guiones`);
+    if (!res.ok) { prog.style.color = '#e85555'; prog.textContent = '✕ Error al subir'; return; }
+  }
+
+  prog.style.color = '#4caf7d';
+  prog.textContent = '✓ Guión subido correctamente';
+  setTimeout(() => { prog.style.display = 'none'; prog.style.color = ''; }, 3000);
+  cargarArchivosSemana(semana);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SUBIDA DE MATERIAL
+// ═══════════════════════════════════════════════════════════════
+async function uploadMaterial(input, carpeta) {
+  if (!input.files.length) return;
+  const progId = carpeta === 'Logos' ? 'prog-logos' : 'prog-material';
+  const prog   = document.getElementById(progId);
+  prog.style.display = 'block';
+  prog.textContent = `Subiendo ${input.files.length} archivo(s)...`;
+
+  let ok = true;
+  for (const file of input.files) {
+    const fd = new FormData();
+    fd.append('file', file);
+    const res = await apiForm('upload', fd, carpeta);
+    if (!res.ok) { ok = false; break; }
+  }
+
+  prog.style.color = ok ? '#4caf7d' : '#e85555';
+  prog.textContent = ok ? '✓ Material subido correctamente' : '✕ Error al subir';
+  setTimeout(() => { prog.style.display = 'none'; prog.style.color = ''; }, 3000);
+  if (ok) cargarArchivosMaterial(carpeta);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CARGA DE ARCHIVOS (listas)
+// ═══════════════════════════════════════════════════════════════
+function cargarArchivos() {
+  [1, 2, 3, 4].forEach(s => cargarArchivosSemana(s));
+  cargarArchivosMaterial('Logos');
+  cargarArchivosMaterial('Material-Grafico');
+}
+
+async function cargarArchivosSemana(semana) {
+  const res = await api(`files?folder=Guiones/semana${semana}`, 'GET');
+  renderFileList(`files-sem${semana}`, res.files || []);
+}
+
+async function cargarArchivosMaterial(carpeta) {
+  const res   = await api(`files?folder=${carpeta}`, 'GET');
+  const listId = carpeta === 'Logos' ? 'files-logos' : 'files-material';
+  renderFileList(listId, res.files || []);
+}
+
+function renderFileList(containerId, files) {
+  const el = document.getElementById(containerId);
+  if (!files.length) { el.innerHTML = '<p class="file-empty">Sin archivos aún · No files yet</p>'; return; }
+  el.innerHTML = files.map(f => `
+    <div class="file-item">
+      <span>📄 ${f.name}</span>
+      ${f.url ? `<a href="${f.url}" target="_blank" download>Descargar</a>` : ''}
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// VÍDEOS TERMINADOS
+// ═══════════════════════════════════════════════════════════════
+async function cargarVideos() {
+  const res = await api('files?folder=Videos-Finalizados', 'GET');
+  const container = document.getElementById('videos-container');
+  const files = (res.files || []).filter(f => f.name && f.name !== '');
+
+  if (!files.length) {
+    container.innerHTML = '<p style="font-size:14px;color:#444;font-style:italic;padding:20px 0;">Tus vídeos aparecerán aquí cuando estén listos.<br><em style="font-size:12px">Your videos will appear here once ready.</em></p>';
+    return;
+  }
+
+  container.innerHTML = `<div class="video-grid">${
+    files.map(f => `
+      <div class="video-card">
+        <div class="video-card-name">🎬 ${f.name}</div>
+        <div class="video-card-date">${formatDate(f.uploaded)}</div>
+        ${f.url ? `<a href="${f.url}" target="_blank" download>⬇ Descargar · Download</a>` : '<span style="color:#444;font-size:12px">Enlace no disponible</span>'}
+      </div>
+    `).join('')
+  }</div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DRAG & DROP
+// ═══════════════════════════════════════════════════════════════
+function dragOver(e, id)   { e.preventDefault(); document.getElementById(id).classList.add('drag'); }
+function dragLeave(id)     { document.getElementById(id).classList.remove('drag'); }
+function dropFile(e, sem)  { e.preventDefault(); dragLeave(`upload-sem${sem}`); const dt = e.dataTransfer; if (dt.files.length) { const inp = document.getElementById(`file-sem${sem}`); Object.defineProperty(inp, 'files', { value: dt.files, configurable: true }); uploadGuion(inp, sem); } }
+function dropMaterial(e, c){ e.preventDefault(); dragLeave(`upload-${c.toLowerCase()}`); const dt = e.dataTransfer; if (dt.files.length) { const inp = document.getElementById(`file-${c.toLowerCase()}`); Object.defineProperty(inp, 'files', { value: dt.files, configurable: true }); uploadMaterial(inp, c); } }
+
+// ═══════════════════════════════════════════════════════════════
+// CHIPS
+// ═══════════════════════════════════════════════════════════════
+function toggleChipSingle(el, group) {
+  document.querySelectorAll(`#chips-${group} .chip`).forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+}
+function chipActivo(id) {
+  const el = document.querySelector(`#${id} .chip.on`);
+  return el ? el.textContent : '';
+}
+function activarChip(id, valor) {
+  document.querySelectorAll(`#${id} .chip`).forEach(c => {
+    if (c.textContent.trim() === valor) c.classList.add('on');
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SECCIONES COLAPSABLES
+// ═══════════════════════════════════════════════════════════════
+function toggleSection(head) {
+  const body  = head.nextElementSibling;
+  const arrow = head.querySelector('.section-arrow');
+  body.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// API HELPERS
+// ═══════════════════════════════════════════════════════════════
+async function api(endpoint, method, body) {
+  const url = `${WORKER}/api/${endpoint}${endpoint.includes('?') ? '&' : '?'}id=${CLIENT_ID}&code=${CLIENT_CODE}`;
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  try {
+    const res  = await fetch(url, opts);
+    return await res.json();
+  } catch { return { error: 'Error de red' }; }
+}
+
+async function apiForm(endpoint, formData, folder) {
+  const url = `${WORKER}/api/${endpoint}?id=${CLIENT_ID}&code=${CLIENT_CODE}&folder=${encodeURIComponent(folder)}`;
+  try {
+    const res = await fetch(url, { method: 'POST', body: formData });
+    return await res.json();
+  } catch { return { ok: false }; }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// UTILIDADES
+// ═══════════════════════════════════════════════════════════════
+function get(id)      { return document.getElementById(id)?.value || ''; }
+function set(id, val) { const el = document.getElementById(id); if (el && val) el.value = val; }
+
+function formatDate(ts) {
+  if (!ts) return '';
+  const d = new Date(ts);
+  return `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`;
+}
+</script>
+</body>
+</html>
