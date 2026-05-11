@@ -779,14 +779,22 @@ function formatDate(ts) {
 // ═══════════════════════════════════════════════════════════════
 async function downloadFile(path, filename) {
   try {
-    // Obtener URL firmada del Worker
     const workerUrl = `${WORKER}/api/download?id=${CLIENT_ID}&code=${CLIENT_CODE}&path=${encodeURIComponent(path)}`;
     const response = await fetch(workerUrl);
-    if (!response.ok) { alert('Error al obtener enlace. Código: ' + response.status); return; }
-    const data = await response.json();
-    if (!data.url) { alert('Error: no se recibió URL de descarga.'); return; }
-    // Navegar directamente a la URL firmada de Backblaze — sin fetch, sin CORS
-    window.location.href = data.url;
+    if (!response.ok) {
+      const errText = await response.text();
+      alert('Error al descargar (código ' + response.status + '): ' + errText.substring(0, 200));
+      return;
+    }
+    const blob = await response.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
   } catch(e) { alert('Error al descargar: ' + e.message); }
 }
 
