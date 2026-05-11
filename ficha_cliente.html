@@ -267,6 +267,16 @@
         </div>
       </div>
       <div class="fila">
+        <div class="bloque" style="grid-column: 1 / -1;">
+          <div class="etiqueta">Formato de vídeo <em>· Video format</em></div>
+          <div class="chips" id="chips-formato" style="margin-bottom:10px;">
+            <div class="chip" onclick="toggleChipSingle(this, 'formato')">Horizontal 16:9</div>
+            <div class="chip" onclick="toggleChipSingle(this, 'formato')">Vertical 9:16</div>
+          </div>
+          <p style="font-size:12px;color:#555;line-height:1.7;">⚠️ Si eliges formato vertical, los vídeos no podrán entregarse también en horizontal.<br><em style="color:#444">If you choose vertical format, videos cannot also be delivered in horizontal.</em></p>
+        </div>
+      </div>
+      <div class="fila">
         <div class="bloque">
           <div class="etiqueta">Tipografía de marca <em>· Brand typeface</em></div>
           <input id="d-tipografia" type="text" placeholder="Montserrat, Helvetica..."/>
@@ -413,8 +423,74 @@
     </div>
   </div>
 
+  <!-- ── PANEL RAMON (solo admin) ── -->
+  <div id="panel-ramon" style="display:none; border-top: 2px solid var(--naranja); margin-top:2px;">
+    <div style="background:#0a0a0a; padding:18px 60px; display:flex; align-items:center; justify-content:space-between;">
+      <span style="font-size:11px;letter-spacing:4px;color:var(--naranja);text-transform:uppercase;">⚙ Panel PAM · Admin</span>
+      <button onclick="document.getElementById('panel-ramon').style.display='none'" style="background:none;border:1px solid #333;color:#555;padding:6px 16px;font-size:11px;letter-spacing:2px;cursor:pointer;">Cerrar</button>
+    </div>
+
+    <!-- Resumen datos cliente -->
+    <div class="fila">
+      <div class="bloque">
+        <div class="etiqueta">Resumen cliente</div>
+        <div id="admin-resumen" style="font-size:13px;color:var(--texto);line-height:2;"></div>
+      </div>
+      <div class="bloque">
+        <div class="etiqueta">Notas internas <em>· Solo PAM</em></div>
+        <textarea id="admin-notas" placeholder="Notas internas sobre este cliente..." style="min-height:120px;"></textarea>
+        <button class="btn-save" style="margin-top:12px;padding:10px 24px;font-size:12px;" onclick="guardarNotasAdmin()">Guardar notas</button>
+        <span id="admin-notas-status" style="font-size:12px;margin-left:12px;"></span>
+      </div>
+    </div>
+
+    <!-- Todos los archivos del cliente -->
+    <div style="background:var(--gris); padding:24px 60px; margin-top:2px;">
+      <div class="etiqueta" style="margin-bottom:16px;">Archivos del cliente · Todos</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2px;background:var(--gris2);">
+        <div style="background:var(--gris);padding:16px;">
+          <div style="font-size:11px;color:var(--naranja);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">Guiones</div>
+          <div id="admin-files-guiones" style="font-size:12px;color:var(--texto);"></div>
+        </div>
+        <div style="background:var(--gris);padding:16px;">
+          <div style="font-size:11px;color:var(--naranja);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">Logos</div>
+          <div id="admin-files-logos" style="font-size:12px;color:var(--texto);"></div>
+        </div>
+        <div style="background:var(--gris);padding:16px;">
+          <div style="font-size:11px;color:var(--naranja);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">Material Gráfico</div>
+          <div id="admin-files-material" style="font-size:12px;color:var(--texto);"></div>
+        </div>
+        <div style="background:var(--gris);padding:16px;">
+          <div style="font-size:11px;color:var(--naranja);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">Vídeos Finalizados</div>
+          <div id="admin-files-videos" style="font-size:12px;color:var(--texto);"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Avatar ID -->
+    <div class="fila" style="margin-top:2px;">
+      <div class="bloque">
+        <div class="etiqueta">Avatar ID HeyGen</div>
+        <input id="admin-avatar-id" type="text" placeholder="ID del avatar en HeyGen"/>
+      </div>
+      <div class="bloque">
+        <div class="etiqueta">Looks aprobados</div>
+        <textarea id="admin-looks" placeholder="De pie, sentado, despacho..." style="min-height:60px;"></textarea>
+      </div>
+      <div class="bloque">
+        <div class="etiqueta">Fecha grabación</div>
+        <input id="admin-fecha-grabacion" type="text" placeholder="DD/MM/AAAA"/>
+      </div>
+    </div>
+    <div class="save-bar">
+      <button class="btn-save" onclick="guardarDatosAdmin()">Guardar datos admin</button>
+      <span id="admin-status"></span>
+    </div>
+  </div>
+
+  <!-- Botón oculto acceso admin (triple clic en footer logo) -->
   <footer>
-    <p>© 2026 <span>PAM Audiovisual</span> · Ramon Sales · El Masnou</p>
+    <p>© 2026 <span style="cursor:pointer;" onclick="adminAccess()" title="">PAM Audiovisual</span> · Ramon Sales · El Masnou</p>
     <p style="color:#333;font-size:12px;letter-spacing:1px">CLON DIGITAL</p>
   </footer>
 
@@ -489,6 +565,7 @@ function cargarDatos(d) {
   set('d-cargo-rotulo', d.cargo_rotulo);
   if (d.empresa) document.getElementById('header-empresa').textContent = d.empresa;
   if (d.paquete) activarChip('chips-paquete', d.paquete);
+  if (d.formato) activarChip('chips-formato', d.formato);
   if (d.rotulo !== undefined) activarChip('chips-rotulo', d.rotulo === true || d.rotulo === 'Sí' ? 'Sí' : 'No');
 }
 
@@ -504,6 +581,7 @@ async function guardarDatos() {
     telefono:      get('d-telefono'),
     direccion:     get('d-direccion'),
     paquete:       chipActivo('chips-paquete'),
+    formato:       chipActivo('chips-formato'),
     idiomas:       get('d-idiomas'),
     tipografia:    get('d-tipografia'),
     colores:       get('d-colores'),
@@ -693,6 +771,103 @@ function formatDate(ts) {
   if (!ts) return '';
   const d = new Date(ts);
   return `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PANEL ADMIN (Ramon)
+// ═══════════════════════════════════════════════════════════════
+const ADMIN_CODE = 'PAM2026ADMIN';
+let adminClickCount = 0;
+let adminClickTimer = null;
+
+function adminAccess() {
+  adminClickCount++;
+  if (adminClickTimer) clearTimeout(adminClickTimer);
+  adminClickTimer = setTimeout(() => { adminClickCount = 0; }, 2000);
+  if (adminClickCount >= 3) {
+    adminClickCount = 0;
+    const code = prompt('Código de acceso PAM:');
+    if (code && code.toUpperCase() === ADMIN_CODE) {
+      document.getElementById('panel-ramon').style.display = 'block';
+      document.getElementById('panel-ramon').scrollIntoView({ behavior: 'smooth' });
+      cargarDatosAdmin();
+    } else if (code !== null) {
+      alert('Código incorrecto.');
+    }
+  }
+}
+
+async function cargarDatosAdmin() {
+  // Resumen datos cliente
+  const d = await api('datos', 'GET');
+  const resumen = document.getElementById('admin-resumen');
+  if (d && d.nombre) {
+    resumen.innerHTML = `
+      <strong style="color:var(--blanco)">${d.nombre}</strong> · ${d.empresa || ''}<br>
+      ${d.email || ''} · ${d.telefono || ''}<br>
+      ${d.direccion || ''}<br>
+      Paquete: <span style="color:var(--naranja)">${d.paquete || '—'}</span> · Formato: <span style="color:var(--naranja)">${d.formato || '—'}</span><br>
+      Idiomas: ${d.idiomas || '—'} · Rótulo: ${d.rotulo ? 'Sí' : 'No'}<br>
+      ${d.nombre_rotulo ? `${d.nombre_rotulo} · ${d.cargo_rotulo || ''}` : ''}
+    `;
+  }
+
+  // Datos admin
+  const admin = await api('datos-admin', 'GET');
+  if (admin && !admin.error) {
+    set('admin-notas', admin.notas);
+    set('admin-avatar-id', admin.avatar_id);
+    set('admin-looks', admin.looks);
+    set('admin-fecha-grabacion', admin.fecha_grabacion);
+  }
+
+  // Archivos por carpeta
+  cargarFilesAdmin('Guiones', 'admin-files-guiones');
+  cargarFilesAdmin('Logos', 'admin-files-logos');
+  cargarFilesAdmin('Material-Grafico', 'admin-files-material');
+  cargarFilesAdmin('Videos-Finalizados', 'admin-files-videos');
+}
+
+async function cargarFilesAdmin(folder, containerId) {
+  const res = await api(`files?folder=${folder}`, 'GET');
+  const el = document.getElementById(containerId);
+  const files = res.files || [];
+  if (!files.length) { el.innerHTML = '<em style="color:#444">Sin archivos</em>'; return; }
+  el.innerHTML = files.map(f =>
+    `<div style="margin-bottom:6px;">📄 ${f.name} ${f.url ? `<a href="${f.url}" target="_blank" style="color:var(--naranja);font-size:11px;margin-left:6px;">↓</a>` : ''}</div>`
+  ).join('');
+}
+
+async function guardarNotasAdmin() {
+  const admin = await api('datos-admin', 'GET').catch(() => ({}));
+  const datos = { ...(admin || {}), notas: get('admin-notas') };
+  const res = await apiAdmin('datos-admin', 'POST', datos);
+  const st = document.getElementById('admin-notas-status');
+  st.style.color = res.ok ? 'var(--verde)' : 'var(--rojo)';
+  st.textContent = res.ok ? '✓ Guardado' : '✕ Error';
+}
+
+async function guardarDatosAdmin() {
+  const datos = {
+    notas:           get('admin-notas'),
+    avatar_id:       get('admin-avatar-id'),
+    looks:           get('admin-looks'),
+    fecha_grabacion: get('admin-fecha-grabacion'),
+  };
+  const res = await apiAdmin('datos-admin', 'POST', datos);
+  const st = document.getElementById('admin-status');
+  st.style.color = res.ok ? 'var(--verde)' : 'var(--rojo)';
+  st.textContent = res.ok ? '✓ Datos admin guardados' : '✕ Error al guardar';
+}
+
+async function apiAdmin(endpoint, method, body) {
+  const url = `${WORKER}/api/${endpoint}?id=${CLIENT_ID}&code=${CLIENT_CODE}&admin=1`;
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  try {
+    const res = await fetch(url, opts);
+    return await res.json();
+  } catch { return { error: 'Error de red' }; }
 }
 </script>
 </body>
