@@ -677,7 +677,7 @@ function renderFileList(containerId, files) {
   el.innerHTML = files.map(f => `
     <div class="file-item">
       <span>📄 ${f.name}</span>
-      ${f.url ? `<a href="${f.url}" target="_blank" download>Descargar</a>` : ''}
+      ${f.path ? `<button onclick="downloadFile('${f.path}','${f.name}')" style="background:none;border:1px solid var(--naranja);color:var(--naranja);padding:4px 12px;font-size:12px;letter-spacing:1px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='var(--naranja)';this.style.color='var(--negro)'" onmouseout="this.style.background='none';this.style.color='var(--naranja)'">Descargar</button>` : ''}
     </div>
   `).join('');
 }
@@ -700,7 +700,7 @@ async function cargarVideos() {
       <div class="video-card">
         <div class="video-card-name">🎬 ${f.name}</div>
         <div class="video-card-date">${formatDate(f.uploaded)}</div>
-        ${f.url ? `<a href="${f.url}" target="_blank" download>⬇ Descargar · Download</a>` : '<span style="color:#444;font-size:12px">Enlace no disponible</span>'}
+        ${f.path ? `<button onclick="downloadFile('${f.path}','${f.name}')" style="display:inline-block;padding:10px 24px;background:var(--naranja);color:var(--negro);border:none;font-size:12px;letter-spacing:2px;font-weight:500;text-transform:uppercase;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='var(--blanco)'" onmouseout="this.style.background='var(--naranja)'">⬇ Descargar · Download</button>` : '<span style="color:#444;font-size:12px">Enlace no disponible</span>'}
       </div>
     `).join('')
   }</div>`;
@@ -775,6 +775,26 @@ function formatDate(ts) {
 }
 
 // ═══════════════════════════════════════════════════════════════
+// DESCARGA FORZADA
+// ═══════════════════════════════════════════════════════════════
+async function downloadFile(path, filename) {
+  try {
+    const url = `${WORKER}/api/download?id=${CLIENT_ID}&code=${CLIENT_CODE}&path=${encodeURIComponent(path)}`;
+    const response = await fetch(url);
+    if (!response.ok) { alert('Error al descargar el archivo.'); return; }
+    const blob = await response.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(blobUrl);
+  } catch(e) { alert('Error al descargar: ' + e.message); }
+}
+
+// ═══════════════════════════════════════════════════════════════
 // PANEL ADMIN (Ramon)
 // ═══════════════════════════════════════════════════════════════
 const ADMIN_CODE = 'PAM2026ADMIN';
@@ -835,7 +855,7 @@ async function cargarFilesAdmin(folder, containerId) {
   const files = res.files || [];
   if (!files.length) { el.innerHTML = '<em style="color:#444">Sin archivos</em>'; return; }
   el.innerHTML = files.map(f =>
-    `<div style="margin-bottom:6px;">📄 ${f.name} ${f.url ? `<a href="${f.url}" target="_blank" style="color:var(--naranja);font-size:11px;margin-left:6px;">↓</a>` : ''}</div>`
+    `<div style="margin-bottom:6px;">📄 ${f.name} ${f.path ? `<button onclick="downloadFile('${f.path}','${f.name}')" style="background:none;border:none;color:var(--naranja);font-size:11px;margin-left:6px;cursor:pointer;text-decoration:underline;">↓ descargar</button>` : ''}</div>`
   ).join('');
 }
 
