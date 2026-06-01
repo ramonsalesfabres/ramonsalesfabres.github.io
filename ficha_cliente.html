@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ficha Clon Digital | PAM Audiovisual</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Inter:wght@300;700&display=swap" rel="stylesheet">
+<script src="https://js.stripe.com/v3/"></script>
 <style>
   :root {
     --naranja: #E8943A;
@@ -171,14 +172,265 @@
     .bloque { padding: 20px 24px; }
     .semana-bloque { padding: 18px 20px; }
   }
+
+  /* ── Formulario captación (sin código) ── */
+  #captacion-overlay {
+    min-height: 100vh;
+    background: var(--negro);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 60px 24px;
+  }
+
+  .captacion-logo { margin-bottom: 40px; }
+  .captacion-logo svg { width: 120px; }
+
+  .captacion-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 8vw, 64px);
+    color: var(--blanco);
+    text-align: center;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .captacion-title span { color: var(--naranja); }
+
+  .captacion-sub {
+    font-size: 14px;
+    color: var(--texto);
+    text-align: center;
+    line-height: 1.8;
+    max-width: 480px;
+    margin-bottom: 48px;
+  }
+
+  .captacion-form {
+    width: 100%;
+    max-width: 560px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .captacion-bloque {
+    background: var(--gris);
+    padding: 24px 28px;
+  }
+
+  .captacion-bloque .etiqueta { margin-bottom: 8px; }
+
+  .captacion-opciones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-top: 24px;
+    width: 100%;
+    max-width: 560px;
+  }
+
+  .btn-opcion {
+    padding: 20px;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    line-height: 1.5;
+  }
+
+  .btn-reservar {
+    background: var(--naranja);
+    color: var(--negro);
+  }
+
+  .btn-reservar:hover { background: var(--blanco); }
+
+  .btn-hablar {
+    background: var(--gris2);
+    color: var(--texto);
+    border: 1px solid var(--gris2);
+  }
+
+  .btn-hablar:hover { border-color: var(--naranja); color: var(--naranja); }
+
+  /* ── Panel de pago ── */
+  #pago-panel {
+    display: none;
+    width: 100%;
+    max-width: 560px;
+    margin-top: 2px;
+  }
+
+  .pago-bloque {
+    background: var(--gris);
+    padding: 28px;
+  }
+
+  .pago-titulo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--naranja);
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+  }
+
+  .pago-sub {
+    font-size: 13px;
+    color: var(--texto);
+    margin-bottom: 24px;
+    line-height: 1.7;
+  }
+
+  #stripe-card-element {
+    background: var(--gris2);
+    padding: 14px 16px;
+    border: 1px solid var(--gris2);
+    transition: border-color 0.2s;
+  }
+
+  #stripe-card-element.StripeElement--focus { border-color: var(--naranja); }
+
+  .btn-pagar {
+    width: 100%;
+    margin-top: 16px;
+    padding: 16px;
+    background: var(--naranja);
+    color: var(--negro);
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .btn-pagar:hover { background: var(--blanco); }
+  .btn-pagar:disabled { background: #555; cursor: not-allowed; }
+
+  #pago-error { color: var(--rojo); font-size: 13px; margin-top: 8px; display: none; }
+  #pago-ok { color: var(--verde); font-size: 13px; margin-top: 8px; display: none; }
+
+  /* ── Sección plan y pagos ── */
+  .plan-info {
+    background: var(--gris2);
+    padding: 16px 20px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--texto);
+    line-height: 2;
+    border-left: 2px solid var(--naranja);
+  }
+
+  .plan-info strong { color: var(--naranja); }
+
+  .aviso-produccion {
+    background: rgba(232,148,58,0.08);
+    border: 1px solid rgba(232,148,58,0.3);
+    padding: 14px 20px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--texto);
+    line-height: 1.8;
+  }
+
+  .aviso-produccion strong { color: var(--naranja); }
 </style>
 </head>
 <body>
 
 <!-- ═══════════════════════════════════════════════════════════
-     PANTALLA DE ACCESO
+     FORMULARIO DE CAPTACIÓN (sin código en la URL)
      ═══════════════════════════════════════════════════════════ -->
-<div id="access-overlay">
+<div id="captacion-overlay" style="display:none;">
+  <div class="captacion-logo">
+    <svg viewBox="0 0 408 300" xmlns="http://www.w3.org/2000/svg">
+      <text x="204" y="147" font-family="Inter,sans-serif" font-size="94" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="-4">PAM</text>
+      <path d="M57 163 A147 147 0 0 1 351 163" fill="none" stroke="#E8943A" stroke-width="1.5"/>
+      <line x1="57" y1="162" x2="127" y2="162" stroke="#E8943A" stroke-width="1.5"/>
+      <line x1="281" y1="162" x2="351" y2="162" stroke="#E8943A" stroke-width="1.5"/>
+      <text x="204" y="188" font-family="Inter,sans-serif" font-size="14" font-weight="300" fill="#E8943A" text-anchor="middle" letter-spacing="7">AUDIOVISUAL</text>
+    </svg>
+  </div>
+
+  <h1 class="captacion-title">Reserva tu<br><span>Clon Digital</span></h1>
+  <p class="captacion-sub">Rellena tus datos y elige cómo quieres continuar. Sin compromiso hasta que confirmes tu reserva.</p>
+
+  <div class="captacion-form">
+    <div class="captacion-bloque">
+      <div class="etiqueta">Nombre completo</div>
+      <input id="c-nombre" type="text" placeholder="Tu nombre y apellidos"/>
+    </div>
+    <div class="captacion-bloque">
+      <div class="etiqueta">Empresa</div>
+      <input id="c-empresa" type="text" placeholder="Nombre de tu empresa"/>
+    </div>
+    <div class="captacion-bloque">
+      <div class="etiqueta">Email</div>
+      <input id="c-email" type="email" placeholder="email@empresa.com"/>
+    </div>
+    <div class="captacion-bloque">
+      <div class="etiqueta">Teléfono</div>
+      <input id="c-telefono" type="tel" placeholder="+34 600 000 000"/>
+    </div>
+    <div class="captacion-bloque">
+      <div class="etiqueta">Paquete de interés</div>
+      <div class="chips" id="chips-captacion-paquete">
+        <div class="chip" onclick="toggleChipSingle(this,'captacion-paquete')">Básico · 200€/mes</div>
+        <div class="chip" onclick="toggleChipSingle(this,'captacion-paquete')">Básico+ · 300€/mes</div>
+        <div class="chip" onclick="toggleChipSingle(this,'captacion-paquete')">Pro · 350€/mes</div>
+        <div class="chip" onclick="toggleChipSingle(this,'captacion-paquete')">Pro+ · 500€/mes</div>
+      </div>
+    </div>
+    <div class="captacion-bloque">
+      <div class="etiqueta">Sector</div>
+      <input id="c-sector" type="text" placeholder="Inmobiliaria, clínica, consultoría..."/>
+    </div>
+
+    <!-- Checkbox RGPD -->
+    <div class="captacion-bloque" style="display:flex;gap:12px;align-items:flex-start;">
+      <input type="checkbox" id="c-rgpd" style="width:auto;margin-top:4px;accent-color:var(--naranja);"/>
+      <label for="c-rgpd" style="font-size:13px;color:var(--texto);line-height:1.7;cursor:pointer;">
+        He leído y acepto la <a href="/privacidad.html" target="_blank" style="color:var(--naranja);">Política de privacidad</a> de PAM Audiovisual. Consiento el tratamiento de mis datos para gestionar mi solicitud.
+      </label>
+    </div>
+
+    <p id="captacion-error" style="color:var(--rojo);font-size:13px;display:none;padding:0 4px;">Por favor, rellena todos los campos y acepta la política de privacidad.</p>
+  </div>
+
+  <div class="captacion-opciones">
+    <button class="btn-opcion btn-reservar" onclick="mostrarPago()">
+      💳 Reservar ahora<br><span style="font-size:11px;font-weight:300;letter-spacing:1px;">Señal de 100€ con tarjeta</span>
+    </button>
+    <button class="btn-opcion btn-hablar" onclick="solicitarLlamada()">
+      📞 Prefiero hablar primero<br><span style="font-size:11px;font-weight:300;letter-spacing:1px;">Llamada o videollamada 10 min</span>
+    </button>
+  </div>
+
+  <!-- Panel de pago Stripe -->
+  <div id="pago-panel">
+    <div class="pago-bloque">
+      <div class="pago-titulo">Señal de reserva · 100€</div>
+      <p class="pago-sub">Esta señal reserva tu fecha de grabación durante 24 horas. Si no se confirma el pago en ese plazo, la fecha queda libre de nuevo.</p>
+      <div id="stripe-card-element"></div>
+      <div id="pago-error"></div>
+      <div id="pago-ok"></div>
+      <button class="btn-pagar" id="btn-pagar" onclick="procesarPago()">Confirmar reserva · Pagar 100€</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PANTALLA DE ACCESO (con código)
+     ═══════════════════════════════════════════════════════════ -->
+<div id="access-overlay" style="display:none;">
   <svg viewBox="0 0 408 300" xmlns="http://www.w3.org/2000/svg">
     <text x="204" y="147" font-family="Inter,sans-serif" font-size="94" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="-4">PAM</text>
     <path d="M57 163 A147 147 0 0 1 351 163" fill="none" stroke="#E8943A" stroke-width="1.5"/>
@@ -220,10 +472,46 @@
     <p class="hero-sub">Aquí gestionas tus datos, envías guiones cada mes y descargas tus vídeos terminados. Todo en un solo sitio.</p>
   </div>
 
-  <!-- ── SECCIÓN 1: DATOS DEL CLIENTE ── -->
+  <!-- ── SECCIÓN 2: PLAN Y PAGOS ── -->
   <div class="section">
     <div class="section-head" onclick="toggleSection(this)">
-      <span class="section-label">01 · Tus datos <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Your details</em></span>
+      <span class="section-label">02 · Tu plan y pagos <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Your plan & billing</em></span>
+      <span class="section-arrow open">›</span>
+    </div>
+    <div class="section-body open">
+      <div class="fila">
+        <div class="bloque">
+          <div class="etiqueta">Paquete activo <em>· Active plan</em></div>
+          <div id="plan-paquete-display" class="plan-info">— Pendiente de confirmar</div>
+        </div>
+        <div class="bloque">
+          <div class="etiqueta">Día de cobro mensual <em>· Billing day</em></div>
+          <div class="chips" id="chips-dia-cobro">
+            <div class="chip" onclick="toggleChipSingle(this,'dia-cobro')">Día 1</div>
+            <div class="chip" onclick="toggleChipSingle(this,'dia-cobro')">Día 15</div>
+            <div class="chip" onclick="toggleChipSingle(this,'dia-cobro')">Factura +15 días</div>
+          </div>
+        </div>
+      </div>
+      <div class="fila">
+        <div class="bloque" style="grid-column: 1 / -1;">
+          <div class="aviso-produccion">
+            <strong>⏱ Plazo de producción:</strong> La producción de tus vídeos empieza <strong>72 horas después</strong> de que PAM Audiovisual reciba los guiones de esa semana.<br>
+            <strong>📝 Responsabilidad del contenido:</strong> El texto y el idioma de cada vídeo son responsabilidad del cliente. PAM Audiovisual produce el vídeo con el contenido recibido sin modificarlo.
+          </div>
+        </div>
+      </div>
+      <div class="save-bar">
+        <button class="btn-save" onclick="guardarPlan()">Guardar plan · Save</button>
+        <span id="plan-status"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECCIÓN 3: DATOS DEL CLIENTE ── -->
+  <div class="section">
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="section-label">03 · Tus datos <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Your details</em></span>
       <span class="section-arrow open">›</span>
     </div>
     <div class="section-body open">
@@ -316,7 +604,7 @@
   <!-- ── SECCIÓN 2: GUIONES MENSUALES ── -->
   <div class="section">
     <div class="section-head" onclick="toggleSection(this)">
-      <span class="section-label">02 · Guiones del mes <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Monthly scripts</em></span>
+      <span class="section-label">04 · Guiones del mes <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Monthly scripts</em></span>
       <span class="section-arrow open">›</span>
     </div>
     <div class="section-body open">
@@ -374,7 +662,7 @@
   <!-- ── SECCIÓN 3: MATERIAL GRÁFICO ── -->
   <div class="section">
     <div class="section-head" onclick="toggleSection(this)">
-      <span class="section-label">03 · Material gráfico <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Brand & visual assets</em></span>
+      <span class="section-label">05 · Material gráfico <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Brand & visual assets</em></span>
       <span class="section-arrow">›</span>
     </div>
     <div class="section-body">
@@ -412,7 +700,7 @@
   <!-- ── SECCIÓN 4: VÍDEOS TERMINADOS ── -->
   <div class="section">
     <div class="section-head" onclick="toggleSection(this)">
-      <span class="section-label">04 · Tus vídeos listos <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Your finished videos</em></span>
+      <span class="section-label">06 · Tus vídeos listos <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Your finished videos</em></span>
       <span class="section-arrow open">›</span>
     </div>
     <div class="section-body open">
@@ -501,7 +789,583 @@
 // ═══════════════════════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════════════════════
-const WORKER = 'https://pam-backblaze.ramon-301.workers.dev';
+const WORKER      = 'https://pam-backblaze.ramon-301.workers.dev';
+const STRIPE_KEY  = 'pk_test_51TdRSnFTpEDshqFm3SPGYoRsrbBWXeD8wBAd6rCamIz1f36JzLRTnaaDheLRsqyLP8tWKauK7WmQsaryDo1uolY200NJiZ3pTF';
+const CAL_URL     = 'https://cal.com/ramon-pam'; // Actualizar cuando esté creada la cuenta
+
+let CLIENT_ID   = '';
+let CLIENT_CODE = '';
+let stripe, cardElement;
+
+// ═══════════════════════════════════════════════════════════════
+// INIT — decidir qué mostrar al cargar
+// ═══════════════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  CLIENT_ID   = params.get('id') || '';
+  CLIENT_CODE = params.get('code') || '';
+
+  if (CLIENT_ID && CLIENT_CODE) {
+    // Tiene id y code → pantalla de acceso con código
+    document.getElementById('captacion-overlay').style.display = 'none';
+    document.getElementById('access-overlay').style.display = 'flex';
+    document.getElementById('access-overlay').style.flexDirection = 'column';
+    document.getElementById('access-overlay').style.alignItems = 'center';
+    document.getElementById('access-overlay').style.justifyContent = 'center';
+    document.getElementById('access-overlay').style.minHeight = '100vh';
+    document.getElementById('access-overlay').style.gap = '24px';
+  } else {
+    // Sin código → formulario de captación
+    document.getElementById('access-overlay').style.display = 'none';
+    document.getElementById('captacion-overlay').style.display = 'flex';
+    iniciarStripe();
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// STRIPE — inicializar
+// ═══════════════════════════════════════════════════════════════
+function iniciarStripe() {
+  stripe = Stripe(STRIPE_KEY);
+  const elements = stripe.elements();
+  cardElement = elements.create('card', {
+    style: {
+      base: {
+        color: '#f5f5f0',
+        fontFamily: '"DM Sans", sans-serif',
+        fontSize: '15px',
+        '::placeholder': { color: '#444' }
+      }
+    }
+  });
+  cardElement.mount('#stripe-card-element');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CAPTACIÓN — validar y mostrar pago
+// ═══════════════════════════════════════════════════════════════
+function validarFormularioCaptacion() {
+  const nombre  = document.getElementById('c-nombre').value.trim();
+  const empresa = document.getElementById('c-empresa').value.trim();
+  const email   = document.getElementById('c-email').value.trim();
+  const telefono= document.getElementById('c-telefono').value.trim();
+  const rgpd    = document.getElementById('c-rgpd').checked;
+
+  if (!nombre || !empresa || !email || !telefono || !rgpd) {
+    document.getElementById('captacion-error').style.display = 'block';
+    return false;
+  }
+  document.getElementById('captacion-error').style.display = 'none';
+  return true;
+}
+
+function mostrarPago() {
+  if (!validarFormularioCaptacion()) return;
+  document.getElementById('pago-panel').style.display = 'block';
+  document.getElementById('pago-panel').scrollIntoView({ behavior: 'smooth' });
+}
+
+async function solicitarLlamada() {
+  if (!validarFormularioCaptacion()) return;
+
+  // Guardar lead primero
+  await guardarLead('llamada');
+
+  // Redirigir a Cal.com
+  window.open(CAL_URL, '_blank');
+}
+
+async function guardarLead(tipo) {
+  const datos = {
+    nombre:   document.getElementById('c-nombre').value.trim(),
+    empresa:  document.getElementById('c-empresa').value.trim(),
+    email:    document.getElementById('c-email').value.trim(),
+    telefono: document.getElementById('c-telefono').value.trim(),
+    paquete:  chipActivo('chips-captacion-paquete'),
+    sector:   document.getElementById('c-sector').value.trim(),
+    tipo,
+    fecha:    new Date().toISOString(),
+  };
+
+  await fetch(`${WORKER}/api/lead`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(datos)
+  }).catch(() => {});
+}
+
+// ═══════════════════════════════════════════════════════════════
+// STRIPE — procesar pago señal 100€
+// ═══════════════════════════════════════════════════════════════
+async function procesarPago() {
+  const btn = document.getElementById('btn-pagar');
+  const errEl = document.getElementById('pago-error');
+  const okEl  = document.getElementById('pago-ok');
+
+  btn.disabled = true;
+  btn.textContent = 'Procesando...';
+  errEl.style.display = 'none';
+  okEl.style.display  = 'none';
+
+  try {
+    // Crear PaymentIntent en el Worker
+    const nombre  = document.getElementById('c-nombre').value.trim();
+    const empresa = document.getElementById('c-empresa').value.trim();
+    const email   = document.getElementById('c-email').value.trim();
+
+    const intentRes = await fetch(`${WORKER}/api/crear-pago`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre, empresa, email, importe: 10000 }) // 100€ en céntimos
+    });
+
+    const intentData = await intentRes.json();
+    if (!intentData.clientSecret) throw new Error('No se pudo iniciar el pago');
+
+    // Confirmar pago con Stripe
+    const result = await stripe.confirmCardPayment(intentData.clientSecret, {
+      payment_method: {
+        card: cardElement,
+        billing_details: { name: nombre, email }
+      }
+    });
+
+    if (result.error) {
+      errEl.textContent = result.error.message;
+      errEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Confirmar reserva · Pagar 100€';
+    } else if (result.paymentIntent.status === 'succeeded') {
+      // Pago OK → guardar lead como reserva confirmada
+      await guardarLead('reserva-confirmada');
+
+      okEl.textContent = '✓ Pago confirmado. PAM Audiovisual se pondrá en contacto contigo para acordar la fecha de grabación.';
+      okEl.style.display = 'block';
+      btn.style.display = 'none';
+      cardElement.update({ disabled: true });
+    }
+  } catch(e) {
+    errEl.textContent = 'Error al procesar el pago. Inténtalo de nuevo.';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Confirmar reserva · Pagar 100€';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ACCESO CON CÓDIGO
+// ═══════════════════════════════════════════════════════════════
+function getUrlParam(k) {
+  return new URLSearchParams(window.location.search).get(k) || '';
+}
+
+async function acceder() {
+  CLIENT_ID   = getUrlParam('id');
+  CLIENT_CODE = document.getElementById('code-input').value.trim().toUpperCase();
+
+  if (!CLIENT_ID) {
+    alert('URL sin ID de cliente. Contacta con PAM Audiovisual.');
+    return;
+  }
+  if (!CLIENT_CODE) return;
+
+  document.getElementById('access-btn').textContent = '...';
+  document.getElementById('access-error').style.display = 'none';
+
+  try {
+    const res = await api('datos', 'GET');
+    if (res.error) throw new Error(res.error);
+
+    document.getElementById('access-overlay').style.display = 'none';
+    document.getElementById('main').style.display = 'block';
+    cargarDatos(res);
+    cargarArchivos();
+    cargarVideos();
+  } catch (e) {
+    document.getElementById('access-error').style.display = 'block';
+    document.getElementById('access-btn').textContent = 'Acceder · Enter';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const codeInput = document.getElementById('code-input');
+  if (codeInput) {
+    codeInput.addEventListener('keyup', e => {
+      if (e.key === 'Enter') acceder();
+      e.target.value = e.target.value.toUpperCase();
+    });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// DATOS DEL CLIENTE
+// ═══════════════════════════════════════════════════════════════
+function cargarDatos(d) {
+  if (!d || !Object.keys(d).length) return;
+  set('d-nombre', d.nombre);
+  set('d-empresa', d.empresa);
+  set('d-email', d.email);
+  set('d-telefono', d.telefono);
+  set('d-direccion', d.direccion);
+  set('d-idiomas', d.idiomas);
+  set('d-tipografia', d.tipografia);
+  set('d-colores', d.colores);
+  set('d-nombre-rotulo', d.nombre_rotulo);
+  set('d-cargo-rotulo', d.cargo_rotulo);
+  if (d.empresa) document.getElementById('header-empresa').textContent = d.empresa;
+  if (d.paquete) {
+    activarChip('chips-paquete', d.paquete);
+    const planDisplay = document.getElementById('plan-paquete-display');
+    if (planDisplay) planDisplay.innerHTML = `<strong>${d.paquete}</strong>`;
+  }
+  if (d.formato)   activarChip('chips-formato', d.formato);
+  if (d.rotulo !== undefined) activarChip('chips-rotulo', d.rotulo === true || d.rotulo === 'Sí' ? 'Sí' : 'No');
+  if (d.dia_cobro) activarChip('chips-dia-cobro', d.dia_cobro);
+}
+
+async function guardarDatos() {
+  const status = document.getElementById('save-status');
+  status.className = '';
+  status.textContent = 'Guardando...';
+
+  const datos = {
+    nombre:        get('d-nombre'),
+    empresa:       get('d-empresa'),
+    email:         get('d-email'),
+    telefono:      get('d-telefono'),
+    direccion:     get('d-direccion'),
+    paquete:       chipActivo('chips-paquete'),
+    formato:       chipActivo('chips-formato'),
+    idiomas:       get('d-idiomas'),
+    tipografia:    get('d-tipografia'),
+    colores:       get('d-colores'),
+    rotulo:        chipActivo('chips-rotulo') === 'Sí',
+    nombre_rotulo: get('d-nombre-rotulo'),
+    cargo_rotulo:  get('d-cargo-rotulo'),
+  };
+
+  const res = await api('datos', 'POST', datos);
+  if (res.ok) {
+    status.className = 'ok';
+    status.textContent = res.cambiosDetectados > 0
+      ? `✓ Guardado — ${res.cambiosDetectados} cambio(s) notificado(s) a PAM`
+      : '✓ Datos guardados correctamente';
+    if (datos.empresa) document.getElementById('header-empresa').textContent = datos.empresa;
+  } else {
+    status.className = 'err';
+    status.textContent = '✕ Error al guardar. Inténtalo de nuevo.';
+  }
+}
+
+async function guardarPlan() {
+  const status = document.getElementById('plan-status');
+  status.textContent = 'Guardando...';
+
+  const datos = {
+    dia_cobro: chipActivo('chips-dia-cobro'),
+  };
+
+  const res = await api('datos', 'POST', datos);
+  status.style.color = res.ok ? 'var(--verde)' : 'var(--rojo)';
+  status.textContent = res.ok ? '✓ Guardado' : '✕ Error';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SUBIDA DE GUIONES
+// ═══════════════════════════════════════════════════════════════
+async function uploadGuion(input, semana) {
+  if (!input.files.length) return;
+  const prog = document.getElementById(`prog-sem${semana}`);
+  prog.style.display = 'block';
+  prog.textContent = `Subiendo semana ${semana}...`;
+
+  for (const file of input.files) {
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('semana', semana);
+    const res = await apiForm('upload', fd, `Guiones`);
+    if (!res.ok) { prog.style.color = '#e85555'; prog.textContent = '✕ Error al subir'; return; }
+  }
+
+  prog.style.color = '#4caf7d';
+  prog.textContent = '✓ Guión subido correctamente';
+  setTimeout(() => { prog.style.display = 'none'; prog.style.color = ''; }, 3000);
+  cargarArchivosSemana(semana);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SUBIDA DE MATERIAL
+// ═══════════════════════════════════════════════════════════════
+async function uploadMaterial(input, carpeta) {
+  if (!input.files.length) return;
+  const progId = carpeta === 'Logos' ? 'prog-logos' : 'prog-material';
+  const prog   = document.getElementById(progId);
+  prog.style.display = 'block';
+  prog.textContent = `Subiendo ${input.files.length} archivo(s)...`;
+
+  let ok = true;
+  for (const file of input.files) {
+    const fd = new FormData();
+    fd.append('file', file);
+    const res = await apiForm('upload', fd, carpeta);
+    if (!res.ok) { ok = false; break; }
+  }
+
+  prog.style.color = ok ? '#4caf7d' : '#e85555';
+  prog.textContent = ok ? '✓ Material subido correctamente' : '✕ Error al subir';
+  setTimeout(() => { prog.style.display = 'none'; prog.style.color = ''; }, 3000);
+  if (ok) cargarArchivosMaterial(carpeta);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CARGA DE ARCHIVOS
+// ═══════════════════════════════════════════════════════════════
+function cargarArchivos() {
+  [1, 2, 3, 4].forEach(s => cargarArchivosSemana(s));
+  cargarArchivosMaterial('Logos');
+  cargarArchivosMaterial('Material-Grafico');
+}
+
+async function cargarArchivosSemana(semana) {
+  const res = await api(`files?folder=Guiones/semana${semana}`, 'GET');
+  renderFileList(`files-sem${semana}`, res.files || []);
+}
+
+async function cargarArchivosMaterial(carpeta) {
+  const res   = await api(`files?folder=${carpeta}`, 'GET');
+  const listId = carpeta === 'Logos' ? 'files-logos' : 'files-material';
+  renderFileList(listId, res.files || []);
+}
+
+function renderFileList(containerId, files) {
+  const el = document.getElementById(containerId);
+  if (!files.length) { el.innerHTML = '<p class="file-empty">Sin archivos aún · No files yet</p>'; return; }
+  el.innerHTML = files.map(f => `
+    <div class="file-item">
+      <span>📄 ${f.name}</span>
+      ${f.path ? `<button onclick="downloadFile('${f.path}','${f.name}')" style="background:none;border:1px solid var(--naranja);color:var(--naranja);padding:4px 12px;font-size:12px;letter-spacing:1px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='var(--naranja)';this.style.color='var(--negro)'" onmouseout="this.style.background='none';this.style.color='var(--naranja)'">Descargar</button>` : ''}
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// VÍDEOS TERMINADOS
+// ═══════════════════════════════════════════════════════════════
+async function cargarVideos() {
+  const res = await api('files?folder=Videos-Finalizados', 'GET');
+  const container = document.getElementById('videos-container');
+  const files = (res.files || []).filter(f => f.name && f.name !== '');
+
+  if (!files.length) {
+    container.innerHTML = '<p style="font-size:14px;color:#444;font-style:italic;padding:20px 0;">Tus vídeos aparecerán aquí cuando estén listos.<br><em style="font-size:12px">Your videos will appear here once ready.</em></p>';
+    return;
+  }
+
+  container.innerHTML = `<div class="video-grid">${
+    files.map(f => `
+      <div class="video-card">
+        <div class="video-card-name">🎬 ${f.name}</div>
+        <div class="video-card-date">${formatDate(f.uploaded)}</div>
+        ${f.path ? `<button onclick="downloadFile('${f.path}','${f.name}')" style="display:inline-block;padding:10px 24px;background:var(--naranja);color:var(--negro);border:none;font-size:12px;letter-spacing:2px;font-weight:500;text-transform:uppercase;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='var(--blanco)'" onmouseout="this.style.background='var(--naranja)'">⬇ Descargar · Download</button>` : '<span style="color:#444;font-size:12px">Enlace no disponible</span>'}
+      </div>
+    `).join('')
+  }</div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DRAG & DROP
+// ═══════════════════════════════════════════════════════════════
+function dragOver(e, id)   { e.preventDefault(); document.getElementById(id).classList.add('drag'); }
+function dragLeave(id)     { document.getElementById(id).classList.remove('drag'); }
+function dropFile(e, sem)  { e.preventDefault(); dragLeave(`upload-sem${sem}`); const dt = e.dataTransfer; if (dt.files.length) { const inp = document.getElementById(`file-sem${sem}`); Object.defineProperty(inp, 'files', { value: dt.files, configurable: true }); uploadGuion(inp, sem); } }
+function dropMaterial(e, c){ e.preventDefault(); dragLeave(`upload-${c.toLowerCase()}`); const dt = e.dataTransfer; if (dt.files.length) { const inp = document.getElementById(`file-${c.toLowerCase()}`); Object.defineProperty(inp, 'files', { value: dt.files, configurable: true }); uploadMaterial(inp, c); } }
+
+// ═══════════════════════════════════════════════════════════════
+// CHIPS
+// ═══════════════════════════════════════════════════════════════
+function toggleChipSingle(el, group) {
+  document.querySelectorAll(`#chips-${group} .chip`).forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+}
+function chipActivo(id) {
+  const el = document.querySelector(`#${id} .chip.on`);
+  return el ? el.textContent : '';
+}
+function activarChip(id, valor) {
+  document.querySelectorAll(`#${id} .chip`).forEach(c => {
+    if (c.textContent.trim() === valor) c.classList.add('on');
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SECCIONES COLAPSABLES
+// ═══════════════════════════════════════════════════════════════
+function toggleSection(head) {
+  const body  = head.nextElementSibling;
+  const arrow = head.querySelector('.section-arrow');
+  body.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// API HELPERS
+// ═══════════════════════════════════════════════════════════════
+async function api(endpoint, method, body) {
+  const url = `${WORKER}/api/${endpoint}${endpoint.includes('?') ? '&' : '?'}id=${CLIENT_ID}&code=${CLIENT_CODE}`;
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  try {
+    const res  = await fetch(url, opts);
+    return await res.json();
+  } catch { return { error: 'Error de red' }; }
+}
+
+async function apiForm(endpoint, formData, folder) {
+  const url = `${WORKER}/api/${endpoint}?id=${CLIENT_ID}&code=${CLIENT_CODE}&folder=${encodeURIComponent(folder)}`;
+  try {
+    const res = await fetch(url, { method: 'POST', body: formData });
+    return await res.json();
+  } catch { return { ok: false }; }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// UTILIDADES
+// ═══════════════════════════════════════════════════════════════
+function get(id)      { return document.getElementById(id)?.value || ''; }
+function set(id, val) { const el = document.getElementById(id); if (el && val) el.value = val; }
+
+function formatDate(ts) {
+  if (!ts) return '';
+  const d = new Date(ts);
+  return `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DESCARGA FORZADA
+// ═══════════════════════════════════════════════════════════════
+async function downloadFile(path, filename) {
+  try {
+    const workerUrl = `${WORKER}/api/download?id=${CLIENT_ID}&code=${CLIENT_CODE}&path=${encodeURIComponent(path)}`;
+    const response = await fetch(workerUrl);
+    if (!response.ok) {
+      const errText = await response.text();
+      alert('Error al descargar (código ' + response.status + '): ' + errText.substring(0, 200));
+      return;
+    }
+    const blob = await response.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+  } catch(e) { alert('Error al descargar: ' + e.message); }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PANEL ADMIN (Ramon) — código fuera del HTML
+// ═══════════════════════════════════════════════════════════════
+let adminClickCount = 0;
+let adminClickTimer = null;
+
+async function adminAccess() {
+  adminClickCount++;
+  if (adminClickTimer) clearTimeout(adminClickTimer);
+  adminClickTimer = setTimeout(() => { adminClickCount = 0; }, 2000);
+  if (adminClickCount >= 3) {
+    adminClickCount = 0;
+    const code = prompt('Código de acceso PAM:');
+    if (!code) return;
+
+    // Verificar código contra el Worker (no está en el HTML)
+    const res = await fetch(`${WORKER}/api/verificar-admin`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: code.toUpperCase() })
+    }).then(r => r.json()).catch(() => ({ ok: false }));
+
+    if (res.ok) {
+      document.getElementById('panel-ramon').style.display = 'block';
+      document.getElementById('panel-ramon').scrollIntoView({ behavior: 'smooth' });
+      cargarDatosAdmin();
+    } else {
+      alert('Código incorrecto.');
+    }
+  }
+}
+
+async function cargarDatosAdmin() {
+  const d = await api('datos', 'GET');
+  const resumen = document.getElementById('admin-resumen');
+  if (d && d.nombre) {
+    resumen.innerHTML = `
+      <strong style="color:var(--blanco)">${d.nombre}</strong> · ${d.empresa || ''}<br>
+      ${d.email || ''} · ${d.telefono || ''}<br>
+      ${d.direccion || ''}<br>
+      Paquete: <span style="color:var(--naranja)">${d.paquete || '—'}</span> · Formato: <span style="color:var(--naranja)">${d.formato || '—'}</span><br>
+      Idiomas: ${d.idiomas || '—'} · Rótulo: ${d.rotulo ? 'Sí' : 'No'}<br>
+      ${d.nombre_rotulo ? `${d.nombre_rotulo} · ${d.cargo_rotulo || ''}` : ''}
+    `;
+  }
+
+  const admin = await api('datos-admin', 'GET');
+  if (admin && !admin.error) {
+    set('admin-notas', admin.notas);
+    set('admin-avatar-id', admin.avatar_id);
+    set('admin-looks', admin.looks);
+    set('admin-fecha-grabacion', admin.fecha_grabacion);
+  }
+
+  cargarFilesAdmin('Guiones', 'admin-files-guiones');
+  cargarFilesAdmin('Logos', 'admin-files-logos');
+  cargarFilesAdmin('Material-Grafico', 'admin-files-material');
+  cargarFilesAdmin('Videos-Finalizados', 'admin-files-videos');
+}
+
+async function cargarFilesAdmin(folder, containerId) {
+  const res = await api(`files?folder=${folder}`, 'GET');
+  const el = document.getElementById(containerId);
+  const files = res.files || [];
+  if (!files.length) { el.innerHTML = '<em style="color:#444">Sin archivos</em>'; return; }
+  el.innerHTML = files.map(f =>
+    `<div style="margin-bottom:6px;">📄 ${f.name} ${f.path ? `<button onclick="downloadFile('${f.path}','${f.name}')" style="background:none;border:none;color:var(--naranja);font-size:11px;margin-left:6px;cursor:pointer;text-decoration:underline;">↓ descargar</button>` : ''}</div>`
+  ).join('');
+}
+
+async function guardarNotasAdmin() {
+  const admin = await api('datos-admin', 'GET').catch(() => ({}));
+  const datos = { ...(admin || {}), notas: get('admin-notas') };
+  const res = await apiAdmin('datos-admin', 'POST', datos);
+  const st = document.getElementById('admin-notas-status');
+  st.style.color = res.ok ? 'var(--verde)' : 'var(--rojo)';
+  st.textContent = res.ok ? '✓ Guardado' : '✕ Error';
+}
+
+async function guardarDatosAdmin() {
+  const datos = {
+    notas:           get('admin-notas'),
+    avatar_id:       get('admin-avatar-id'),
+    looks:           get('admin-looks'),
+    fecha_grabacion: get('admin-fecha-grabacion'),
+  };
+  const res = await apiAdmin('datos-admin', 'POST', datos);
+  const st = document.getElementById('admin-status');
+  st.style.color = res.ok ? 'var(--verde)' : 'var(--rojo)';
+  st.textContent = res.ok ? '✓ Datos admin guardados' : '✕ Error al guardar';
+}
+
+async function apiAdmin(endpoint, method, body) {
+  const url = `${WORKER}/api/${endpoint}?id=${CLIENT_ID}&code=${CLIENT_CODE}&admin=1`;
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  try {
+    const res = await fetch(url, opts);
+    return await res.json();
+  } catch { return { error: 'Error de red' }; }
+}
+</script>
 
 let CLIENT_ID   = '';
 let CLIENT_CODE = '';
