@@ -405,6 +405,10 @@
     <p id="captacion-error" style="color:var(--rojo);font-size:13px;display:none;padding:0 4px;">Por favor, rellena todos los campos y acepta la política de privacidad.</p>
   </div>
 
+  <p style="font-size:13px;color:var(--texto);text-align:center;margin-bottom:16px;line-height:1.8;">
+    Grabación inicial: <strong style="color:var(--blanco);">350€</strong> · 100€ al reservar + 250€ el día del rodaje
+  </p>
+
   <div class="captacion-opciones">
     <button class="btn-opcion btn-reservar" onclick="mostrarCalendario()">
       📅 Elegir fecha de grabación<br><span style="font-size:11px;font-weight:300;letter-spacing:1px;">Paso 1 de 2</span>
@@ -417,15 +421,17 @@
   <!-- Paso 2: confirmar fecha y pagar -->
   <div id="pago-panel">
     <div class="pago-bloque">
-      <div class="pago-titulo">Paso 2 · Confirma tu reserva</div>
-      <p class="pago-sub" style="margin-bottom:16px;">¿Ya tienes fecha elegida en el calendario? Ahora paga la señal de 100€ para confirmarla. Si no pagas en 24h, la fecha queda libre.</p>
+      <div class="pago-titulo">Confirma tu reserva</div>
+      <p class="pago-sub">Para reservar tu fecha de grabación, realizamos un cargo inicial de <strong style="color:var(--blanco);">100€</strong> con tu tarjeta.<br><br>
+      El importe restante de <strong style="color:var(--blanco);">250€</strong> se cargará automáticamente en la misma tarjeta el día de la grabación. No necesitas hacer nada más.<br><br>
+      <em style="font-size:12px;color:#555;">El total de la sesión de grabación inicial es de 350€.</em></p>
       <div style="margin-bottom:20px;">
         <a href="https://cal.eu/ramon-sales/grabacion" target="_blank" style="font-size:13px;color:var(--naranja);text-decoration:underline;">↩ Volver al calendario para elegir o cambiar fecha</a>
       </div>
       <div id="stripe-card-element"></div>
       <div id="pago-error"></div>
       <div id="pago-ok"></div>
-      <button class="btn-pagar" id="btn-pagar" onclick="procesarPago()">Confirmar reserva · Pagar 100€</button>
+      <button class="btn-pagar" id="btn-pagar" onclick="procesarPago()">Reservar y pagar señal · 100€</button>
     </div>
   </div>
 </div>
