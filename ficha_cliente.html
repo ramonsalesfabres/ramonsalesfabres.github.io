@@ -800,7 +800,8 @@
 // ═══════════════════════════════════════════════════════════════
 const WORKER      = 'https://pam-backblaze.ramon-301.workers.dev';
 const STRIPE_KEY  = 'pk_test_51TdRSnFTpEDshqFm3SPGYoRsrbBWXeD8wBAd6rCamIz1f36JzLRTnaaDheLRsqyLP8tWKauK7WmQsaryDo1uolY200NJiZ3pTF';
-const CAL_URL     = 'https://cal.com/ramon-pam'; // Actualizar cuando esté creada la cuenta
+const CAL_URL     = 'https://cal.eu/ramon-sales/grabacion';
+const CAL_VIDEO   = 'https://cal.eu/ramon-sales/videollamada';
 
 let CLIENT_ID   = '';
 let CLIENT_CODE = '';
@@ -891,7 +892,7 @@ async function solicitarLlamada() {
   await guardarLead('llamada');
 
   // Redirigir a Cal.com
-  window.open(CAL_URL, '_blank');
+  window.open(CAL_VIDEO, '_blank');
 }
 
 async function guardarLead(tipo) {
