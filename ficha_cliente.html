@@ -406,19 +406,22 @@
   </div>
 
   <div class="captacion-opciones">
-    <button class="btn-opcion btn-reservar" onclick="mostrarPago()">
-      💳 Reservar ahora<br><span style="font-size:11px;font-weight:300;letter-spacing:1px;">Señal de 100€ con tarjeta</span>
+    <button class="btn-opcion btn-reservar" onclick="mostrarCalendario()">
+      📅 Elegir fecha de grabación<br><span style="font-size:11px;font-weight:300;letter-spacing:1px;">Paso 1 de 2</span>
     </button>
     <button class="btn-opcion btn-hablar" onclick="solicitarLlamada()">
-      📞 Prefiero hablar primero<br><span style="font-size:11px;font-weight:300;letter-spacing:1px;">Llamada o videollamada 10 min</span>
+      📞 Prefiero hablar primero<br><span style="font-size:11px;font-weight:300;letter-spacing:1px;">Videollamada 10 min</span>
     </button>
   </div>
 
-  <!-- Panel de pago Stripe -->
+  <!-- Paso 2: confirmar fecha y pagar -->
   <div id="pago-panel">
     <div class="pago-bloque">
-      <div class="pago-titulo">Señal de reserva · 100€</div>
-      <p class="pago-sub">Esta señal reserva tu fecha de grabación durante 24 horas. Si no se confirma el pago en ese plazo, la fecha queda libre de nuevo.</p>
+      <div class="pago-titulo">Paso 2 · Confirma tu reserva</div>
+      <p class="pago-sub" style="margin-bottom:16px;">¿Ya tienes fecha elegida en el calendario? Ahora paga la señal de 100€ para confirmarla. Si no pagas en 24h, la fecha queda libre.</p>
+      <div style="margin-bottom:20px;">
+        <a href="https://cal.eu/ramon-sales/grabacion" target="_blank" style="font-size:13px;color:var(--naranja);text-decoration:underline;">↩ Volver al calendario para elegir o cambiar fecha</a>
+      </div>
       <div id="stripe-card-element"></div>
       <div id="pago-error"></div>
       <div id="pago-ok"></div>
@@ -858,6 +861,15 @@ function validarFormularioCaptacion() {
   }
   document.getElementById('captacion-error').style.display = 'none';
   return true;
+}
+
+function mostrarCalendario() {
+  if (!validarFormularioCaptacion()) return;
+  // Abrir Cal.com en ventana nueva
+  window.open('https://cal.eu/ramon-sales/grabacion', '_blank');
+  // Mostrar el panel de pago para cuando vuelva
+  document.getElementById('pago-panel').style.display = 'block';
+  document.getElementById('pago-panel').scrollIntoView({ behavior: 'smooth' });
 }
 
 function mostrarPago() {
