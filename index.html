@@ -394,6 +394,46 @@
 
   .contacto-email:hover { color: var(--blanco); border-color: var(--blanco); }
 
+  /* CTA BOTONES */
+  .cta-botones {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  .cta-principal {
+    display: inline-block;
+    padding: 18px 48px;
+    background: var(--naranja);
+    color: var(--negro);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .cta-principal:hover { background: var(--blanco); transform: translateY(-2px); }
+
+  .cta-secundario {
+    display: inline-block;
+    padding: 14px 32px;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--texto);
+    font-size: 14px;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .cta-secundario:hover { border-color: var(--naranja); color: var(--naranja); }
+
+  @media (min-width: 480px) {
+    .cta-botones { flex-direction: row; justify-content: center; }
+  }
+
   /* FOOTER */
   footer {
     padding: 28px 24px;
@@ -687,11 +727,17 @@
   </div>
 </div>
 
-<!-- CONTACTO -->
+<!-- CTA FINAL -->
 <section class="contacto">
-  <h2 class="contacto-title reveal">¿Hablamos?</h2>
-  <p class="contacto-sub reveal">Escríbenos y te contamos cómo funciona, sin compromiso.</p>
-  <a href="mailto:clon.digital@pam-audiovisual.com" class="contacto-email reveal">clon.digital@pam-audiovisual.com</a>
+  <h2 class="contacto-title reveal">¿Empezamos?</h2>
+  <p class="contacto-sub reveal">Reserva tu grabación inicial o háblanos primero, sin compromiso.</p>
+
+  <div class="cta-botones reveal">
+    <a href="https://ramonsalesfabres.github.io/ficha_cliente.html" class="cta-principal">Reservar mi Clon Digital</a>
+    <a href="https://cal.eu/ramon-sales/videollamada" class="cta-secundario">Prefiero hablar primero →</a>
+  </div>
+
+  <p class="contacto-sub reveal" style="margin-top:32px;font-size:13px;">O escríbenos directamente a <a href="mailto:clon.digital@pam-audiovisual.com" class="contacto-email" style="font-size:13px;font-family:'DM Sans',sans-serif;font-weight:300;">clon.digital@pam-audiovisual.com</a></p>
 </section>
 
 <!-- FOOTER -->
@@ -738,3 +784,4 @@
 
 </body>
 </html>
+
