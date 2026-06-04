@@ -77,12 +77,12 @@
   /* ── Grid / bloques ── */
   .fila { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2px; background: var(--gris2); margin-bottom: 2px; }
   .bloque { background: var(--gris); padding: 28px; }
-  .etiqueta { font-size: 13px; letter-spacing: 2px; color: var(--naranja); text-transform: uppercase; margin-bottom: 10px; }
+  .etiqueta { font-size: 14px; letter-spacing: 2px; color: var(--naranja); text-transform: uppercase; margin-bottom: 10px; }
   .etiqueta em { color: #555; font-style: italic; font-size: 12px; letter-spacing: 1px; }
 
   input, textarea {
     width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--gris2);
-    color: var(--blanco); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 300;
+    color: var(--blanco); font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 300;
     padding: 10px 0; outline: none; resize: none; transition: border-color 0.2s;
   }
   input + input { margin-top: 10px; }
@@ -92,7 +92,7 @@
 
   .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
   .chip {
-    padding: 7px 16px; border: 1px solid var(--gris2); font-size: 13px;
+    padding: 8px 18px; border: 1px solid var(--gris2); font-size: 14px;
     color: var(--texto); cursor: pointer; transition: all 0.2s; user-select: none;
   }
   .chip:hover { border-color: var(--naranja); color: var(--blanco); }
@@ -482,6 +482,10 @@
     <p class="hero-tag">Portal de Cliente · Clon Digital</p>
     <h1 class="hero-title">Tu espacio<br><span>PAM.</span></h1>
     <p class="hero-sub">Aquí gestionas tus datos, envías guiones cada mes y descargas tus vídeos terminados. Todo en un solo sitio.</p>
+    <div style="margin-top:20px;background:rgba(232,148,58,0.08);border:1px solid rgba(232,148,58,0.3);padding:16px 20px;max-width:600px;">
+      <p style="font-size:14px;color:var(--texto);line-height:1.8;">👋 <strong style="color:var(--naranja)">Bienvenido/a.</strong> Por favor, revisa y completa tus datos en cada sección. Cuanta más información tengas al día, mejor podremos personalizar tus vídeos.<br>
+      <em style="font-size:12px;color:#555;">Please review and complete your details in each section.</em></p>
+    </div>
   </div>
 
   <!-- ── SECCIÓN 2: PLAN Y PAGOS ── -->
@@ -510,14 +514,14 @@
       <div class="fila" style="margin-top:16px;">
         <div class="bloque" style="grid-column: 1 / -1;">
           <div class="etiqueta">Fecha de grabación <em>· Recording date</em></div>
-          <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:8px;">
-            <div id="fecha-grabacion-display" style="color:var(--blanco);font-size:15px;font-weight:500;">— Sin confirmar</div>
-            <button onclick="mostrarCambioFecha()" style="background:transparent;border:1px solid var(--naranja);color:var(--naranja);font-size:12px;letter-spacing:1px;padding:6px 16px;border-radius:4px;cursor:pointer;text-transform:uppercase;">📅 Cambiar fecha</button>
+          <div style="margin-top:8px;margin-bottom:16px;">
+            <div id="fecha-grabacion-display" style="color:var(--blanco);font-size:16px;font-weight:500;margin-bottom:12px;">— Sin confirmar</div>
           </div>
           <!-- Calendario inline para cambiar fecha -->
-          <div id="cal-cambio-container" style="display:none;margin-top:16px;">
+          <div id="cal-cambio-container" style="display:none;margin-bottom:16px;">
             <div style="width:100%;height:650px;overflow:scroll;border-radius:8px;" id="my-cal-cambio"></div>
           </div>
+          <button onclick="mostrarCambioFecha()" style="background:transparent;border:1px solid var(--naranja);color:var(--naranja);font-size:12px;letter-spacing:1px;padding:8px 20px;border-radius:4px;cursor:pointer;text-transform:uppercase;">📅 Cambiar fecha de grabación</button>
         </div>
       </div>
       <div class="fila">
@@ -997,14 +1001,16 @@ async function procesarPago() {
 
   try {
     // Crear PaymentIntent en el Worker
-    const nombre  = document.getElementById('c-nombre').value.trim();
-    const empresa = document.getElementById('c-empresa').value.trim();
-    const email   = document.getElementById('c-email').value.trim();
+    const nombre   = document.getElementById('c-nombre').value.trim();
+    const empresa  = document.getElementById('c-empresa').value.trim();
+    const email    = document.getElementById('c-email').value.trim();
+    const telefono = document.getElementById('c-telefono').value.trim();
+    const paquete  = chipActivo('captacion-paquete') || '';
 
     const intentRes = await fetch(`${WORKER}/api/crear-pago`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nombre, empresa, email, importe: 10000 }) // 100€ en céntimos
+      body: JSON.stringify({ nombre, empresa, email, telefono, paquete, importe: 10000 })
     });
 
     const intentData = await intentRes.json();
