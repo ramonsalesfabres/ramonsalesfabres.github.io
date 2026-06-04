@@ -959,7 +959,7 @@ async function procesarPago() {
       // Pago OK → guardar lead como reserva confirmada
       await guardarLead('reserva-confirmada');
 
-      okEl.textContent = '✓ Pago confirmado. PAM Audiovisual se pondrá en contacto contigo para acordar la fecha de grabación.';
+      okEl.textContent = '✓ Reserva confirmada. En breve recibirás un correo con todos los detalles y el acceso a tu área privada.';
       okEl.style.display = 'block';
       btn.style.display = 'none';
       cardElement.update({ disabled: true });
