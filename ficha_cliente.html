@@ -582,7 +582,7 @@
         </div>
         <div class="bloque">
           <div class="etiqueta">Idioma/s de los vídeos <em>· Language/s</em></div>
-          <input id="d-idiomas" type="text" placeholder="Español, inglés, ambos..."/>
+          <input id="d-idiomas" type="text" placeholder="Ej: Español · Inglés · Español (2) + Inglés (2)..."/>
         </div>
       </div>
       <div class="fila">
@@ -1005,7 +1005,7 @@ async function procesarPago() {
     const empresa  = document.getElementById('c-empresa').value.trim();
     const email    = document.getElementById('c-email').value.trim();
     const telefono = document.getElementById('c-telefono').value.trim();
-    const paquete  = chipActivo('captacion-paquete') || '';
+    const paquete  = chipActivo('chips-captacion-paquete') || '';
 
     const intentRes = await fetch(`${WORKER}/api/crear-pago`, {
       method: 'POST',
@@ -1108,7 +1108,9 @@ function cargarDatos(d) {
   set('d-cargo-rotulo', d.cargo_rotulo);
   if (d.empresa) document.getElementById('header-empresa').textContent = d.empresa;
   if (d.paquete) {
-    activarChip('chips-paquete', d.paquete);
+    // Normalizar paquete: quitar precio si viene con él (ej: "Básico · 200€/mes" → "Básico")
+    const paqueteNorm = d.paquete.split('·')[0].split('–')[0].trim();
+    activarChip('chips-paquete', paqueteNorm);
     const planDisplay = document.getElementById('plan-paquete-display');
     if (planDisplay) planDisplay.innerHTML = `<strong>${d.paquete}</strong>`;
   }
