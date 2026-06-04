@@ -430,6 +430,7 @@
       <p class="pago-sub">Para reservar tu fecha de grabación, realizamos un cargo inicial de <strong style="color:var(--blanco);">100€</strong> con tu tarjeta.<br><br>
       El importe restante de <strong style="color:var(--blanco);">250€</strong> se cargará automáticamente en la misma tarjeta el día de la grabación. No necesitas hacer nada más.<br><br>
       <em style="font-size:12px;color:#555;">El total de la sesión de grabación inicial es de 350€.</em></p>
+      <p style="font-size:12px;color:#444;margin-bottom:20px;line-height:1.7;">ℹ️ La señal de 100€ no es reembolsable en caso de cancelación. Si necesitas aplazar la fecha, puedes hacerlo sin coste desde tu área privada una vez recibas el acceso.</p>
       <div id="stripe-card-element"></div>
       <div id="pago-error"></div>
       <div id="pago-ok"></div>
@@ -501,6 +502,21 @@
             <div class="chip" onclick="toggleChipSingle(this,'dia-cobro')">Día 1</div>
             <div class="chip" onclick="toggleChipSingle(this,'dia-cobro')">Día 15</div>
             <div class="chip" onclick="toggleChipSingle(this,'dia-cobro')">Factura +15 días</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fecha de grabación -->
+      <div class="fila" style="margin-top:16px;">
+        <div class="bloque" style="grid-column: 1 / -1;">
+          <div class="etiqueta">Fecha de grabación <em>· Recording date</em></div>
+          <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:8px;">
+            <div id="fecha-grabacion-display" style="color:var(--blanco);font-size:15px;font-weight:500;">— Sin confirmar</div>
+            <button onclick="mostrarCambioFecha()" style="background:transparent;border:1px solid var(--naranja);color:var(--naranja);font-size:12px;letter-spacing:1px;padding:6px 16px;border-radius:4px;cursor:pointer;text-transform:uppercase;">📅 Cambiar fecha</button>
+          </div>
+          <!-- Calendario inline para cambiar fecha -->
+          <div id="cal-cambio-container" style="display:none;margin-top:16px;">
+            <div style="width:100%;height:650px;overflow:scroll;border-radius:8px;" id="my-cal-cambio"></div>
           </div>
         </div>
       </div>
@@ -1093,6 +1109,54 @@ function cargarDatos(d) {
   if (d.formato)   activarChip('chips-formato', d.formato);
   if (d.rotulo !== undefined) activarChip('chips-rotulo', d.rotulo === true || d.rotulo === 'Sí' ? 'Sí' : 'No');
   if (d.dia_cobro) activarChip('chips-dia-cobro', d.dia_cobro);
+  // Mostrar fecha de grabación
+  const fechaDisplay = document.getElementById('fecha-grabacion-display');
+  if (fechaDisplay && d.fechaGrabacion) {
+    fechaDisplay.textContent = d.fechaGrabacion;
+  }
+}
+
+function mostrarCambioFecha() {
+  const container = document.getElementById('cal-cambio-container');
+  container.style.display = 'block';
+  container.scrollIntoView({ behavior: 'smooth' });
+
+  if (!window.__calCambioLoaded) {
+    window.__calCambioLoaded = true;
+    const nombre = document.getElementById('d-nombre')?.value || '';
+    const email  = document.getElementById('d-email')?.value  || '';
+
+    (function (C, A, L) {
+      let p = function (a, ar) { a.q.push(ar); };
+      let d = C.document;
+      C.Cal = C.Cal || function () {
+        let cal = C.Cal; let ar = arguments;
+        if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; }
+        if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar);
+      };
+    })(window, "https://app.cal.eu/embed/embed.js", "init");
+
+    Cal("init", "cambio", {origin:"https://app.cal.eu"});
+
+    Cal.ns.cambio("inline", {
+      elementOrSelector: "#my-cal-cambio",
+      config: { layout: "month_view", name: nombre, email: email },
+      calLink: "ramon-sales/grabacion",
+    });
+
+    Cal.ns.cambio("ui", {"hideEventTypeDetails": true, "layout": "month_view"});
+
+    Cal.ns.cambio("on", {
+      action: "bookingSuccessful",
+      callback: (e) => {
+        // Ocultar calendario y mostrar confirmación
+        document.getElementById('cal-cambio-container').style.display = 'none';
+        const fechaDisplay = document.getElementById('fecha-grabacion-display');
+        if (fechaDisplay) fechaDisplay.textContent = 'Fecha actualizada — recibirás confirmación por email';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  }
 }
 
 async function guardarDatos() {
