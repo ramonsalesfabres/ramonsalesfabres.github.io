@@ -410,12 +410,17 @@
   </p>
 
   <div class="captacion-opciones">
-    <button class="btn-opcion btn-reservar" onclick="mostrarCalendario()">
+    <button class="btn-opcion btn-reservar" onclick="mostrarCalendarioInline()">
       📅 Elegir fecha de grabación<br><span style="font-size:11px;font-weight:300;letter-spacing:1px;">Paso 1 de 2</span>
     </button>
     <button class="btn-opcion btn-hablar" onclick="solicitarLlamada()">
       📞 Prefiero hablar primero<br><span style="font-size:11px;font-weight:300;letter-spacing:1px;">Videollamada 10 min</span>
     </button>
+  </div>
+
+  <!-- Calendario inline Cal.com -->
+  <div id="cal-inline-container" style="display:none;margin-top:24px;">
+    <div style="width:100%;height:700px;overflow:scroll;border-radius:8px;" id="my-cal-inline-grabacion"></div>
   </div>
 
   <!-- Paso 2: confirmar fecha y pagar -->
@@ -425,9 +430,6 @@
       <p class="pago-sub">Para reservar tu fecha de grabación, realizamos un cargo inicial de <strong style="color:var(--blanco);">100€</strong> con tu tarjeta.<br><br>
       El importe restante de <strong style="color:var(--blanco);">250€</strong> se cargará automáticamente en la misma tarjeta el día de la grabación. No necesitas hacer nada más.<br><br>
       <em style="font-size:12px;color:#555;">El total de la sesión de grabación inicial es de 350€.</em></p>
-      <div style="margin-bottom:20px;">
-        <a href="https://cal.eu/ramon-sales/grabacion" target="_blank" style="font-size:13px;color:var(--naranja);text-decoration:underline;">↩ Volver al calendario para elegir o cambiar fecha</a>
-      </div>
       <div id="stripe-card-element"></div>
       <div id="pago-error"></div>
       <div id="pago-ok"></div>
@@ -868,6 +870,56 @@ function validarFormularioCaptacion() {
   }
   document.getElementById('captacion-error').style.display = 'none';
   return true;
+}
+
+function mostrarCalendarioInline() {
+  if (!validarFormularioCaptacion()) return;
+
+  const nombre = document.getElementById('cap-nombre')?.value || '';
+  const email  = document.getElementById('cap-email')?.value  || '';
+
+  const container = document.getElementById('cal-inline-container');
+  container.style.display = 'block';
+  container.scrollIntoView({ behavior: 'smooth' });
+
+  // Inicializar Cal.com embed si no está ya cargado
+  if (!window.__calLoaded) {
+    window.__calLoaded = true;
+    (function (C, A, L) {
+      let p = function (a, ar) { a.q.push(ar); };
+      let d = C.document;
+      C.Cal = C.Cal || function () {
+        let cal = C.Cal; let ar = arguments;
+        if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; }
+        if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar);
+      };
+    })(window, "https://app.cal.eu/embed/embed.js", "init");
+
+    Cal("init", "grabacion", {origin:"https://app.cal.eu"});
+
+    Cal.ns.grabacion("inline", {
+      elementOrSelector: "#my-cal-inline-grabacion",
+      config: {
+        layout: "month_view",
+        name: nombre,
+        email: email,
+      },
+      calLink: "ramon-sales/grabacion",
+    });
+
+    Cal.ns.grabacion("ui", {"hideEventTypeDetails": true, "layout": "month_view"});
+
+    // Cuando el cliente confirma la reserva → mostrar pago
+    Cal.ns.grabacion("on", {
+      action: "bookingSuccessful",
+      callback: () => {
+        document.getElementById('cal-inline-container').style.display = 'none';
+        document.getElementById('pago-panel').style.display = 'block';
+        document.getElementById('pago-panel').scrollIntoView({ behavior: 'smooth' });
+        iniciarStripe();
+      }
+    });
+  }
 }
 
 function mostrarCalendario() {
