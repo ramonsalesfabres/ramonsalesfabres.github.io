@@ -429,6 +429,7 @@
       <div class="pago-titulo">Confirma tu reserva</div>
       <p class="pago-sub">Para reservar tu fecha de grabación, realizamos un cargo inicial de <strong style="color:var(--blanco);">100€</strong> con tu tarjeta.<br><br>
       El importe restante de <strong style="color:var(--blanco);">250€</strong> se cargará automáticamente en la misma tarjeta el día de la grabación. No necesitas hacer nada más.<br><br>
+      Tu tarjeta quedará guardada de forma segura para los cobros mensuales de producción.<br><br>
       <em style="font-size:13px;color:#aaaaaa;">El total de la sesión de grabación inicial es de 350€.</em></p>
       <p style="font-size:13px;color:#aaaaaa;margin-bottom:20px;line-height:1.7;">ℹ️ La señal de 100€ no es reembolsable en caso de cancelación. Si necesitas aplazar la fecha, puedes hacerlo sin coste desde tu área privada una vez recibas el acceso.</p>
       <div id="stripe-card-element"></div>
@@ -501,12 +502,8 @@
           <div id="plan-paquete-display" class="plan-info">— Pendiente de confirmar</div>
         </div>
         <div class="bloque">
-          <div class="etiqueta">Día de cobro mensual <em>· Billing day</em></div>
-          <div class="chips" id="chips-dia-cobro">
-            <div class="chip" onclick="toggleChipSingle(this,'dia-cobro')">Día 1</div>
-            <div class="chip" onclick="toggleChipSingle(this,'dia-cobro')">Día 15</div>
-            <div class="chip" onclick="toggleChipSingle(this,'dia-cobro')">Factura +15 días</div>
-          </div>
+          <div class="etiqueta">Cobro mensual <em>· Monthly billing</em></div>
+          <p style="font-size:14px;color:var(--texto);line-height:1.8;margin-top:6px;">Cuando tus vídeos estén listos, te avisaremos por correo para que puedas descargarlos directamente desde aquí. En ese momento se cargará automáticamente el importe del mes en tu tarjeta. Sin sorpresas.<br><em style="font-size:12px;color:#444;">When your videos are ready, we'll notify you by email so you can download them directly from here. Your monthly fee will then be charged automatically to your card.</em></p>
         </div>
       </div>
 
@@ -787,6 +784,25 @@
       </div>
     </div>
 
+    <!-- Subida de vídeos finalizados + cobro -->
+    <div style="background:var(--gris); padding:24px 60px; margin-top:2px; border-top: 1px solid var(--naranja);">
+      <div class="etiqueta" style="margin-bottom:6px;">📦 Entrega del mes · Subir vídeos y cobrar</div>
+      <p style="font-size:13px;color:var(--texto);line-height:1.8;margin-bottom:16px;">Sube aquí los vídeos finalizados del mes. Cuando pulses "Entregar y cobrar" se publicarán en el área del cliente, se le enviará un correo avisándole y se cargará el importe en su tarjeta.</p>
+      <div class="upload-area" id="upload-videos-admin" onclick="document.getElementById('file-videos-admin').click()"
+           ondragover="dragOver(event,'upload-videos-admin')" ondragleave="dragLeave('upload-videos-admin')" ondrop="dropVideosAdmin(event)"
+           style="border:1px dashed var(--naranja);padding:24px;text-align:center;cursor:pointer;margin-bottom:12px;border-radius:4px;">
+        <p style="color:var(--texto);">🎬 Arrastra los vídeos aquí o haz clic para seleccionarlos<br><strong style="color:var(--blanco);">MP4, MOV</strong></p>
+        <input type="file" id="file-videos-admin" multiple accept=".mp4,.mov,.avi,.mkv" onchange="seleccionarVideosAdmin(this)" style="display:none;"/>
+      </div>
+      <div id="lista-videos-admin" style="font-size:13px;color:var(--texto);margin-bottom:12px;"></div>
+      <div id="prog-videos-admin" style="display:none;font-size:13px;color:var(--naranja);margin-bottom:12px;"></div>
+      <button id="btn-entregar-cobrar" onclick="entregarYCobrar()"
+        style="background:var(--naranja);color:var(--negro);border:none;padding:14px 32px;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;opacity:0.4;pointer-events:none;transition:all 0.2s;">
+        💳 Entregar y cobrar
+      </button>
+      <span id="entregar-status" style="font-size:13px;margin-left:16px;"></span>
+    </div>
+
     <!-- Avatar ID -->
     <div class="fila" style="margin-top:2px;">
       <div class="bloque">
@@ -987,7 +1003,7 @@ async function guardarLead(tipo) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// STRIPE — procesar pago señal 100€
+// STRIPE — procesar pago señal 100€ + guardar tarjeta
 // ═══════════════════════════════════════════════════════════════
 async function procesarPago() {
   const btn = document.getElementById('btn-pagar');
@@ -1000,13 +1016,13 @@ async function procesarPago() {
   okEl.style.display  = 'none';
 
   try {
-    // Crear PaymentIntent en el Worker
     const nombre   = document.getElementById('c-nombre').value.trim();
     const empresa  = document.getElementById('c-empresa').value.trim();
     const email    = document.getElementById('c-email').value.trim();
     const telefono = document.getElementById('c-telefono').value.trim();
     const paquete  = chipActivo('chips-captacion-paquete') || '';
 
+    // Crear pago en el Worker (devuelve setupIntent + paymentIntent)
     const intentRes = await fetch(`${WORKER}/api/crear-pago`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -1016,33 +1032,39 @@ async function procesarPago() {
     const intentData = await intentRes.json();
     if (!intentData.clientSecret) throw new Error('No se pudo iniciar el pago');
 
-    // Confirmar pago con Stripe
-    const result = await stripe.confirmCardPayment(intentData.clientSecret, {
+    // Primero confirmar el SetupIntent para guardar la tarjeta
+    const setupResult = await stripe.confirmCardSetup(intentData.setupSecret, {
       payment_method: {
         card: cardElement,
         billing_details: { name: nombre, email }
       }
     });
 
-    if (result.error) {
-      errEl.textContent = result.error.message;
-      errEl.style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'Confirmar reserva · Pagar 100€';
-    } else if (result.paymentIntent.status === 'succeeded') {
-      // Pago OK → guardar lead como reserva confirmada
-      await guardarLead('reserva-confirmada');
+    if (setupResult.error) {
+      throw new Error(setupResult.error.message);
+    }
 
+    // Luego confirmar el PaymentIntent de 100€ con la tarjeta guardada
+    const payResult = await stripe.confirmCardPayment(intentData.clientSecret, {
+      payment_method: setupResult.setupIntent.payment_method
+    });
+
+    if (payResult.error) {
+      throw new Error(payResult.error.message);
+    }
+
+    if (payResult.paymentIntent.status === 'succeeded') {
+      await guardarLead('reserva-confirmada');
       okEl.textContent = '✓ Reserva confirmada. En breve recibirás un correo con todos los detalles y el acceso a tu área privada.';
       okEl.style.display = 'block';
       btn.style.display = 'none';
       cardElement.update({ disabled: true });
     }
   } catch(e) {
-    errEl.textContent = 'Error al procesar el pago. Inténtalo de nuevo.';
+    errEl.textContent = e.message || 'Error al procesar el pago. Inténtalo de nuevo.';
     errEl.style.display = 'block';
     btn.disabled = false;
-    btn.textContent = 'Confirmar reserva · Pagar 100€';
+    btn.textContent = 'Reservar y pagar señal · 100€';
   }
 }
 
@@ -1205,9 +1227,7 @@ async function guardarPlan() {
   const status = document.getElementById('plan-status');
   status.textContent = 'Guardando...';
 
-  const datos = {
-    dia_cobro: chipActivo('chips-dia-cobro'),
-  };
+  const datos = {};
 
   const res = await api('datos', 'POST', datos);
   status.style.color = res.ok ? 'var(--verde)' : 'var(--rojo)';
@@ -1498,6 +1518,89 @@ async function guardarDatosAdmin() {
   const st = document.getElementById('admin-status');
   st.style.color = res.ok ? 'var(--verde)' : 'var(--rojo)';
   st.textContent = res.ok ? '✓ Datos admin guardados' : '✕ Error al guardar';
+}
+
+
+// ═══════════════════════════════════════════════════════════════
+// ADMIN — subida de vídeos y entrega+cobro
+// ═══════════════════════════════════════════════════════════════
+let videosAdminSeleccionados = [];
+
+function seleccionarVideosAdmin(input) {
+  videosAdminSeleccionados = Array.from(input.files);
+  const lista = document.getElementById('lista-videos-admin');
+  const btn   = document.getElementById('btn-entregar-cobrar');
+  if (!videosAdminSeleccionados.length) {
+    lista.innerHTML = '';
+    btn.style.opacity = '0.4';
+    btn.style.pointerEvents = 'none';
+    return;
+  }
+  lista.innerHTML = videosAdminSeleccionados.map(f =>
+    `<div style="margin-bottom:4px;">🎬 ${f.name} <span style="color:#555;font-size:11px;">(${(f.size/1024/1024).toFixed(1)} MB)</span></div>`
+  ).join('');
+  btn.style.opacity = '1';
+  btn.style.pointerEvents = 'auto';
+}
+
+function dropVideosAdmin(e) {
+  e.preventDefault();
+  dragLeave('upload-videos-admin');
+  const dt = e.dataTransfer;
+  if (dt.files.length) {
+    const inp = document.getElementById('file-videos-admin');
+    Object.defineProperty(inp, 'files', { value: dt.files, configurable: true });
+    seleccionarVideosAdmin(inp);
+  }
+}
+
+async function entregarYCobrar() {
+  if (!videosAdminSeleccionados.length) return;
+
+  const btn    = document.getElementById('btn-entregar-cobrar');
+  const prog   = document.getElementById('prog-videos-admin');
+  const status = document.getElementById('entregar-status');
+
+  btn.disabled = true;
+  btn.textContent = 'Subiendo vídeos...';
+  prog.style.display = 'block';
+  status.textContent = '';
+
+  try {
+    // Subir cada vídeo a Videos-Finalizados
+    for (let i = 0; i < videosAdminSeleccionados.length; i++) {
+      const file = videosAdminSeleccionados[i];
+      prog.textContent = `Subiendo ${i + 1} de ${videosAdminSeleccionados.length}: ${file.name}...`;
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await apiForm('upload', fd, 'Videos-Finalizados');
+      if (!res.ok) throw new Error(`Error al subir ${file.name}`);
+    }
+
+    // Cobrar y enviar correo
+    prog.textContent = 'Procesando cobro y enviando correo...';
+    btn.textContent = 'Cobrando...';
+
+    const res = await api('cobrar-entrega', 'POST', {});
+    if (!res.ok) throw new Error(res.error || 'Error al cobrar');
+
+    prog.style.display = 'none';
+    status.style.color = 'var(--verde)';
+    status.textContent = `✓ ${videosAdminSeleccionados.length} vídeo(s) entregados · Cobro realizado · Correo enviado`;
+    btn.textContent = '✓ Entregado';
+
+    // Recargar lista de vídeos del admin
+    cargarFilesAdmin('Videos-Finalizados', 'admin-files-videos');
+    videosAdminSeleccionados = [];
+    document.getElementById('lista-videos-admin').innerHTML = '';
+
+  } catch(e) {
+    prog.style.display = 'none';
+    status.style.color = 'var(--rojo)';
+    status.textContent = '✕ ' + e.message;
+    btn.disabled = false;
+    btn.textContent = '💳 Entregar y cobrar';
+  }
 }
 
 async function apiAdmin(endpoint, method, body) {
