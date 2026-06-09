@@ -1243,13 +1243,18 @@ async function uploadGuion(input, semana) {
   prog.style.display = 'block';
   prog.textContent = `Subiendo semana ${semana}...`;
 
+  const archivos = [];
   for (const file of input.files) {
     const fd = new FormData();
     fd.append('file', file);
     fd.append('semana', semana);
     const res = await apiForm('upload', fd, `Guiones`);
     if (!res.ok) { prog.style.color = '#e85555'; prog.textContent = '✕ Error al subir'; return; }
+    archivos.push(file.name);
   }
+
+  // Notificar a Ramon una sola vez con todos los archivos
+  await api('notify-guiones', 'POST', { semana, archivos });
 
   prog.style.color = '#4caf7d';
   prog.textContent = '✓ Guión subido correctamente';
