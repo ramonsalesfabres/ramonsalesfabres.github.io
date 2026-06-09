@@ -854,14 +854,10 @@ window.addEventListener('DOMContentLoaded', () => {
   CLIENT_CODE = params.get('code') || '';
 
   if (CLIENT_ID && CLIENT_CODE) {
-    // Tiene id y code → pantalla de acceso con código
+    // Tiene id y code en URL → entrar directamente sin pedir código
     document.getElementById('captacion-overlay').style.display = 'none';
-    document.getElementById('access-overlay').style.display = 'flex';
-    document.getElementById('access-overlay').style.flexDirection = 'column';
-    document.getElementById('access-overlay').style.alignItems = 'center';
-    document.getElementById('access-overlay').style.justifyContent = 'center';
-    document.getElementById('access-overlay').style.minHeight = '100vh';
-    document.getElementById('access-overlay').style.gap = '24px';
+    document.getElementById('access-overlay').style.display = 'none';
+    setTimeout(() => accederConCodigo(CLIENT_ID, CLIENT_CODE), 300);
   } else {
     // Sin código → formulario de captación
     document.getElementById('access-overlay').style.display = 'none';
@@ -1073,6 +1069,30 @@ async function procesarPago() {
 // ═══════════════════════════════════════════════════════════════
 function getUrlParam(k) {
   return new URLSearchParams(window.location.search).get(k) || '';
+}
+
+async function accederConCodigo(clientId, clientCode) {
+  CLIENT_ID   = clientId;
+  CLIENT_CODE = clientCode;
+
+  try {
+    const res = await api('datos', 'GET');
+    if (res.error) throw new Error(res.error);
+    document.getElementById('access-overlay').style.display = 'none';
+    document.getElementById('main').style.display = 'block';
+    cargarDatos(res);
+    cargarArchivos();
+    cargarVideos();
+  } catch (e) {
+    console.error('accederConCodigo error:', e.message);
+    // Si falla mostrar pantalla de código con error
+    document.getElementById('access-overlay').style.display = 'flex';
+    document.getElementById('access-overlay').style.flexDirection = 'column';
+    document.getElementById('access-overlay').style.alignItems = 'center';
+    document.getElementById('access-overlay').style.justifyContent = 'center';
+    document.getElementById('access-overlay').style.minHeight = '100vh';
+    document.getElementById('access-error').style.display = 'block';
+  }
 }
 
 async function acceder() {
