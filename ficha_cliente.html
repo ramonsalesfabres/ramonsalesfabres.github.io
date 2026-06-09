@@ -854,10 +854,22 @@ window.addEventListener('DOMContentLoaded', () => {
   CLIENT_CODE = params.get('code') || '';
 
   if (CLIENT_ID && CLIENT_CODE) {
-    // Tiene id y code en URL → entrar directamente sin pedir código
-    document.getElementById('captacion-overlay').style.display = 'none';
-    document.getElementById('access-overlay').style.display = 'none';
-    setTimeout(() => accederConCodigo(CLIENT_ID, CLIENT_CODE), 300);
+    const autoLogin = params.get('auto') === '1';
+    if (autoLogin) {
+      // Enlace admin → entrar directamente
+      document.getElementById('captacion-overlay').style.display = 'none';
+      document.getElementById('access-overlay').style.display = 'none';
+      setTimeout(() => accederConCodigo(CLIENT_ID, CLIENT_CODE), 300);
+    } else {
+      // Enlace cliente → pedir código
+      document.getElementById('captacion-overlay').style.display = 'none';
+      document.getElementById('access-overlay').style.display = 'flex';
+      document.getElementById('access-overlay').style.flexDirection = 'column';
+      document.getElementById('access-overlay').style.alignItems = 'center';
+      document.getElementById('access-overlay').style.justifyContent = 'center';
+      document.getElementById('access-overlay').style.minHeight = '100vh';
+      document.getElementById('access-overlay').style.gap = '24px';
+    }
   } else {
     // Sin código → formulario de captación
     document.getElementById('access-overlay').style.display = 'none';
