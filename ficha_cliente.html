@@ -574,14 +574,8 @@
           <input id="d-municipio" type="text" placeholder="El Masnou"/>
         </div>
         <div class="bloque">
-          <div class="etiqueta">NIF / DNI <em>· Personal tax ID</em></div>
-          <input id="d-nif" type="text" placeholder="45444555F"/>
-        </div>
-      </div>
-      <div class="fila">
-        <div class="bloque">
-          <div class="etiqueta">CIF <em>· Company tax ID</em></div>
-          <input id="d-cif" type="text" placeholder="B12345678"/>
+          <div class="etiqueta">NIF o CIF <em>· Tax ID</em></div>
+          <input id="d-nif" type="text" placeholder="45444555F o B12345678"/>
         </div>
       </div>
       <div class="fila">
@@ -1228,7 +1222,6 @@ function cargarDatos(d) {
   set('d-cp', d.cp);
   set('d-municipio', d.municipio);
   set('d-nif', d.nif);
-  set('d-cif', d.cif);
   set('d-idiomas', d.idiomas);
   set('d-nombre-rotulo', d.nombre_rotulo);
   set('d-cargo-rotulo', d.cargo_rotulo);
@@ -1356,7 +1349,6 @@ async function guardarTodo() {
     cp:            get('d-cp'),
     municipio:     get('d-municipio'),
     nif:           get('d-nif'),
-    cif:           get('d-cif'),
     paquete:       chipActivo('chips-paquete'),
     formato:       chipActivo('chips-formato'),
     idiomas:       get('d-idiomas'),
