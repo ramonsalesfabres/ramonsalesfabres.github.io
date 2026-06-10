@@ -483,16 +483,19 @@
     <p class="hero-tag">Portal de Cliente · Clon Digital</p>
     <h1 class="hero-title">Tu espacio<br><span>PAM.</span></h1>
     <p class="hero-sub">Aquí gestionas tus datos, envías guiones cada mes y descargas tus vídeos terminados. Todo en un solo sitio.</p>
-    <div style="margin-top:20px;background:rgba(232,148,58,0.08);border:1px solid rgba(232,148,58,0.3);padding:16px 20px;max-width:600px;">
-      <p style="font-size:14px;color:var(--texto);line-height:1.8;">👋 <strong style="color:var(--naranja)">Bienvenido/a.</strong> Por favor, revisa y completa tus datos en cada sección. Cuanta más información tengas al día, mejor podremos personalizar tus vídeos.<br>
-      <em style="font-size:12px;color:#555;">Please review and complete your details in each section.</em></p>
+    <div style="margin-top:20px;background:rgba(232,148,58,0.08);border-left:3px solid var(--naranja);padding:20px 24px;max-width:600px;border-radius:0 4px 4px 0;">
+      <p style="font-size:14px;color:var(--texto);line-height:1.9;margin:0;">
+        <strong style="color:var(--naranja);letter-spacing:1px;">Antes de empezar.</strong> Para que podamos producir tus vídeos exactamente como los imaginas, necesitamos que completes todos los apartados de esta ficha. Sin esta información no podemos iniciar la producción.<br><br>
+        Tómate unos minutos ahora y no tendrás que preocuparte por nada más.<br>
+        <em style="font-size:12px;color:#555;">Please complete all sections before we can start your production.</em>
+      </p>
     </div>
   </div>
 
   <!-- ── SECCIÓN 2: PLAN Y PAGOS ── -->
   <div class="section">
     <div class="section-head" onclick="toggleSection(this)">
-      <span class="section-label">02 · Tu plan y pagos <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Your plan & billing</em></span>
+      <span class="section-label">01 · Tu plan y pagos <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Your plan & billing</em></span>
       <span class="section-arrow open">›</span>
     </div>
     <div class="section-body open">
@@ -539,7 +542,7 @@
   <!-- ── SECCIÓN 3: DATOS DEL CLIENTE ── -->
   <div class="section">
     <div class="section-head" onclick="toggleSection(this)">
-      <span class="section-label">03 · Tus datos <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Your details</em></span>
+      <span class="section-label">02 · Tus datos <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Your details</em></span>
       <span class="section-arrow open">›</span>
     </div>
     <div class="section-body open">
@@ -595,16 +598,6 @@
       </div>
       <div class="fila">
         <div class="bloque">
-          <div class="etiqueta">Tipografía de marca <em>· Brand typeface</em></div>
-          <input id="d-tipografia" type="text" placeholder="Montserrat, Helvetica..."/>
-        </div>
-        <div class="bloque">
-          <div class="etiqueta">Colores corporativos <em>· Brand colors (HEX)</em></div>
-          <input id="d-colores" type="text" placeholder="#FF0000, #000000..."/>
-        </div>
-      </div>
-      <div class="fila">
-        <div class="bloque">
           <div class="etiqueta">Rótulo / Cairón <em>· Lower third</em></div>
           <div class="chips" id="chips-rotulo">
             <div class="chip" onclick="toggleChipSingle(this, 'rotulo')">Sí</div>
@@ -632,7 +625,7 @@
   <!-- ── SECCIÓN 2: GUIONES MENSUALES ── -->
   <div class="section">
     <div class="section-head" onclick="toggleSection(this)">
-      <span class="section-label">04 · Guiones del mes <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Monthly scripts</em></span>
+      <span class="section-label">03 · Guiones del mes <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Monthly scripts</em></span>
       <span class="section-arrow open">›</span>
     </div>
     <div class="section-body open">
@@ -752,7 +745,7 @@
   </div>
   <div class="section">
     <div class="section-head" onclick="toggleSection(this)">
-      <span class="section-label">05 · Material gráfico <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Brand & visual assets</em></span>
+      <span class="section-label">04 · Material gráfico <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Brand & visual assets</em></span>
       <span class="section-arrow">›</span>
     </div>
     <div class="section-body">
@@ -790,7 +783,7 @@
   <!-- ── SECCIÓN 4: VÍDEOS TERMINADOS ── -->
   <div class="section">
     <div class="section-head" onclick="toggleSection(this)">
-      <span class="section-label">06 · Tus vídeos listos <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Your finished videos</em></span>
+      <span class="section-label">05 · Tus vídeos listos <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Your finished videos</em></span>
       <span class="section-arrow open">›</span>
     </div>
     <div class="section-body open">
@@ -1218,8 +1211,6 @@ function cargarDatos(d) {
   set('d-telefono', d.telefono);
   set('d-direccion', d.direccion);
   set('d-idiomas', d.idiomas);
-  set('d-tipografia', d.tipografia);
-  set('d-colores', d.colores);
   set('d-nombre-rotulo', d.nombre_rotulo);
   set('d-cargo-rotulo', d.cargo_rotulo);
   if (d.empresa) document.getElementById('header-empresa').textContent = d.empresa;
@@ -1292,6 +1283,31 @@ function mostrarCambioFecha() {
 async function guardarDatos() {
   const status = document.getElementById('save-status');
   status.className = '';
+  status.textContent = '';
+
+  // Campos obligatorios
+  const obligatorios = [
+    { id: 'd-nombre',    label: 'Nombre' },
+    { id: 'd-empresa',   label: 'Empresa' },
+    { id: 'd-email',     label: 'Email' },
+    { id: 'd-telefono',  label: 'Teléfono' },
+    { id: 'd-direccion', label: 'Dirección' },
+    { id: 'd-idiomas',   label: 'Idiomas' },
+  ];
+  const faltanCampos = obligatorios.filter(f => !get(f.id)?.trim());
+  const faltanChips  = [];
+  if (!chipActivo('chips-paquete'))  faltanChips.push('Paquete');
+  if (!chipActivo('chips-formato'))  faltanChips.push('Formato');
+  if (!chipActivo('chips-rotulo'))   faltanChips.push('Rótulo');
+
+  const faltan = [...faltanCampos.map(f => f.label), ...faltanChips];
+
+  if (faltan.length > 0) {
+    status.className = 'err';
+    status.textContent = `Faltan: ${faltan.join(', ')}`;
+    return;
+  }
+
   status.textContent = 'Guardando...';
 
   const datos = {
@@ -1303,8 +1319,6 @@ async function guardarDatos() {
     paquete:       chipActivo('chips-paquete'),
     formato:       chipActivo('chips-formato'),
     idiomas:       get('d-idiomas'),
-    tipografia:    get('d-tipografia'),
-    colores:       get('d-colores'),
     rotulo:        chipActivo('chips-rotulo') === 'Sí',
     nombre_rotulo: get('d-nombre-rotulo'),
     cargo_rotulo:  get('d-cargo-rotulo'),
