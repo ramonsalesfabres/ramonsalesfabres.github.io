@@ -867,10 +867,6 @@
         <input id="admin-fecha-grabacion" type="text" placeholder="DD/MM/AAAA"/>
       </div>
     </div>
-    <div class="save-bar">
-      <button class="btn-save" onclick="guardarDatosAdmin()">Guardar datos admin</button>
-      <span id="admin-status"></span>
-    </div>
 
     <!-- Botón exportar para producción -->
     <div style="background:#111;border-top:1px solid #2a2a2a;padding:20px 60px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
@@ -1361,6 +1357,12 @@ async function guardarTodo() {
       ? `✓ Guardado — ${res.cambiosDetectados} cambio(s) notificado(s) a PAM`
       : '✓ Todo guardado correctamente';
     if (datos.empresa) document.getElementById('header-empresa').textContent = datos.empresa;
+
+    // Si el panel admin está abierto, guardar también datos admin
+    const panelAdmin = document.getElementById('panel-ramon');
+    if (panelAdmin && panelAdmin.style.display !== 'none') {
+      await guardarDatosAdmin(true);
+    }
   } else {
     status.style.color = '#e85555';
     status.textContent = '✕ Error al guardar. Inténtalo de nuevo.';
@@ -1726,16 +1728,20 @@ async function exportarProduccion() {
   }
 }
 
-async function guardarDatosAdmin() {
+async function guardarDatosAdmin(silencioso = false) {
   const datos = {
     notas:           get('admin-notas'),
     avatar_id:       get('admin-avatar-id'),
     fecha_grabacion: get('admin-fecha-grabacion'),
   };
   const res = await apiAdmin('datos-admin', 'POST', datos);
-  const st = document.getElementById('admin-status');
-  st.style.color = res.ok ? 'var(--verde)' : 'var(--rojo)';
-  st.textContent = res.ok ? '✓ Datos admin guardados' : '✕ Error al guardar';
+  if (!silencioso) {
+    const st = document.getElementById('admin-status');
+    if (st) {
+      st.style.color = res.ok ? 'var(--verde)' : 'var(--rojo)';
+      st.textContent = res.ok ? '✓ Datos admin guardados' : '✕ Error al guardar';
+    }
+  }
 }
 
 
