@@ -642,52 +642,114 @@
           <em style="color:#444">Upload one PDF or Word file per video, in the correct week slot. Each script must be readable in under 1 minute.</em>
         </p>
       </div>
-      <div class="semana-grid" style="background:var(--gris2); gap:2px; display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr));">
-        <div class="semana-bloque" id="sem1-block">
-          <div class="semana-label">Semana 1 <em style="color:#444;font-style:italic">· Week 1</em></div>
-          <div class="upload-area" id="upload-sem1" onclick="document.getElementById('file-sem1').click()"
-               ondragover="dragOver(event,'upload-sem1')" ondragleave="dragLeave('upload-sem1')" ondrop="dropFile(event,1)">
-            <p>📄 Arrastra el guión aquí<br><strong>PDF o Word</strong><br><em style="font-size:11px;color:#444">Drag script here</em></p>
-            <input type="file" id="file-sem1" accept=".pdf,.doc,.docx" onchange="uploadGuion(this, 1)"/>
-          </div>
-          <div class="upload-progress" id="prog-sem1">Subiendo...</div>
-          <div class="file-list" id="files-sem1"></div>
+
+      <!-- Marco unificado de guiones -->
+      <div style="margin:0 40px 0 40px; border:2px solid var(--naranja); border-radius:8px; overflow:hidden;">
+
+        <!-- Header del marco -->
+        <div style="background:var(--naranja);padding:10px 20px;">
+          <span style="font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--negro);">📅 Guiones del mes · Monthly scripts</span>
         </div>
-        <div class="semana-bloque" id="sem2-block">
-          <div class="semana-label">Semana 2 <em style="color:#444;font-style:italic">· Week 2</em></div>
-          <div class="upload-area" id="upload-sem2" onclick="document.getElementById('file-sem2').click()"
-               ondragover="dragOver(event,'upload-sem2')" ondragleave="dragLeave('upload-sem2')" ondrop="dropFile(event,2)">
-            <p>📄 Arrastra el guión aquí<br><strong>PDF o Word</strong><br><em style="font-size:11px;color:#444">Drag script here</em></p>
-            <input type="file" id="file-sem2" accept=".pdf,.doc,.docx" onchange="uploadGuion(this, 2)"/>
+
+        <!-- Grid de semanas -->
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap:1px; background:var(--naranja);">
+          <div style="background:var(--gris);padding:20px;" id="sem1-block">
+            <div class="semana-label">Semana 1 <em style="color:#444;font-style:italic">· Week 1</em></div>
+            <div class="upload-area" id="upload-sem1" onclick="document.getElementById('file-sem1').click()"
+                 ondragover="dragOver(event,'upload-sem1')" ondragleave="dragLeave('upload-sem1')" ondrop="dropFile(event,1)">
+              <p>📄 Arrastra el guión aquí<br><strong>PDF o Word</strong></p>
+              <input type="file" id="file-sem1" accept=".pdf,.doc,.docx" onchange="uploadGuion(this, 1)"/>
+            </div>
+            <div class="upload-progress" id="prog-sem1">Subiendo...</div>
+            <div class="file-list" id="files-sem1"></div>
           </div>
-          <div class="upload-progress" id="prog-sem2">Subiendo...</div>
-          <div class="file-list" id="files-sem2"></div>
-        </div>
-        <div class="semana-bloque" id="sem3-block">
-          <div class="semana-label">Semana 3 <em style="color:#444;font-style:italic">· Week 3</em></div>
-          <div class="upload-area" id="upload-sem3" onclick="document.getElementById('file-sem3').click()"
-               ondragover="dragOver(event,'upload-sem3')" ondragleave="dragLeave('upload-sem3')" ondrop="dropFile(event,3)">
-            <p>📄 Arrastra el guión aquí<br><strong>PDF o Word</strong><br><em style="font-size:11px;color:#444">Drag script here</em></p>
-            <input type="file" id="file-sem3" accept=".pdf,.doc,.docx" onchange="uploadGuion(this, 3)"/>
+          <div style="background:var(--gris);padding:20px;" id="sem2-block">
+            <div class="semana-label">Semana 2 <em style="color:#444;font-style:italic">· Week 2</em></div>
+            <div class="upload-area" id="upload-sem2" onclick="document.getElementById('file-sem2').click()"
+                 ondragover="dragOver(event,'upload-sem2')" ondragleave="dragLeave('upload-sem2')" ondrop="dropFile(event,2)">
+              <p>📄 Arrastra el guión aquí<br><strong>PDF o Word</strong></p>
+              <input type="file" id="file-sem2" accept=".pdf,.doc,.docx" onchange="uploadGuion(this, 2)"/>
+            </div>
+            <div class="upload-progress" id="prog-sem2">Subiendo...</div>
+            <div class="file-list" id="files-sem2"></div>
           </div>
-          <div class="upload-progress" id="prog-sem3">Subiendo...</div>
-          <div class="file-list" id="files-sem3"></div>
-        </div>
-        <div class="semana-bloque" id="sem4-block">
-          <div class="semana-label">Semana 4 <em style="color:#444;font-style:italic">· Week 4</em></div>
-          <div class="upload-area" id="upload-sem4" onclick="document.getElementById('file-sem4').click()"
-               ondragover="dragOver(event,'upload-sem4')" ondragleave="dragLeave('upload-sem4')" ondrop="dropFile(event,4)">
-            <p>📄 Arrastra el guión aquí<br><strong>PDF o Word</strong><br><em style="font-size:11px;color:#444">Drag script here</em></p>
-            <input type="file" id="file-sem4" accept=".pdf,.doc,.docx" onchange="uploadGuion(this, 4)"/>
+          <div style="background:var(--gris);padding:20px;" id="sem3-block">
+            <div class="semana-label">Semana 3 <em style="color:#444;font-style:italic">· Week 3</em></div>
+            <div class="upload-area" id="upload-sem3" onclick="document.getElementById('file-sem3').click()"
+                 ondragover="dragOver(event,'upload-sem3')" ondragleave="dragLeave('upload-sem3')" ondrop="dropFile(event,3)">
+              <p>📄 Arrastra el guión aquí<br><strong>PDF o Word</strong></p>
+              <input type="file" id="file-sem3" accept=".pdf,.doc,.docx" onchange="uploadGuion(this, 3)"/>
+            </div>
+            <div class="upload-progress" id="prog-sem3">Subiendo...</div>
+            <div class="file-list" id="files-sem3"></div>
           </div>
-          <div class="upload-progress" id="prog-sem4">Subiendo...</div>
-          <div class="file-list" id="files-sem4"></div>
+          <div style="background:var(--gris);padding:20px;" id="sem4-block">
+            <div class="semana-label">Semana 4 <em style="color:#444;font-style:italic">· Week 4</em></div>
+            <div class="upload-area" id="upload-sem4" onclick="document.getElementById('file-sem4').click()"
+                 ondragover="dragOver(event,'upload-sem4')" ondragleave="dragLeave('upload-sem4')" ondrop="dropFile(event,4)">
+              <p>📄 Arrastra el guión aquí<br><strong>PDF o Word</strong></p>
+              <input type="file" id="file-sem4" accept=".pdf,.doc,.docx" onchange="uploadGuion(this, 4)"/>
+            </div>
+            <div class="upload-progress" id="prog-sem4">Subiendo...</div>
+            <div class="file-list" id="files-sem4"></div>
+          </div>
+          <!-- Semanas 5-8: solo visibles en Pro+ -->
+          <div style="background:var(--gris);padding:20px;display:none;" id="sem5-block">
+            <div class="semana-label">Semana 5 <em style="color:#444;font-style:italic">· Week 5</em></div>
+            <div class="upload-area" id="upload-sem5" onclick="document.getElementById('file-sem5').click()"
+                 ondragover="dragOver(event,'upload-sem5')" ondragleave="dragLeave('upload-sem5')" ondrop="dropFile(event,5)">
+              <p>📄 Arrastra el guión aquí<br><strong>PDF o Word</strong></p>
+              <input type="file" id="file-sem5" accept=".pdf,.doc,.docx" onchange="uploadGuion(this, 5)"/>
+            </div>
+            <div class="upload-progress" id="prog-sem5">Subiendo...</div>
+            <div class="file-list" id="files-sem5"></div>
+          </div>
+          <div style="background:var(--gris);padding:20px;display:none;" id="sem6-block">
+            <div class="semana-label">Semana 6 <em style="color:#444;font-style:italic">· Week 6</em></div>
+            <div class="upload-area" id="upload-sem6" onclick="document.getElementById('file-sem6').click()"
+                 ondragover="dragOver(event,'upload-sem6')" ondragleave="dragLeave('upload-sem6')" ondrop="dropFile(event,6)">
+              <p>📄 Arrastra el guión aquí<br><strong>PDF o Word</strong></p>
+              <input type="file" id="file-sem6" accept=".pdf,.doc,.docx" onchange="uploadGuion(this, 6)"/>
+            </div>
+            <div class="upload-progress" id="prog-sem6">Subiendo...</div>
+            <div class="file-list" id="files-sem6"></div>
+          </div>
+          <div style="background:var(--gris);padding:20px;display:none;" id="sem7-block">
+            <div class="semana-label">Semana 7 <em style="color:#444;font-style:italic">· Week 7</em></div>
+            <div class="upload-area" id="upload-sem7" onclick="document.getElementById('file-sem7').click()"
+                 ondragover="dragOver(event,'upload-sem7')" ondragleave="dragLeave('upload-sem7')" ondrop="dropFile(event,7)">
+              <p>📄 Arrastra el guión aquí<br><strong>PDF o Word</strong></p>
+              <input type="file" id="file-sem7" accept=".pdf,.doc,.docx" onchange="uploadGuion(this, 7)"/>
+            </div>
+            <div class="upload-progress" id="prog-sem7">Subiendo...</div>
+            <div class="file-list" id="files-sem7"></div>
+          </div>
+          <div style="background:var(--gris);padding:20px;display:none;" id="sem8-block">
+            <div class="semana-label">Semana 8 <em style="color:#444;font-style:italic">· Week 8</em></div>
+            <div class="upload-area" id="upload-sem8" onclick="document.getElementById('file-sem8').click()"
+                 ondragover="dragOver(event,'upload-sem8')" ondragleave="dragLeave('upload-sem8')" ondrop="dropFile(event,8)">
+              <p>📄 Arrastra el guión aquí<br><strong>PDF o Word</strong></p>
+              <input type="file" id="file-sem8" accept=".pdf,.doc,.docx" onchange="uploadGuion(this, 8)"/>
+            </div>
+            <div class="upload-progress" id="prog-sem8">Subiendo...</div>
+            <div class="file-list" id="files-sem8"></div>
+          </div>
         </div>
+
+        <!-- Botón enviar guiones dentro del marco -->
+        <div style="background:var(--gris2);padding:20px 24px;border-top:1px solid #2a2a2a;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <button id="btn-enviar-guiones" onclick="enviarGuionesMes()"
+            style="background:var(--naranja);color:var(--negro);border:none;padding:14px 32px;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:not-allowed;opacity:0.35;transition:all 0.2s;border-radius:2px;">
+            📨 Enviar guiones del mes
+          </button>
+          <span id="guiones-aviso" style="font-size:13px;color:#e85555;display:none;"></span>
+          <span id="guiones-status" style="font-size:13px;"></span>
+        </div>
+
       </div>
+      <div style="height:24px;"></div>
     </div>
   </div>
-
-  <!-- ── SECCIÓN 3: MATERIAL GRÁFICO ── -->
   <div class="section">
     <div class="section-head" onclick="toggleSection(this)">
       <span class="section-label">05 · Material gráfico <em style="color:#555;font-style:italic;font-size:11px;margin-left:8px">· Brand & visual assets</em></span>
@@ -1167,6 +1229,12 @@ function cargarDatos(d) {
     activarChip('chips-paquete', paqueteNorm);
     const planDisplay = document.getElementById('plan-paquete-display');
     if (planDisplay) planDisplay.innerHTML = `<strong>${d.paquete}</strong>`;
+    // Mostrar semanas 5-8 solo en Pro+ (8 vídeos)
+    const es8 = paqueteNorm.includes('pro+') || paqueteNorm.includes('pro +');
+    [5,6,7,8].forEach(n => {
+      const bl = document.getElementById(`sem${n}-block`);
+      if (bl) bl.style.display = es8 ? '' : 'none';
+    });
   }
   if (d.formato)   activarChip('chips-formato', d.formato);
   if (d.rotulo !== undefined) activarChip('chips-rotulo', d.rotulo === true || d.rotulo === 'Sí' ? 'Sí' : 'No');
@@ -1269,29 +1337,101 @@ async function guardarPlan() {
 // ═══════════════════════════════════════════════════════════════
 // SUBIDA DE GUIONES
 // ═══════════════════════════════════════════════════════════════
+
+// Registro de semanas subidas este mes
+const semanasSubidas = new Set();
+
+// Cuántos guiones necesita el paquete
+function guionesRequeridos() {
+  const paquete = (document.getElementById('plan-paquete-display')?.textContent || '').toLowerCase();
+  if (paquete.includes('pro+') || paquete.includes('pro +')) return 8;
+  if (paquete.includes('pro'))   return 4;
+  if (paquete.includes('básico+') || paquete.includes('basico+')) return 4;
+  return 4;
+}
+
+function actualizarBotonEnviar() {
+  const requeridos = guionesRequeridos();
+  const btn    = document.getElementById('btn-enviar-guiones');
+  const aviso  = document.getElementById('guiones-aviso');
+  const subidos = semanasSubidas.size;
+  const semanasTotales = requeridos <= 4 ? 4 : 8;
+
+  // Botón siempre clickable pero con estilo diferente
+  btn.style.cursor = 'pointer';
+
+  if (subidos >= semanasTotales) {
+    btn.style.opacity = '1';
+    btn.style.background = 'var(--naranja)';
+    aviso.style.display = 'none';
+  } else if (subidos > 0) {
+    btn.style.opacity = '0.7';
+    btn.style.background = '#b07010';
+    aviso.style.display = 'block';
+    aviso.textContent = `Faltan ${semanasTotales - subidos} guion(es) de ${semanasTotales}. Puedes enviar igualmente o subir los que faltan.`;
+  }
+}
+
 async function uploadGuion(input, semana) {
   if (!input.files.length) return;
   const prog = document.getElementById(`prog-sem${semana}`);
   prog.style.display = 'block';
   prog.textContent = `Subiendo semana ${semana}...`;
+  prog.style.color = '';
 
-  const archivos = [];
   for (const file of input.files) {
     const fd = new FormData();
     fd.append('file', file);
     fd.append('semana', semana);
     const res = await apiForm('upload', fd, `Guiones`);
     if (!res.ok) { prog.style.color = '#e85555'; prog.textContent = '✕ Error al subir'; return; }
-    archivos.push(file.name);
   }
 
-  // Notificar a Ramon una sola vez con todos los archivos
-  await api('notify-guiones', 'POST', { semana, archivos });
-
+  semanasSubidas.add(semana);
   prog.style.color = '#4caf7d';
-  prog.textContent = '✓ Guión subido correctamente';
-  setTimeout(() => { prog.style.display = 'none'; prog.style.color = ''; }, 3000);
+  prog.textContent = '✓ Guión subido';
   cargarArchivosSemana(semana);
+  actualizarBotonEnviar();
+}
+
+async function enviarGuionesMes() {
+  if (semanasSubidas.size === 0) {
+    const aviso = document.getElementById('guiones-aviso');
+    aviso.style.display = 'block';
+    aviso.textContent = 'No has subido ningún guion todavía.';
+    return;
+  }
+
+  const requeridos = guionesRequeridos();
+  const semanasTotales = requeridos <= 4 ? 4 : 8;
+
+  if (semanasSubidas.size < semanasTotales) {
+    const faltan = semanasTotales - semanasSubidas.size;
+    const confirmar = window.confirm(`Te faltan ${faltan} guion(es) de ${semanasTotales}. ¿Quieres enviar igualmente lo que tienes?`);
+    if (!confirmar) return;
+  }
+
+  const btn    = document.getElementById('btn-enviar-guiones');
+  const status = document.getElementById('guiones-status');
+  btn.style.opacity = '0.4';
+  btn.style.cursor = 'not-allowed';
+  status.textContent = 'Enviando...';
+  status.style.color = '';
+
+  const resumen = Array.from(semanasSubidas).sort().map(s => `Semana ${s}`);
+  const res = await api('notify-guiones', 'POST', { semana: 'mes completo', archivos: resumen });
+
+  if (res.ok) {
+    status.style.color = '#4caf7d';
+    status.textContent = '✓ Guiones enviados a producción';
+    btn.textContent = '✓ Enviado';
+    document.getElementById('guiones-aviso').style.display = 'none';
+  } else {
+    status.style.color = '#e85555';
+    status.textContent = '✕ Error al enviar';
+    btn.style.opacity = '0.7';
+    btn.style.cursor = 'pointer';
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
