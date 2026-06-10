@@ -573,6 +573,10 @@
           <div class="etiqueta">Municipio <em>· City</em></div>
           <input id="d-municipio" type="text" placeholder="El Masnou"/>
         </div>
+        <div class="bloque">
+          <div class="etiqueta">NIF / CIF <em>· Tax ID</em></div>
+          <input id="d-nif" type="text" placeholder="B12345678"/>
+        </div>
       </div>
       <div class="fila">
         <div class="bloque">
@@ -1217,6 +1221,7 @@ function cargarDatos(d) {
   set('d-direccion', d.direccion);
   set('d-cp', d.cp);
   set('d-municipio', d.municipio);
+  set('d-nif', d.nif);
   set('d-idiomas', d.idiomas);
   set('d-nombre-rotulo', d.nombre_rotulo);
   set('d-cargo-rotulo', d.cargo_rotulo);
@@ -1303,6 +1308,7 @@ async function guardarTodo() {
     { id: 'd-direccion', label: 'Dirección' },
     { id: 'd-cp',        label: 'Código postal' },
     { id: 'd-municipio', label: 'Municipio' },
+    { id: 'd-nif',       label: 'NIF/CIF' },
     { id: 'd-idiomas',   label: 'Idiomas' },
   ];
   const faltanCampos = obligatorios.filter(f => !get(f.id)?.trim());
@@ -1342,6 +1348,7 @@ async function guardarTodo() {
     direccion:     get('d-direccion'),
     cp:            get('d-cp'),
     municipio:     get('d-municipio'),
+    nif:           get('d-nif'),
     paquete:       chipActivo('chips-paquete'),
     formato:       chipActivo('chips-formato'),
     idiomas:       get('d-idiomas'),
