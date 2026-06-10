@@ -856,10 +856,6 @@
         <input id="admin-avatar-id" type="text" placeholder="ID del avatar en HeyGen"/>
       </div>
       <div class="bloque">
-        <div class="etiqueta">Looks aprobados</div>
-        <textarea id="admin-looks" placeholder="De pie, sentado, despacho..." style="min-height:60px;"></textarea>
-      </div>
-      <div class="bloque">
         <div class="etiqueta">Fecha grabación</div>
         <input id="admin-fecha-grabacion" type="text" placeholder="DD/MM/AAAA"/>
       </div>
@@ -1309,6 +1305,18 @@ async function guardarTodo() {
   if (!chipActivo('chips-rotulo'))   faltanChips.push('Rótulo');
 
   const faltan = [...faltanCampos.map(f => f.label), ...faltanChips];
+
+  // Logo obligatorio
+  const logoFiles = document.getElementById('files-logos');
+  if (!logoFiles || logoFiles.children.length === 0) faltan.push('Logo');
+
+  // Fotos/vídeo obligatorio en paquetes Plus
+  const paqueteActual = (chipActivo('chips-paquete') || '').toLowerCase();
+  const esPlus = paqueteActual.includes('+');
+  if (esPlus) {
+    const materialFiles = document.getElementById('files-material');
+    if (!materialFiles || materialFiles.children.length === 0) faltan.push('Fotos/vídeos (obligatorio en paquetes Plus)');
+  }
   if (faltan.length > 0) {
     status.style.color = '#e85555';
     status.textContent = `Faltan: ${faltan.join(', ')}`;
@@ -1348,8 +1356,13 @@ async function guardarTodo() {
 // SUBIDA DE GUIONES
 // ═══════════════════════════════════════════════════════════════
 
-// Registro de semanas subidas este mes
-const semanasSubidas = new Set();
+// Registro de archivos subidos por semana: { semana: count }
+const archivosSubidos = {};
+
+// Total de archivos subidos
+function totalArchivosSubidos() {
+  return Object.values(archivosSubidos).reduce((a, b) => a + b, 0);
+}
 
 // Cuántos guiones necesita el paquete
 function guionesRequeridos() {
@@ -1364,13 +1377,11 @@ function actualizarBotonEnviar() {
   const requeridos = guionesRequeridos();
   const btn    = document.getElementById('btn-enviar-guiones');
   const aviso  = document.getElementById('guiones-aviso');
-  const subidos = semanasSubidas.size;
-  const semanasTotales = requeridos <= 4 ? 4 : 8;
+  const subidos = totalArchivosSubidos();
 
-  // Botón siempre clickable pero con estilo diferente
   btn.style.cursor = 'pointer';
 
-  if (subidos >= semanasTotales) {
+  if (subidos >= requeridos) {
     btn.style.opacity = '1';
     btn.style.background = 'var(--naranja)';
     aviso.style.display = 'none';
@@ -1378,7 +1389,7 @@ function actualizarBotonEnviar() {
     btn.style.opacity = '0.7';
     btn.style.background = '#b07010';
     aviso.style.display = 'block';
-    aviso.textContent = `Faltan ${semanasTotales - subidos} guion(es) de ${semanasTotales}. Puedes enviar igualmente o subir los que faltan.`;
+    aviso.textContent = `Faltan ${requeridos - subidos} guion(es) de ${requeridos}. Puedes enviar igualmente o subir los que faltan.`;
   }
 }
 
@@ -1397,7 +1408,7 @@ async function uploadGuion(input, semana) {
     if (!res.ok) { prog.style.color = '#e85555'; prog.textContent = '✕ Error al subir'; return; }
   }
 
-  semanasSubidas.add(semana);
+  archivosSubidos[semana] = (archivosSubidos[semana] || 0) + input.files.length;
   prog.style.color = '#4caf7d';
   prog.textContent = '✓ Guión subido';
   cargarArchivosSemana(semana);
@@ -1405,7 +1416,8 @@ async function uploadGuion(input, semana) {
 }
 
 async function enviarGuionesMes() {
-  if (semanasSubidas.size === 0) {
+  const total = totalArchivosSubidos();
+  if (total === 0) {
     const aviso = document.getElementById('guiones-aviso');
     aviso.style.display = 'block';
     aviso.textContent = 'No has subido ningún guion todavía.';
@@ -1413,11 +1425,10 @@ async function enviarGuionesMes() {
   }
 
   const requeridos = guionesRequeridos();
-  const semanasTotales = requeridos <= 4 ? 4 : 8;
 
-  if (semanasSubidas.size < semanasTotales) {
-    const faltan = semanasTotales - semanasSubidas.size;
-    const confirmar = window.confirm(`Te faltan ${faltan} guion(es) de ${semanasTotales}. ¿Quieres enviar igualmente lo que tienes?`);
+  if (total < requeridos) {
+    const faltan = requeridos - total;
+    const confirmar = window.confirm(`Te faltan ${faltan} guion(es) de ${requeridos}. ¿Quieres enviar igualmente lo que tienes?`);
     if (!confirmar) return;
   }
 
@@ -1428,7 +1439,7 @@ async function enviarGuionesMes() {
   status.textContent = 'Enviando...';
   status.style.color = '';
 
-  const resumen = Array.from(semanasSubidas).sort().map(s => `Semana ${s}`);
+  const resumen = Object.entries(archivosSubidos).sort().map(([s, n]) => `Semana ${s}: ${n} guion(es)`);
   const res = await api('notify-guiones', 'POST', { semana: 'mes completo', archivos: resumen });
 
   if (res.ok) {
@@ -1665,7 +1676,6 @@ async function cargarDatosAdmin() {
   if (admin && !admin.error) {
     set('admin-notas', admin.notas);
     set('admin-avatar-id', admin.avatar_id);
-    set('admin-looks', admin.looks);
     set('admin-fecha-grabacion', admin.fecha_grabacion);
   }
 
@@ -1714,7 +1724,6 @@ async function guardarDatosAdmin() {
   const datos = {
     notas:           get('admin-notas'),
     avatar_id:       get('admin-avatar-id'),
-    looks:           get('admin-looks'),
     fecha_grabacion: get('admin-fecha-grabacion'),
   };
   const res = await apiAdmin('datos-admin', 'POST', datos);
