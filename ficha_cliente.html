@@ -562,8 +562,16 @@
           <input id="d-telefono" type="tel" placeholder="+34 600 000 000"/>
         </div>
         <div class="bloque">
-          <div class="etiqueta">Dirección fiscal <em>· Billing address</em></div>
-          <input id="d-direccion" type="text" placeholder="Calle, número, ciudad, CP"/>
+          <div class="etiqueta">Dirección <em>· Address</em></div>
+          <input id="d-direccion" type="text" placeholder="Calle y número"/>
+        </div>
+        <div class="bloque">
+          <div class="etiqueta">Código postal <em>· Postcode</em></div>
+          <input id="d-cp" type="text" placeholder="08320"/>
+        </div>
+        <div class="bloque">
+          <div class="etiqueta">Municipio <em>· City</em></div>
+          <input id="d-municipio" type="text" placeholder="El Masnou"/>
         </div>
       </div>
       <div class="fila">
@@ -802,7 +810,6 @@
       <div class="bloque">
         <div class="etiqueta">Notas internas <em>· Solo PAM</em></div>
         <textarea id="admin-notas" placeholder="Notas internas sobre este cliente..." style="min-height:120px;"></textarea>
-        <button class="btn-save" style="margin-top:12px;padding:10px 24px;font-size:12px;" onclick="guardarNotasAdmin()">Guardar notas</button>
         <span id="admin-notas-status" style="font-size:12px;margin-left:12px;"></span>
       </div>
     </div>
@@ -1212,6 +1219,8 @@ function cargarDatos(d) {
   set('d-email', d.email);
   set('d-telefono', d.telefono);
   set('d-direccion', d.direccion);
+  set('d-cp', d.cp);
+  set('d-municipio', d.municipio);
   set('d-idiomas', d.idiomas);
   set('d-nombre-rotulo', d.nombre_rotulo);
   set('d-cargo-rotulo', d.cargo_rotulo);
@@ -1296,6 +1305,8 @@ async function guardarTodo() {
     { id: 'd-email',     label: 'Email' },
     { id: 'd-telefono',  label: 'Teléfono' },
     { id: 'd-direccion', label: 'Dirección' },
+    { id: 'd-cp',        label: 'Código postal' },
+    { id: 'd-municipio', label: 'Municipio' },
     { id: 'd-idiomas',   label: 'Idiomas' },
   ];
   const faltanCampos = obligatorios.filter(f => !get(f.id)?.trim());
@@ -1307,15 +1318,17 @@ async function guardarTodo() {
   const faltan = [...faltanCampos.map(f => f.label), ...faltanChips];
 
   // Logo obligatorio
-  const logoFiles = document.getElementById('files-logos');
-  if (!logoFiles || logoFiles.children.length === 0) faltan.push('Logo');
+  const logoEl = document.getElementById('files-logos');
+  const logoVacio = !logoEl || !logoEl.children.length || logoEl.querySelector('.file-empty');
+  if (logoVacio) faltan.push('Logo');
 
   // Fotos/vídeo obligatorio en paquetes Plus
   const paqueteActual = (chipActivo('chips-paquete') || '').toLowerCase();
   const esPlus = paqueteActual.includes('+');
   if (esPlus) {
-    const materialFiles = document.getElementById('files-material');
-    if (!materialFiles || materialFiles.children.length === 0) faltan.push('Fotos/vídeos (obligatorio en paquetes Plus)');
+    const materialEl = document.getElementById('files-material');
+    const materialVacio = !materialEl || !materialEl.children.length || materialEl.querySelector('.file-empty');
+    if (materialVacio) faltan.push('Fotos/vídeos (obligatorio en paquetes Plus)');
   }
   if (faltan.length > 0) {
     status.style.color = '#e85555';
@@ -1331,6 +1344,8 @@ async function guardarTodo() {
     email:         get('d-email'),
     telefono:      get('d-telefono'),
     direccion:     get('d-direccion'),
+    cp:            get('d-cp'),
+    municipio:     get('d-municipio'),
     paquete:       chipActivo('chips-paquete'),
     formato:       chipActivo('chips-formato'),
     idiomas:       get('d-idiomas'),
@@ -1665,7 +1680,7 @@ async function cargarDatosAdmin() {
     resumen.innerHTML = `
       <strong style="color:var(--blanco)">${d.nombre}</strong> · ${d.empresa || ''}<br>
       ${d.email || ''} · ${d.telefono || ''}<br>
-      ${d.direccion || ''}<br>
+      ${d.direccion || ''}${d.cp ? ', ' + d.cp : ''}${d.municipio ? ' ' + d.municipio : ''}<br>
       Paquete: <span style="color:var(--naranja)">${d.paquete || '—'}</span> · Formato: <span style="color:var(--naranja)">${d.formato || '—'}</span><br>
       Idiomas: ${d.idiomas || '—'} · Rótulo: ${d.rotulo ? 'Sí' : 'No'}<br>
       ${d.nombre_rotulo ? `${d.nombre_rotulo} · ${d.cargo_rotulo || ''}` : ''}
@@ -1693,15 +1708,6 @@ async function cargarFilesAdmin(folder, containerId) {
   el.innerHTML = files.map(f =>
     `<div style="margin-bottom:6px;">📄 ${f.name} ${f.path ? `<button onclick="downloadFile('${f.path}','${f.name}')" style="background:none;border:none;color:var(--naranja);font-size:11px;margin-left:6px;cursor:pointer;text-decoration:underline;">↓ descargar</button>` : ''}</div>`
   ).join('');
-}
-
-async function guardarNotasAdmin() {
-  const admin = await api('datos-admin', 'GET').catch(() => ({}));
-  const datos = { ...(admin || {}), notas: get('admin-notas') };
-  const res = await apiAdmin('datos-admin', 'POST', datos);
-  const st = document.getElementById('admin-notas-status');
-  st.style.color = res.ok ? 'var(--verde)' : 'var(--rojo)';
-  st.textContent = res.ok ? '✓ Guardado' : '✕ Error';
 }
 
 async function exportarProduccion() {
