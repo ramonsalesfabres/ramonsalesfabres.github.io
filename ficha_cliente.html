@@ -47,7 +47,7 @@
   #access-error { color: var(--rojo); font-size: 13px; display: none; }
 
   /* ── Main layout ── */
-  #main { display: none; }
+  #main { display: none; padding-bottom: 80px; }
 
   .header { padding: 40px 60px 28px; border-bottom: 1px solid var(--gris2); display: flex; align-items: center; justify-content: space-between; }
   .logo svg { width: 100px; height: auto; }
@@ -532,10 +532,6 @@
           </div>
         </div>
       </div>
-      <div class="save-bar">
-        <button class="btn-save" onclick="guardarPlan()">Guardar plan · Save</button>
-        <span id="plan-status"></span>
-      </div>
     </div>
   </div>
 
@@ -614,11 +610,6 @@
         </div>
       </div>
 
-      <!-- Botón guardar -->
-      <div class="save-bar">
-        <button class="btn-save" onclick="guardarDatos()">Guardar datos · Save</button>
-        <span id="save-status"></span>
-      </div>
     </div>
   </div>
 
@@ -886,6 +877,12 @@
       </button>
       <span id="exportar-status" style="font-size:13px;color:var(--texto);"></span>
     </div>
+  </div>
+
+  <!-- Botón fijo Guardar todo -->
+  <div id="save-todo-bar" style="position:fixed;bottom:0;left:0;right:0;background:var(--negro);border-top:1px solid #2a2a2a;padding:14px 40px;display:flex;align-items:center;gap:20px;z-index:100;">
+    <button class="btn-save" onclick="guardarTodo()" style="padding:12px 40px;">💾 Guardar todo · Save all</button>
+    <span id="save-todo-status" style="font-size:13px;"></span>
   </div>
 
   <!-- Botón oculto acceso admin (triple clic en footer logo) -->
@@ -1289,9 +1286,11 @@ function mostrarCambioFecha() {
   }
 }
 
-async function guardarDatos() {
-  const status = document.getElementById('save-status');
-  status.className = '';
+async function guardarDatos() { return guardarTodo(); }
+
+async function guardarTodo() {
+  const status = document.getElementById('save-todo-status');
+  status.style.color = 'var(--texto)';
   status.textContent = '';
 
   // Campos obligatorios
@@ -1310,9 +1309,8 @@ async function guardarDatos() {
   if (!chipActivo('chips-rotulo'))   faltanChips.push('Rótulo');
 
   const faltan = [...faltanCampos.map(f => f.label), ...faltanChips];
-
   if (faltan.length > 0) {
-    status.className = 'err';
+    status.style.color = '#e85555';
     status.textContent = `Faltan: ${faltan.join(', ')}`;
     return;
   }
@@ -1335,26 +1333,15 @@ async function guardarDatos() {
 
   const res = await api('datos', 'POST', datos);
   if (res.ok) {
-    status.className = 'ok';
+    status.style.color = '#4caf7d';
     status.textContent = res.cambiosDetectados > 0
       ? `✓ Guardado — ${res.cambiosDetectados} cambio(s) notificado(s) a PAM`
-      : '✓ Datos guardados correctamente';
+      : '✓ Todo guardado correctamente';
     if (datos.empresa) document.getElementById('header-empresa').textContent = datos.empresa;
   } else {
-    status.className = 'err';
+    status.style.color = '#e85555';
     status.textContent = '✕ Error al guardar. Inténtalo de nuevo.';
   }
-}
-
-async function guardarPlan() {
-  const status = document.getElementById('plan-status');
-  status.textContent = 'Guardando...';
-
-  const datos = {};
-
-  const res = await api('datos', 'POST', datos);
-  status.style.color = res.ok ? 'var(--verde)' : 'var(--rojo)';
-  status.textContent = res.ok ? '✓ Guardado' : '✕ Error';
 }
 
 // ═══════════════════════════════════════════════════════════════
