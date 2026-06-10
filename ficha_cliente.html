@@ -1365,6 +1365,11 @@ async function guardarTodo() {
       : '✓ Todo guardado correctamente';
     if (datos.empresa) document.getElementById('header-empresa').textContent = datos.empresa;
 
+    // Aviso suave si no hay guiones subidos
+    if (totalArchivosSubidos() === 0) {
+      status.textContent += ' · Recuerda subir los guiones del mes cuando los tengas listos.';
+    }
+
     // Si el panel admin está abierto, guardar también datos admin
     const panelAdmin = document.getElementById('panel-ramon');
     if (panelAdmin && panelAdmin.style.display !== 'none') {
