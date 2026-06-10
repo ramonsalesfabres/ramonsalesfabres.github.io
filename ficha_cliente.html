@@ -574,8 +574,14 @@
           <input id="d-municipio" type="text" placeholder="El Masnou"/>
         </div>
         <div class="bloque">
-          <div class="etiqueta">NIF / CIF <em>· Tax ID</em></div>
-          <input id="d-nif" type="text" placeholder="B12345678"/>
+          <div class="etiqueta">NIF / DNI <em>· Personal tax ID</em></div>
+          <input id="d-nif" type="text" placeholder="45444555F"/>
+        </div>
+      </div>
+      <div class="fila">
+        <div class="bloque">
+          <div class="etiqueta">CIF <em>· Company tax ID</em></div>
+          <input id="d-cif" type="text" placeholder="B12345678"/>
         </div>
       </div>
       <div class="fila">
@@ -1222,6 +1228,7 @@ function cargarDatos(d) {
   set('d-cp', d.cp);
   set('d-municipio', d.municipio);
   set('d-nif', d.nif);
+  set('d-cif', d.cif);
   set('d-idiomas', d.idiomas);
   set('d-nombre-rotulo', d.nombre_rotulo);
   set('d-cargo-rotulo', d.cargo_rotulo);
@@ -1349,6 +1356,7 @@ async function guardarTodo() {
     cp:            get('d-cp'),
     municipio:     get('d-municipio'),
     nif:           get('d-nif'),
+    cif:           get('d-cif'),
     paquete:       chipActivo('chips-paquete'),
     formato:       chipActivo('chips-formato'),
     idiomas:       get('d-idiomas'),
@@ -1360,15 +1368,13 @@ async function guardarTodo() {
   const res = await api('datos', 'POST', datos);
   if (res.ok) {
     status.style.color = '#4caf7d';
-    status.textContent = res.cambiosDetectados > 0
-      ? `✓ Guardado — ${res.cambiosDetectados} cambio(s) notificado(s) a PAM`
+    const cambios = Number(res.cambiosDetectados) || 0;
+    status.textContent = cambios > 0
+      ? `✓ Guardado — ${cambios} cambio(s) notificado(s) a PAM`
       : '✓ Todo guardado correctamente';
     if (datos.empresa) document.getElementById('header-empresa').textContent = datos.empresa;
 
-    // Aviso suave si no hay guiones subidos en esta sesión
-    const sinGuiones = totalArchivosSubidos() === 0;
-    console.log('archivosSubidos:', archivosSubidos, 'total:', totalArchivosSubidos());
-    if (sinGuiones) {
+    if (totalArchivosSubidos() === 0) {
       status.textContent += ' · Recuerda subir los guiones del mes cuando los tengas listos.';
     }
 
