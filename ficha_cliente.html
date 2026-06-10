@@ -877,6 +877,15 @@
       <button class="btn-save" onclick="guardarDatosAdmin()">Guardar datos admin</button>
       <span id="admin-status"></span>
     </div>
+
+    <!-- Botón exportar para producción -->
+    <div style="background:#111;border-top:1px solid #2a2a2a;padding:20px 60px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <button onclick="exportarProduccion()"
+        style="background:transparent;color:var(--naranja);border:1px solid var(--naranja);padding:12px 28px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;border-radius:2px;">
+        📦 Exportar para producción
+      </button>
+      <span id="exportar-status" style="font-size:13px;color:var(--texto);"></span>
+    </div>
   </div>
 
   <!-- Botón oculto acceso admin (triple clic en footer logo) -->
@@ -1696,6 +1705,22 @@ async function guardarNotasAdmin() {
   const st = document.getElementById('admin-notas-status');
   st.style.color = res.ok ? 'var(--verde)' : 'var(--rojo)';
   st.textContent = res.ok ? '✓ Guardado' : '✕ Error';
+}
+
+async function exportarProduccion() {
+  const status = document.getElementById('exportar-status');
+  status.textContent = 'Exportando...';
+  status.style.color = 'var(--texto)';
+
+  const res = await api('exportar-produccion', 'POST', {});
+
+  if (res.ok) {
+    status.style.color = '#4caf7d';
+    status.textContent = `✓ Exportado → ${res.ruta}`;
+  } else {
+    status.style.color = '#e85555';
+    status.textContent = '✕ Error al exportar';
+  }
 }
 
 async function guardarDatosAdmin() {
