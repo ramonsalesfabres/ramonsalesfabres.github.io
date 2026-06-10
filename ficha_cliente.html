@@ -1366,7 +1366,9 @@ async function guardarTodo() {
     if (datos.empresa) document.getElementById('header-empresa').textContent = datos.empresa;
 
     // Aviso suave si no hay guiones subidos en esta sesión
-    if (totalArchivosSubidos() === 0) {
+    const sinGuiones = totalArchivosSubidos() === 0;
+    console.log('archivosSubidos:', archivosSubidos, 'total:', totalArchivosSubidos());
+    if (sinGuiones) {
       status.textContent += ' · Recuerda subir los guiones del mes cuando los tengas listos.';
     }
 
