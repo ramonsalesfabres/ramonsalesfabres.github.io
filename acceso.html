@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acceso · PAM Audiovisual</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --negro:   #0d0d0d;
+    --gris:    #1a1a1a;
+    --naranja: #e8941a;
+    --blanco:  #f5f5f0;
+    --texto:   #aaaaaa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--negro);
+    font-family: 'DM Sans', 'Helvetica Neue', sans-serif;
+    color: var(--blanco);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .container { width: 100%; max-width: 460px; }
+  .logo { text-align: center; margin-bottom: 32px; }
+  .logo img { width: 160px; }
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--naranja);
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .subtitulo {
+    font-size: 13px;
+    color: var(--texto);
+    text-align: center;
+    margin-bottom: 32px;
+    line-height: 1.7;
+  }
+  .card {
+    background: var(--gris);
+    border-radius: 6px;
+    padding: 32px;
+  }
+  label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--texto);
+    margin-bottom: 8px;
+    margin-top: 20px;
+  }
+  label:first-of-type { margin-top: 0; }
+  input {
+    width: 100%;
+    background: var(--negro);
+    border: 1px solid #2a2a2a;
+    color: var(--blanco);
+    padding: 13px 16px;
+    font-size: 15px;
+    border-radius: 3px;
+    outline: none;
+    transition: border-color 0.2s;
+    letter-spacing: 0.5px;
+  }
+  input:focus { border-color: var(--naranja); }
+  input#codigo { letter-spacing: 3px; text-transform: uppercase; font-size: 16px; }
+  button {
+    width: 100%;
+    background: var(--naranja);
+    color: var(--negro);
+    border: none;
+    padding: 15px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 3px;
+    margin-top: 24px;
+    transition: opacity 0.2s;
+  }
+  button:hover { opacity: 0.85; }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+  #status {
+    margin-top: 16px;
+    font-size: 13px;
+    text-align: center;
+    min-height: 18px;
+    line-height: 1.6;
+  }
+  .err { color: #e85555; }
+  .info { color: var(--texto); }
+  .ayuda {
+    margin-top: 24px;
+    font-size: 12px;
+    color: #444;
+    text-align: center;
+    line-height: 1.8;
+  }
+  .ayuda a { color: #555; text-decoration: none; }
+  .ayuda a:hover { color: var(--naranja); }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="logo">
+    <img src="https://ramonsalesfabres.github.io/pam_logo_negro.png" alt="PAM Audiovisual"/>
+  </div>
+  <h1>Tu área privada</h1>
+  <p class="subtitulo">Introduce tu email y el código que recibiste<br>en el correo de bienvenida.</p>
+
+  <div class="card">
+    <label>Email</label>
+    <input id="email" type="email" placeholder="tu@empresa.com" autocomplete="email"
+           onkeyup="if(event.key==='Enter') document.getElementById('codigo').focus()"/>
+
+    <label>Código de acceso</label>
+    <input id="codigo" type="text" placeholder="XXXXXXXX" maxlength="8" autocomplete="off"
+           onkeyup="this.value=this.value.toUpperCase(); if(event.key==='Enter') acceder()"/>
+
+    <button id="btn" onclick="acceder()">Acceder · Enter</button>
+    <div id="status"></div>
+  </div>
+
+  <p class="ayuda">
+    ¿No encuentras tu código? Búscalo en el correo<br>
+    "Te damos la bienvenida · Tu grabación está confirmada"<br><br>
+    <a href="mailto:clon.digital@pam-audiovisual.com">clon.digital@pam-audiovisual.com</a>
+  </p>
+</div>
+
+<script>
+const WORKER = 'https://pam-backblaze.ramon-301.workers.dev';
+const FICHA  = 'https://ramonsalesfabres.github.io/ficha_cliente.html';
+
+async function acceder() {
+  const email  = document.getElementById('email').value.trim();
+  const codigo = document.getElementById('codigo').value.trim().toUpperCase();
+  const btn    = document.getElementById('btn');
+  const status = document.getElementById('status');
+
+  if (!email || !codigo) {
+    status.className = 'err';
+    status.textContent = 'Introduce tu email y tu código de acceso.';
+    return;
+  }
+  if (codigo.length !== 8) {
+    status.className = 'err';
+    status.textContent = 'El código tiene 8 caracteres.';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Buscando...';
+  status.className = 'info';
+  status.textContent = '';
+
+  try {
+    const res = await fetch(`${WORKER}/api/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, codigo })
+    });
+    const data = await res.json();
+
+    if (data.ok) {
+      status.textContent = '✓ Accediendo...';
+      setTimeout(() => {
+        window.location.href = `${FICHA}?id=${data.clientId}&code=${data.codigo}`;
+      }, 500);
+    } else {
+      status.className = 'err';
+      status.textContent = data.error || 'No hemos podido verificar tus datos. Comprueba el email y el código.';
+      btn.disabled = false;
+      btn.textContent = 'Acceder · Enter';
+    }
+  } catch(e) {
+    status.className = 'err';
+    status.textContent = 'Error de conexión. Inténtalo de nuevo.';
+    btn.disabled = false;
+    btn.textContent = 'Acceder · Enter';
+  }
+}
+</script>
+</body>
+</html>
