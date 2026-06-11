@@ -175,7 +175,7 @@ async function acceder() {
     if (data.ok) {
       status.textContent = '✓ Accediendo...';
       setTimeout(() => {
-        window.location.href = `${FICHA}?id=${data.clientId}&code=${data.codigo}`;
+        window.location.href = `${FICHA}?id=${data.clientId}&code=${data.codigo}&auto=1`;
       }, 500);
     } else {
       status.className = 'err';
