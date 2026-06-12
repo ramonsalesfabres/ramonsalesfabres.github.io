@@ -983,8 +983,8 @@ function validarFormularioCaptacion() {
 function mostrarCalendarioInline() {
   if (!validarFormularioCaptacion()) return;
 
-  const nombre = document.getElementById('cap-nombre')?.value || '';
-  const email  = document.getElementById('cap-email')?.value  || '';
+  const nombre = document.getElementById('c-nombre')?.value || '';
+  const email  = document.getElementById('c-email')?.value  || '';
 
   const container = document.getElementById('cal-inline-container');
   container.style.display = 'block';
