@@ -1020,7 +1020,14 @@ function mostrarCalendarioInline() {
     // Cuando el cliente confirma la reserva → mostrar pago
     Cal.ns.grabacion("on", {
       action: "bookingSuccessful",
-      callback: () => {
+      callback: (e) => {
+        if (e?.data?.date) {
+          window._calFechaISO = e.data.date;
+          window._calFechaHora = new Date(e.data.date).toLocaleString('es-ES', {
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+            hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid'
+          });
+        }
         document.getElementById('cal-inline-container').style.display = 'none';
         document.getElementById('pago-panel').style.display = 'block';
         document.getElementById('pago-panel').scrollIntoView({ behavior: 'smooth' });
@@ -1095,10 +1102,11 @@ async function procesarPago() {
     const paquete  = chipActivo('chips-captacion-paquete') || '';
 
     // Crear pago en el Worker (devuelve setupIntent + paymentIntent)
+    const fechaHora = window._calFechaHora || '';
     const intentRes = await fetch(`${WORKER}/api/crear-pago`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nombre, empresa, email, telefono, paquete, importe: 10000 })
+      body: JSON.stringify({ nombre, empresa, email, telefono, paquete, importe: 10000, fechaHora })
     });
 
     const intentData = await intentRes.json();
