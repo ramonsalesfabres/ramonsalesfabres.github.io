@@ -613,7 +613,7 @@
           </div>
         </div>
         <div class="bloque">
-          <div class="etiqueta">Nombre en rótulo <em>· Name on lower third</em></div>
+          <div class="etiqueta">Nombre de la persona que aparece en el vídeo <em>· Name on lower third</em></div>
           <input id="d-nombre-rotulo" type="text" placeholder="Juan García"/>
         </div>
         <div class="bloque">
@@ -883,7 +883,11 @@
   </div>
 
   <!-- Botón fijo Guardar todo -->
-  <div id="save-todo-bar" style="position:fixed;bottom:0;left:0;right:0;background:var(--negro);border-top:1px solid #2a2a2a;padding:14px 40px;display:flex;align-items:center;gap:20px;z-index:100;">
+  <div id="save-todo-bar" style="position:fixed;bottom:0;left:0;right:0;background:var(--negro);border-top:1px solid #2a2a2a;padding:14px 40px;display:flex;align-items:center;gap:20px;z-index:100;flex-wrap:wrap;">
+    <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:#666;cursor:pointer;">
+      <input type="checkbox" id="check-privacidad" style="width:16px;height:16px;accent-color:var(--naranja);cursor:pointer;"/>
+      <span>He leído y acepto la <a href="https://ramonsalesfabres.github.io/privacidad.html" target="_blank" style="color:var(--naranja);text-decoration:none;">Política de privacidad</a></span>
+    </label>
     <button class="btn-save" onclick="guardarTodo()" style="padding:12px 40px;">💾 Guardar todo · Save all</button>
     <span id="save-todo-status" style="font-size:13px;"></span>
   </div>
@@ -892,6 +896,11 @@
   <footer>
     <p>© 2026 <span style="cursor:pointer;" onclick="adminAccess()" title="">PAM Audiovisual</span> · Ramon Sales · El Masnou</p>
     <p style="color:#333;font-size:12px;letter-spacing:1px">CLON DIGITAL</p>
+    <p style="margin-top:10px;">
+      <a href="https://ramonsalesfabres.github.io/privacidad.html" target="_blank" style="color:#555;text-decoration:none;font-size:11px;margin-right:16px;letter-spacing:1px;">POLÍTICA DE PRIVACIDAD</a>
+      <a href="https://ramonsalesfabres.github.io/aviso-legal.html" target="_blank" style="color:#555;text-decoration:none;font-size:11px;margin-right:16px;letter-spacing:1px;">AVISO LEGAL</a>
+      <a href="https://ramonsalesfabres.github.io/cookies.html" target="_blank" style="color:#555;text-decoration:none;font-size:11px;letter-spacing:1px;">COOKIES</a>
+    </p>
   </footer>
 
 </div><!-- #main -->
@@ -1306,6 +1315,14 @@ async function guardarTodo() {
   const status = document.getElementById('save-todo-status');
   status.style.color = 'var(--texto)';
   status.textContent = '';
+
+  // Validar casilla de privacidad
+  const checkPrivacidad = document.getElementById('check-privacidad');
+  if (checkPrivacidad && !checkPrivacidad.checked) {
+    status.style.color = '#e85555';
+    status.textContent = 'Debes aceptar la política de privacidad antes de guardar.';
+    return;
+  }
 
   // Campos obligatorios
   const obligatorios = [
