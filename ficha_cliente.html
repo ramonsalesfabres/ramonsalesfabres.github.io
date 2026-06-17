@@ -486,9 +486,15 @@
     <div style="margin-top:20px;background:rgba(232,148,58,0.08);border-left:3px solid var(--naranja);padding:20px 24px;max-width:600px;border-radius:0 4px 4px 0;">
       <p style="font-size:14px;color:var(--texto);line-height:1.9;margin:0;">
         <strong style="color:var(--naranja);letter-spacing:1px;">Antes de empezar.</strong> Para que podamos producir tus vídeos exactamente como los imaginas, necesitamos que completes todos los apartados de esta ficha. Sin esta información no podemos iniciar la producción.<br><br>
-        Tómate unos minutos ahora y no tendrás que preocuparte por nada más.<br>
-        <em style="font-size:12px;color:#555;">Please complete all sections before we can start your production.</em>
+        Tómate unos minutos ahora y no tendrás que preocuparte por nada más. Cuando termines, pulsa el botón <strong style="color:var(--naranja);">Guardar Todo</strong> que encontrarás al pie de la página.<br>
+        <em style="font-size:12px;color:#555;">Please complete all sections before we can start your production. When done, press the Save All button at the bottom of the page.</em>
       </p>
+    </div>
+
+    <!-- Barra guardar arriba -->
+    <div style="margin-top:20px;max-width:600px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:4px;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+      <span style="font-size:13px;color:#666;">💾 Recuerda guardar los cambios cuando termines cada sección.</span>
+      <button onclick="guardarTodo()" style="background:var(--naranja);color:var(--negro);border:none;padding:10px 24px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;white-space:nowrap;">Guardar todo · Save all</button>
     </div>
   </div>
 
@@ -1344,6 +1350,13 @@ async function guardarTodo() {
 
   const faltan = [...faltanCampos.map(f => f.label), ...faltanChips];
 
+  // Si rótulo es Sí, nombre y cargo son obligatorios
+  const rotuloValor = chipActivo('chips-rotulo');
+  if (rotuloValor === 'Sí') {
+    if (!get('d-nombre-rotulo')?.trim()) faltan.push('Nombre en rótulo');
+    if (!get('d-cargo-rotulo')?.trim())  faltan.push('Cargo en rótulo');
+  }
+
   // Logo obligatorio
   const logoEl = document.getElementById('files-logos');
   const logoVacio = !logoEl || !logoEl.children.length || logoEl.querySelector('.file-empty');
@@ -1559,9 +1572,28 @@ function renderFileList(containerId, files) {
   el.innerHTML = files.map(f => `
     <div class="file-item">
       <span>📄 ${f.name}</span>
-      ${f.path ? `<button onclick="downloadFile('${f.path}','${f.name}')" style="background:none;border:1px solid var(--naranja);color:var(--naranja);padding:4px 12px;font-size:12px;letter-spacing:1px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='var(--naranja)';this.style.color='var(--negro)'" onmouseout="this.style.background='none';this.style.color='var(--naranja)'">Descargar</button>` : ''}
+      <div style="display:flex;gap:8px;">
+        ${f.path ? `<button onclick="downloadFile('${f.path}','${f.name}')" style="background:none;border:1px solid var(--naranja);color:var(--naranja);padding:4px 12px;font-size:12px;letter-spacing:1px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='var(--naranja)';this.style.color='var(--negro)'" onmouseout="this.style.background='none';this.style.color='var(--naranja)'">Descargar</button>` : ''}
+        ${f.path ? `<button onclick="borrarArchivo('${f.path}','${containerId}')" style="background:none;border:1px solid #555;color:#555;padding:4px 12px;font-size:12px;letter-spacing:1px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#e85555';this.style.color='#e85555'" onmouseout="this.style.borderColor='#555';this.style.color='#555'">✕ Borrar</button>` : ''}
+      </div>
     </div>
   `).join('');
+}
+
+async function borrarArchivo(path, containerId) {
+  if (!confirm('¿Seguro que quieres borrar este archivo?')) return;
+  const res = await api('delete', 'POST', { path });
+  if (res.ok) {
+    // Recargar la lista correspondiente
+    if (containerId === 'files-logos') cargarArchivosMaterial('Logos');
+    else if (containerId === 'files-material') cargarArchivosMaterial('Material-Grafico');
+    else {
+      const match = containerId.match(/files-sem(\d+)/);
+      if (match) cargarArchivosSemana(parseInt(match[1]));
+    }
+  } else {
+    alert('Error al borrar el archivo. Inténtalo de nuevo.');
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
