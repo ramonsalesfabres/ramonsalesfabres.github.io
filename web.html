@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PAM Audiovisual · Ramon Sales</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  :root {
+    --naranja: #E8943A;
+    --negro:   #0d0d0d;
+    --gris:    #2a2a2a;
+    --gris2:   #383838;
+    --gris3:   #444444;
+    --blanco:  #f5f5f0;
+    --texto:   #cccccc;
+    --texto2:  #999999;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--negro);
+    color: var(--blanco);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(13,13,13,0.97);
+    border-bottom: 1px solid #222;
+  }
+  .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 6px; color: var(--blanco); }
+  .nav-logo span { color: var(--naranja); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a { font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: var(--texto2); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--naranja); }
+  .nav-cta { padding: 11px 28px; background: var(--naranja); color: var(--negro); font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: background 0.2s; }
+  .nav-cta:hover { background: var(--blanco); }
+
+  /* HERO */
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; overflow: hidden; }
+
+  .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 80px 60px; position: relative; z-index: 2; }
+
+  .eyebrow { font-size: 14px; letter-spacing: 4px; color: var(--naranja); text-transform: uppercase; margin-bottom: 20px; }
+
+  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(60px, 7vw, 100px); line-height: 0.92; color: var(--blanco); margin-bottom: 28px; }
+  .hero-title span { color: var(--naranja); }
+
+  .hero-desc { font-size: 18px; color: var(--texto); line-height: 1.8; max-width: 380px; margin-bottom: 40px; }
+
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  .btn-primary { padding: 17px 44px; background: var(--naranja); color: var(--negro); font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: background 0.2s; display: inline-block; }
+  .btn-primary:hover { background: var(--blanco); }
+
+  .btn-ghost { padding: 17px 44px; background: transparent; color: var(--blanco); font-size: 13px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; border: 1px solid #444; transition: border-color 0.2s, color 0.2s; display: inline-block; }
+  .btn-ghost:hover { border-color: var(--naranja); color: var(--naranja); }
+
+  /* VIDEO */
+  .hero-right { position: relative; overflow: hidden; background: #000; min-height: 100vh; }
+  .hero-right iframe { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 190%; height: 190%; pointer-events: none; border: none; }
+  .hero-right::after { content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(to right, var(--negro) 0%, transparent 25%); }
+
+  /* STRIP */
+  .intro-strip { background: var(--naranja); padding: 22px 60px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .intro-strip p { font-size: 15px; font-weight: 500; color: var(--negro); letter-spacing: 1px; }
+  .intro-strip .nums { display: flex; gap: 48px; }
+  .num-val { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--negro); line-height: 1; }
+  .num-label { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: rgba(13,13,13,0.55); }
+
+  /* SERVICIOS */
+  .section-outer { padding: 80px 60px 0; }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(38px, 5vw, 56px); line-height: 1; color: var(--blanco); margin-top: 10px; }
+
+  .servicios { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--gris3); margin-top: 40px; }
+
+  .servicio-card { background: var(--gris); padding: 48px 36px; cursor: pointer; transition: background 0.25s; }
+  .servicio-card:hover { background: var(--gris2); }
+  .servicio-card:hover .servicio-cta { border-color: var(--naranja); color: var(--naranja); background: rgba(232,148,58,0.06); }
+
+  .servicio-nombre { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 1px; color: var(--blanco); margin-bottom: 6px; line-height: 1.1; }
+  .servicio-sub { font-size: 13px; letter-spacing: 3px; color: var(--naranja); text-transform: uppercase; margin-bottom: 28px; }
+  .servicio-linea-a { font-size: 17px; color: var(--blanco); line-height: 1.75; }
+  .servicio-linea-b { font-size: 17px; color: var(--texto); line-height: 1.75; padding-top: 16px; border-top: 1px solid var(--gris3); margin-top: 16px; margin-bottom: 32px; }
+  .servicio-precio { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--naranja); margin-bottom: 28px; letter-spacing: 1px; }
+  .servicio-cta { display: inline-block; padding: 12px 28px; border: 1px solid var(--gris3); color: var(--texto2); font-size: 13px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: all 0.2s; }
+
+  /* SOBRE */
+  .sobre { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--gris3); margin-top: 80px; }
+
+  .sobre-foto { background: var(--gris); min-height: 520px; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
+  .sobre-foto img { width: 100%; height: 100%; object-fit: cover; object-position: center top; filter: grayscale(15%); opacity: 0.85; position: absolute; inset: 0; }
+  .sobre-foto-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 28px; background: linear-gradient(to top, rgba(13,13,13,0.9) 0%, transparent 100%); z-index: 2; }
+  .sobre-foto-tag { font-size: 13px; letter-spacing: 4px; color: var(--naranja); text-transform: uppercase; }
+
+  .sobre-texto { background: var(--gris); padding: 64px 52px; display: flex; flex-direction: column; justify-content: center; }
+  .sobre-nombre { font-family: 'Bebas Neue', sans-serif; font-size: 48px; line-height: 1; color: var(--blanco); margin-top: 10px; margin-bottom: 24px; }
+  .sobre-bio { font-size: 16px; color: var(--texto); line-height: 1.95; margin-bottom: 28px; }
+  .sobre-email { font-size: 15px; color: var(--naranja); letter-spacing: 1px; margin-bottom: 28px; text-decoration: none; display: block; transition: color 0.2s; }
+  .sobre-email:hover { color: var(--blanco); }
+  .sobre-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .sobre-tag { padding: 9px 20px; border: 1px solid var(--gris3); font-size: 12px; letter-spacing: 2px; color: var(--texto2); text-transform: uppercase; }
+
+  /* CTA FINAL */
+  .cta-final { padding: 110px 60px; text-align: center; position: relative; overflow: hidden; }
+  .cta-final::before { content: 'PAM'; position: absolute; font-family: 'Bebas Neue', sans-serif; font-size: 340px; color: rgba(255,255,255,0.018); top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; white-space: nowrap; }
+  .cta-final-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 6vw, 76px); line-height: 1; color: var(--blanco); margin-bottom: 20px; }
+  .cta-final-sub { font-size: 18px; color: var(--texto); line-height: 1.8; max-width: 460px; margin: 0 auto 40px; }
+  .cta-final-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  /* FOOTER */
+  footer { border-top: 1px solid #222; padding: 28px 60px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; background: var(--gris); }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 6px; color: #666; }
+  .footer-logo span { color: var(--naranja); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 12px; letter-spacing: 2px; color: #555; text-decoration: none; text-transform: uppercase; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--naranja); }
+  footer p { font-size: 12px; color: #555; letter-spacing: 1px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 100px 24px 60px; }
+    .hero-right { min-height: 56vw; }
+    .hero-right::after { background: linear-gradient(to bottom, var(--negro) 0%, transparent 30%); }
+    .intro-strip { padding: 20px 24px; }
+    .section-outer { padding: 60px 24px 0; }
+    .servicios { grid-template-columns: 1fr; }
+    .sobre { grid-template-columns: 1fr; }
+    .sobre-foto { min-height: 320px; }
+    .sobre-texto { padding: 40px 24px; }
+    .cta-final { padding: 72px 24px; }
+    footer { padding: 24px; flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">PAM <span>·</span> AUDIOVISUAL</div>
+  <ul class="nav-links">
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#sobre">Ramon Sales</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <a class="nav-cta" href="https://cal.eu/ramon-sales/videollamada" target="_blank">Videollamada gratuita</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="eyebrow">El Masnou · Barcelona · 2026</p>
+    <h1 class="hero-title">Vídeo<br>que<br><span>vende.</span></h1>
+    <p class="hero-desc">Producción audiovisual profesional para empresas que necesitan presencia real en vídeo.</p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="#servicios">Descubre nuestros servicios</a>
+      <a class="btn-ghost" href="https://cal.eu/ramon-sales/videollamada" target="_blank">Hablamos</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <iframe
+      src="https://www.youtube.com/embed/gTP8TQOUBrI?autoplay=1&mute=1&loop=1&playlist=gTP8TQOUBrI&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1"
+      allow="autoplay; encrypted-media"
+      allowfullscreen
+      title="PAM Audiovisual">
+    </iframe>
+  </div>
+</section>
+
+<!-- STRIP -->
+<div class="intro-strip">
+  <p>Producción profesional desde El Masnou para toda España</p>
+  <div class="nums">
+    <div><div class="num-val">+20</div><div class="num-label">Años de experiencia</div></div>
+    <div><div class="num-val">3</div><div class="num-label">Servicios especializados</div></div>
+    <div><div class="num-val">4K</div><div class="num-label">Calidad de producción</div></div>
+  </div>
+</div>
+
+<!-- SERVICIOS -->
+<section id="servicios">
+  <div class="section-outer">
+    <p class="eyebrow">Lo que hacemos</p>
+    <h2 class="section-title">Tres servicios.<br>Una sola dirección.</h2>
+  </div>
+
+  <div class="servicios">
+    <div class="servicio-card">
+      <div class="servicio-nombre">Clon Digital</div>
+      <div class="servicio-sub">Avatar IA · Producción mensual</div>
+      <p class="servicio-linea-a">¿Cuántos vídeos has publicado este mes?</p>
+      <p class="servicio-linea-b">La solución que te ahorrará tiempo y dinero.</p>
+      <div class="servicio-precio">Desde 200€/mes</div>
+      <a class="servicio-cta" href="index.html">Más información</a>
+    </div>
+
+    <div class="servicio-card">
+      <div class="servicio-nombre">Podcast a Domicilio</div>
+      <div class="servicio-sub">Videopodcast · En tus instalaciones</div>
+      <p class="servicio-linea-a">Trasladamos el estudio a tu empresa.</p>
+      <p class="servicio-linea-b">Os encargáis del contenido y nosotros de todo lo demás.</p>
+      <div class="servicio-precio">700€ · incluye 8 reels</div>
+      <a class="servicio-cta" href="#">Más información</a>
+    </div>
+
+    <div class="servicio-card">
+      <div class="servicio-nombre">Resumen de Eventos</div>
+      <div class="servicio-sub">Empresa · Conferencias · Congresos</div>
+      <p class="servicio-linea-a">El vídeo que resume lo que pasó.</p>
+      <p class="servicio-linea-b">Presentaciones, entregas de premios, jornadas de empresa, conferencias y congresos.</p>
+      <div class="servicio-precio">Desde 700€</div>
+      <a class="servicio-cta" href="#">Más información</a>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE RAMON -->
+<section id="sobre">
+  <div class="section-outer" style="padding-top:80px;">
+    <p class="eyebrow">Quién hay detrás</p>
+    <h2 class="section-title">Ramon Sales.</h2>
+  </div>
+
+  <div class="sobre">
+    <div class="sobre-foto">
+      <img src="foto.jpeg" alt="Ramon Sales · PAM Audiovisual" onerror="this.style.display='none'"/>
+      <div class="sobre-foto-overlay">
+        <div class="sobre-foto-tag">El Masnou · Barcelona</div>
+      </div>
+    </div>
+
+    <div class="sobre-texto">
+      <p class="eyebrow">Videógrafo y Creativo</p>
+      <h3 class="sobre-nombre">Ramon Sales<br>Fabrés</h3>
+      <p class="sobre-bio">
+        Con más de 20 años de experiencia en el sector videográfico, mi trayectoria comenzó gracias a mi pasión por la música. Desde pequeño estudié percusión clásica, batería y guitarra. Pronto sentí la necesidad de grabar mis composiciones y estudié imagen y sonido especializándome en producción musical y técnico de sonido. Fundé mi propio estudio y precisamente para cubrir la necesidad que tenían mis clientes de promocionar su música a través del vídeo, me formé en videografía, montaje y color grading.<br><br>
+        Actualmente, estoy especializado en la creación de VídeoClon Digital, Podcast a Domicilio y Resúmenes de Eventos.
+      </p>
+      <a class="sobre-email" href="mailto:info@pam-audiovisual.com">info@pam-audiovisual.com</a>
+      <div class="sobre-tags">
+        <span class="sobre-tag">Dirección de vídeo</span>
+        <span class="sobre-tag">Avatar IA</span>
+        <span class="sobre-tag">Producción 4K</span>
+        <span class="sobre-tag">Color grading</span>
+        <span class="sobre-tag">Podcast</span>
+        <span class="sobre-tag">Resumen de eventos</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final" id="contacto">
+  <p class="eyebrow">El siguiente paso</p>
+  <h2 class="cta-final-title">Hablemos 10 minutos.</h2>
+  <p class="cta-final-sub">Sin compromiso. Te cuento cómo funciona, qué formato encaja mejor contigo y resolvemos todas las dudas.</p>
+  <div class="cta-final-actions">
+    <a class="btn-primary" href="https://cal.eu/ramon-sales/videollamada" target="_blank">Reservar videollamada gratuita</a>
+    <a class="btn-ghost" href="mailto:info@pam-audiovisual.com">info@pam-audiovisual.com</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">PAM <span>·</span> AUDIOVISUAL</div>
+  <div class="footer-links">
+    <a href="https://ramonsalesfabres.github.io/privacidad.html" target="_blank">Privacidad</a>
+    <a href="https://ramonsalesfabres.github.io/aviso-legal.html" target="_blank">Aviso legal</a>
+    <a href="https://ramonsalesfabres.github.io/cookies.html" target="_blank">Cookies</a>
+  </div>
+  <p>© 2026 PAM Audiovisual · Ramon Sales · El Masnou</p>
+</footer>
+
+</body>
+</html>
