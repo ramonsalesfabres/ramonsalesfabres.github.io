@@ -10,7 +10,6 @@ Web · HTML
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
- 
   :root {
     --naranja: #E8943A;
     --negro:   #0d0d0d;
@@ -21,26 +20,10 @@ Web · HTML
     --texto:   #cccccc;
     --texto2:  #999999;
   }
- 
   html { scroll-behavior: smooth; }
+  body { background: var(--negro); color: var(--blanco); font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 17px; line-height: 1.75; }
  
-  body {
-    background: var(--negro);
-    color: var(--blanco);
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 300;
-    font-size: 17px;
-    line-height: 1.75;
-  }
- 
-  /* NAV */
-  nav {
-    position: sticky; top: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 20px 60px;
-    background: rgba(13,13,13,0.97);
-    border-bottom: 1px solid #222;
-  }
+  nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 20px 60px; background: rgba(13,13,13,0.97); border-bottom: 1px solid #222; }
   .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 6px; color: var(--blanco); }
   .nav-logo span { color: var(--naranja); }
   .nav-links { display: flex; gap: 36px; list-style: none; }
@@ -51,28 +34,29 @@ Web · HTML
  
   /* HERO */
   .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; overflow: hidden; }
- 
-  .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 80px 60px; position: relative; z-index: 2; }
- 
+  .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 80px 60px; position: relative; z-index: 3; background: var(--negro); }
   .eyebrow { font-size: 14px; letter-spacing: 4px; color: var(--naranja); text-transform: uppercase; margin-bottom: 20px; }
- 
   .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(60px, 7vw, 100px); line-height: 0.92; color: var(--blanco); margin-bottom: 28px; }
   .hero-title span { color: var(--naranja); }
- 
   .hero-desc { font-size: 18px; color: var(--texto); line-height: 1.8; max-width: 380px; margin-bottom: 40px; }
- 
   .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
  
   .btn-primary { padding: 17px 44px; background: var(--naranja); color: var(--negro); font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: background 0.2s; display: inline-block; }
   .btn-primary:hover { background: var(--blanco); }
- 
   .btn-ghost { padding: 17px 44px; background: transparent; color: var(--blanco); font-size: 13px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; border: 1px solid #444; transition: border-color 0.2s, color 0.2s; display: inline-block; }
   .btn-ghost:hover { border-color: var(--naranja); color: var(--naranja); }
  
-  /* VIDEO */
+  /* VIDEO — sin zoom, capa que tapa bordes YouTube */
   .hero-right { position: relative; overflow: hidden; background: #000; min-height: 100vh; }
-  .hero-right iframe { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 190%; height: 190%; pointer-events: none; border: none; }
-  .hero-right::after { content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(to right, var(--negro) 0%, transparent 25%); }
+  .hero-right iframe {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 56.25vw;          /* 16:9 sobre el ancho */
+    min-height: 100%;
+    min-width: 177.77vh;      /* 16:9 sobre el alto */
+    border: none; pointer-events: none;
+  }
  
   /* STRIP */
   .intro-strip { background: var(--naranja); padding: 22px 60px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
@@ -84,13 +68,10 @@ Web · HTML
   /* SERVICIOS */
   .section-outer { padding: 80px 60px 0; }
   .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(38px, 5vw, 56px); line-height: 1; color: var(--blanco); margin-top: 10px; }
- 
   .servicios { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--gris3); margin-top: 40px; }
- 
   .servicio-card { background: var(--gris); padding: 48px 36px; cursor: pointer; transition: background 0.25s; }
   .servicio-card:hover { background: var(--gris2); }
   .servicio-card:hover .servicio-cta { border-color: var(--naranja); color: var(--naranja); background: rgba(232,148,58,0.06); }
- 
   .servicio-nombre { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 1px; color: var(--blanco); margin-bottom: 6px; line-height: 1.1; }
   .servicio-sub { font-size: 13px; letter-spacing: 3px; color: var(--naranja); text-transform: uppercase; margin-bottom: 28px; }
   .servicio-linea-a { font-size: 17px; color: var(--blanco); line-height: 1.75; }
@@ -98,15 +79,12 @@ Web · HTML
   .servicio-precio { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--naranja); margin-bottom: 28px; letter-spacing: 1px; }
   .servicio-cta { display: inline-block; padding: 12px 28px; border: 1px solid var(--gris3); color: var(--texto2); font-size: 13px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: all 0.2s; }
  
-  /* SOBRE */
-  .sobre { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--gris3); margin-top: 80px; }
- 
-  .sobre-foto { background: var(--gris); min-height: 520px; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
-  .sobre-foto img { width: 100%; height: 100%; object-fit: cover; object-position: center top; filter: grayscale(15%); opacity: 0.85; position: absolute; inset: 0; }
-  .sobre-foto-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 28px; background: linear-gradient(to top, rgba(13,13,13,0.9) 0%, transparent 100%); z-index: 2; }
-  .sobre-foto-tag { font-size: 13px; letter-spacing: 4px; color: var(--naranja); text-transform: uppercase; }
- 
-  .sobre-texto { background: var(--gris); padding: 64px 52px; display: flex; flex-direction: column; justify-content: center; }
+  /* SOBRE — foto a todo el ancho */
+  .sobre-intro { padding: 80px 60px 40px; }
+  .sobre-foto-full { width: 100%; display: block; }
+  .sobre-foto-full img { width: 100%; height: auto; display: block; filter: grayscale(15%); }
+  .sobre-texto { background: var(--gris); padding: 64px 60px; }
+  .sobre-texto-inner { max-width: 760px; }
   .sobre-nombre { font-family: 'Bebas Neue', sans-serif; font-size: 48px; line-height: 1; color: var(--blanco); margin-top: 10px; margin-bottom: 24px; }
   .sobre-bio { font-size: 16px; color: var(--texto); line-height: 1.95; margin-bottom: 28px; }
   .sobre-email { font-size: 15px; color: var(--naranja); letter-spacing: 1px; margin-bottom: 28px; text-decoration: none; display: block; transition: color 0.2s; }
@@ -130,19 +108,16 @@ Web · HTML
   .footer-links a:hover { color: var(--naranja); }
   footer p { font-size: 12px; color: #555; letter-spacing: 1px; }
  
-  /* RESPONSIVE */
   @media (max-width: 900px) {
     nav { padding: 16px 24px; }
     .nav-links { display: none; }
     .hero { grid-template-columns: 1fr; min-height: auto; }
     .hero-left { padding: 100px 24px 60px; }
     .hero-right { min-height: 56vw; }
-    .hero-right::after { background: linear-gradient(to bottom, var(--negro) 0%, transparent 30%); }
     .intro-strip { padding: 20px 24px; }
     .section-outer { padding: 60px 24px 0; }
     .servicios { grid-template-columns: 1fr; }
-    .sobre { grid-template-columns: 1fr; }
-    .sobre-foto { min-height: 320px; }
+    .sobre-intro { padding: 60px 24px 30px; }
     .sobre-texto { padding: 40px 24px; }
     .cta-final { padding: 72px 24px; }
     footer { padding: 24px; flex-direction: column; align-items: flex-start; }
@@ -151,7 +126,6 @@ Web · HTML
 </head>
 <body>
  
-<!-- NAV -->
 <nav>
   <div class="nav-logo">PAM <span>·</span> AUDIOVISUAL</div>
   <ul class="nav-links">
@@ -162,7 +136,6 @@ Web · HTML
   <a class="nav-cta" href="https://cal.eu/ramon-sales/videollamada" target="_blank">Videollamada gratuita</a>
 </nav>
  
-<!-- HERO -->
 <section class="hero">
   <div class="hero-left">
     <p class="eyebrow">El Masnou · Barcelona · 2026</p>
@@ -178,13 +151,11 @@ Web · HTML
     <iframe
       src="https://www.youtube.com/embed/gTP8TQOUBrI?autoplay=1&mute=1&loop=1&playlist=gTP8TQOUBrI&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1"
       allow="autoplay; encrypted-media"
-      allowfullscreen
       title="PAM Audiovisual">
     </iframe>
   </div>
 </section>
  
-<!-- STRIP -->
 <div class="intro-strip">
   <p>Producción profesional desde El Masnou para toda España</p>
   <div class="nums">
@@ -194,13 +165,11 @@ Web · HTML
   </div>
 </div>
  
-<!-- SERVICIOS -->
 <section id="servicios">
   <div class="section-outer">
     <p class="eyebrow">Lo que hacemos</p>
     <h2 class="section-title">Tres servicios.<br>Una sola dirección.</h2>
   </div>
- 
   <div class="servicios">
     <div class="servicio-card">
       <div class="servicio-nombre">Clon Digital</div>
@@ -210,7 +179,6 @@ Web · HTML
       <div class="servicio-precio">Desde 200€/mes</div>
       <a class="servicio-cta" href="index.html">Más información</a>
     </div>
- 
     <div class="servicio-card">
       <div class="servicio-nombre">Podcast a Domicilio</div>
       <div class="servicio-sub">Videopodcast · En tus instalaciones</div>
@@ -219,7 +187,6 @@ Web · HTML
       <div class="servicio-precio">700€ · incluye 8 reels</div>
       <a class="servicio-cta" href="podcast.html">Más información</a>
     </div>
- 
     <div class="servicio-card">
       <div class="servicio-nombre">Resumen de Eventos</div>
       <div class="servicio-sub">Empresa · Conferencias · Congresos</div>
@@ -231,24 +198,20 @@ Web · HTML
   </div>
 </section>
  
-<!-- SOBRE RAMON -->
 <section id="sobre">
-  <div class="section-outer" style="padding-top:80px;">
+  <div class="sobre-intro">
     <p class="eyebrow">Quién hay detrás</p>
     <h2 class="section-title">Ramon Sales.</h2>
   </div>
  
-  <div class="sobre">
-    <div class="sobre-foto">
-      <img src="foto.jpeg" alt="Ramon Sales · PAM Audiovisual" onerror="this.style.display='none'"/>
-      <div class="sobre-foto-overlay">
-        <div class="sobre-foto-tag">El Masnou · Barcelona</div>
-      </div>
-    </div>
+  <div class="sobre-foto-full">
+    <img src="foto.jpeg" alt="Ramon Sales · PAM Audiovisual" onerror="this.parentElement.style.display='none'"/>
+  </div>
  
-    <div class="sobre-texto">
+  <div class="sobre-texto">
+    <div class="sobre-texto-inner">
       <p class="eyebrow">Videógrafo y Creativo</p>
-      <h3 class="sobre-nombre">Ramon Sales<br>Fabrés</h3>
+      <h3 class="sobre-nombre">Ramon Sales Fabrés</h3>
       <p class="sobre-bio">
         Con más de 20 años de experiencia en el sector videográfico, mi trayectoria comenzó gracias a mi pasión por la música. Desde pequeño estudié percusión clásica, batería y guitarra. Pronto sentí la necesidad de grabar mis composiciones y estudié imagen y sonido especializándome en producción musical y técnico de sonido. Fundé mi propio estudio y precisamente para cubrir la necesidad que tenían mis clientes de promocionar su música a través del vídeo, me formé en videografía, montaje y color grading.<br><br>
         Actualmente, estoy especializado en la creación de VídeoClon Digital, Podcast a Domicilio y Resúmenes de Eventos.
@@ -266,7 +229,6 @@ Web · HTML
   </div>
 </section>
  
-<!-- CTA FINAL -->
 <section class="cta-final" id="contacto">
   <p class="eyebrow">El siguiente paso</p>
   <h2 class="cta-final-title">Hablemos 10 minutos.</h2>
@@ -277,7 +239,6 @@ Web · HTML
   </div>
 </section>
  
-<!-- FOOTER -->
 <footer>
   <div class="footer-logo">PAM <span>·</span> AUDIOVISUAL</div>
   <div class="footer-links">
