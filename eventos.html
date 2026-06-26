@@ -1,3 +1,6 @@
+
+
+Eventos · HTML
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -19,7 +22,7 @@
   }
   html { scroll-behavior: smooth; }
   body { background: var(--negro); color: var(--blanco); font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 17px; line-height: 1.75; }
-
+ 
   nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 20px 60px; background: rgba(13,13,13,0.97); border-bottom: 1px solid #222; }
   .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 6px; color: var(--blanco); text-decoration: none; }
   .nav-logo span { color: var(--naranja); }
@@ -27,41 +30,41 @@
   .nav-back:hover { color: var(--naranja); }
   .nav-cta { padding: 11px 28px; background: var(--naranja); color: var(--negro); font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: background 0.2s; }
   .nav-cta:hover { background: var(--blanco); }
-
+ 
   .hero { padding: 100px 60px 80px; border-bottom: 1px solid #222; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
   .eyebrow { font-size: 14px; letter-spacing: 4px; color: var(--naranja); text-transform: uppercase; margin-bottom: 20px; }
   .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(52px, 7vw, 88px); line-height: 0.95; color: var(--blanco); margin-bottom: 28px; }
   .hero-title span { color: var(--naranja); }
   .hero-desc { font-size: 18px; color: var(--texto); line-height: 1.8; margin-bottom: 40px; }
-
+ 
   .precios-wrap { display: flex; flex-direction: column; gap: 14px; margin-bottom: 36px; }
   .precio-bloque { display: inline-flex; flex-direction: column; border-left: 3px solid var(--naranja); padding-left: 20px; }
   .precio-val { font-family: 'Bebas Neue', sans-serif; font-size: 40px; color: var(--naranja); line-height: 1; }
   .precio-desc { font-size: 14px; color: var(--texto2); letter-spacing: 1px; margin-top: 4px; }
-
+ 
   .precio-nota { font-size: 13px; color: var(--texto2); line-height: 1.7; margin-bottom: 36px; font-style: italic; border-left: 1px solid #333; padding-left: 16px; }
-
+ 
   .btn-primary { padding: 17px 44px; background: var(--naranja); color: var(--negro); font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: background 0.2s; display: inline-block; }
   .btn-primary:hover { background: var(--blanco); }
   .btn-ghost { padding: 17px 44px; background: transparent; color: var(--blanco); font-size: 13px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; border: 1px solid #444; transition: border-color 0.2s, color 0.2s; display: inline-block; }
   .btn-ghost:hover { border-color: var(--naranja); color: var(--naranja); }
-
+ 
   .hero-video { background: var(--gris); aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; border: 1px solid var(--gris3); overflow: hidden; }
   .hero-video span { font-size: 13px; letter-spacing: 2px; color: var(--gris3); text-transform: uppercase; }
-
+ 
   .tipos { background: var(--gris); padding: 64px 60px; margin-top: 2px; }
   .tipos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 2px; background: var(--gris3); margin-top: 36px; }
   .tipo-item { background: var(--negro); padding: 32px 28px; transition: background 0.2s; }
   .tipo-item:hover { background: #111; }
   .tipo-nombre { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--blanco); margin-bottom: 6px; }
   .tipo-desc { font-size: 14px; color: var(--texto2); line-height: 1.6; }
-
+ 
   .bloque-texto { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--gris3); margin-top: 2px; }
   .bloque-item { background: var(--gris); padding: 52px 48px; }
   .bloque-eyebrow { font-size: 13px; letter-spacing: 4px; color: var(--naranja); text-transform: uppercase; margin-bottom: 16px; }
   .bloque-titulo { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--blanco); margin-bottom: 20px; line-height: 1.1; }
   .bloque-p { font-size: 16px; color: var(--texto); line-height: 1.9; }
-
+ 
   .incluye { background: var(--gris); padding: 64px 60px; margin-top: 2px; }
   .incluye-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2px; background: var(--gris3); margin-top: 36px; }
   .incluye-item { background: var(--negro); padding: 36px 32px; transition: background 0.2s; }
@@ -69,17 +72,17 @@
   .incluye-num { font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 4px; color: var(--naranja); margin-bottom: 12px; }
   .incluye-nombre { font-size: 17px; color: var(--blanco); font-weight: 400; margin-bottom: 8px; }
   .incluye-desc { font-size: 15px; color: var(--texto2); line-height: 1.7; }
-
+ 
   .aviso { background: rgba(232,148,58,0.07); border-left: 3px solid var(--naranja); padding: 28px 40px; margin-top: 2px; }
   .aviso p { font-size: 16px; color: var(--texto); line-height: 1.85; }
   .aviso strong { color: var(--naranja); }
-
+ 
   .cta { padding: 100px 60px; text-align: center; position: relative; overflow: hidden; }
   .cta::before { content: 'PAM'; position: absolute; font-family: 'Bebas Neue', sans-serif; font-size: 300px; color: rgba(255,255,255,0.018); top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; white-space: nowrap; }
   .cta-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 5vw, 64px); line-height: 1; color: var(--blanco); margin-bottom: 16px; }
   .cta-sub { font-size: 17px; color: var(--texto); line-height: 1.8; max-width: 440px; margin: 0 auto 36px; }
   .cta-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-
+ 
   footer { border-top: 1px solid #222; padding: 28px 60px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; background: var(--gris); }
   .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 6px; color: #666; }
   .footer-logo span { color: var(--naranja); }
@@ -87,7 +90,7 @@
   .footer-links a { font-size: 12px; letter-spacing: 2px; color: #555; text-decoration: none; text-transform: uppercase; transition: color 0.2s; }
   .footer-links a:hover { color: var(--naranja); }
   footer p { font-size: 12px; color: #555; letter-spacing: 1px; }
-
+ 
   @media (max-width: 900px) {
     nav { padding: 16px 24px; }
     .hero { grid-template-columns: 1fr; padding: 80px 24px 60px; gap: 40px; }
@@ -101,19 +104,19 @@
 </style>
 </head>
 <body>
-
+ 
 <nav>
   <a class="nav-logo" href="web.html">PAM <span>·</span> AUDIOVISUAL</a>
   <a class="nav-back" href="web.html">← Volver</a>
   <a class="nav-cta" href="https://cal.eu/ramon-sales/videollamada" target="_blank">Videollamada gratuita</a>
 </nav>
-
+ 
 <section class="hero">
   <div>
     <p class="eyebrow">Servicio · Resumen de Eventos</p>
     <h1 class="hero-title">Tu evento,<br>en un vídeo<br><span>que impacta.</span></h1>
     <p class="hero-desc">No grabamos el evento entero. Creamos un resumen dinámico y actual — una pieza que engancha desde los primeros segundos y comunica lo mejor de lo que ocurrió.</p>
-
+ 
     <div class="precios-wrap">
       <div class="precio-bloque">
         <span class="precio-val">700€</span>
@@ -128,22 +131,28 @@
         <span class="precio-desc">Vídeo horizontal + resumen vertical 1 minuto + 4 reels</span>
       </div>
     </div>
-
+ 
     <p class="precio-nota">
       Desplazamiento y dietas a parte.* <br>
       Para ediciones de ritmo muy dinámico, VFX o varios días de rodaje, consultamos precio según el trabajo.<br><br>
       * Desplazamientos fuera del área metropolitana de Barcelona.<br><br>
       Precios para eventos de 1 día. Para eventos de más de 1 día, consultar.
     </p>
-
+ 
     <a class="btn-primary" href="https://cal.eu/ramon-sales/videollamada" target="_blank">Pedir presupuesto</a>
   </div>
-
+ 
   <div class="hero-video">
-    <span>Vídeo de ejemplo · próximamente</span>
+    <iframe
+      id="eventos-video"
+      src="https://www.youtube.com/embed/Dsp9t0c4HXE?autoplay=0&controls=1&modestbranding=1&playsinline=1"
+      style="width:100%;height:100%;border:none;"
+      allow="autoplay"
+      title="Ejemplo Resumen de Eventos">
+    </iframe>
   </div>
 </section>
-
+ 
 <div class="tipos">
   <p class="eyebrow">Para qué tipo de eventos</p>
   <h2 style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--blanco);margin-top:8px;">Si tiene importancia, merece un buen vídeo.</h2>
@@ -170,7 +179,7 @@
     </div>
   </div>
 </div>
-
+ 
 <div class="bloque-texto">
   <div class="bloque-item">
     <p class="bloque-eyebrow">Cómo rodamos</p>
@@ -183,7 +192,7 @@
     <p class="bloque-p">La postproducción requiere su tiempo para que el resultado sea el que buscamos. El plazo estándar es de una semana. Para ediciones más complejas con VFX o varios días de material, acordamos el plazo antes de empezar.</p>
   </div>
 </div>
-
+ 
 <div class="incluye">
   <p class="eyebrow">Nosotros nos encargamos de todo lo técnico</p>
   <h2 style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--blanco);margin-top:8px;">Tú al evento. Nosotros al trabajo.</h2>
@@ -191,7 +200,7 @@
     <div class="incluye-item">
       <div class="incluye-num">01</div>
       <div class="incluye-nombre">Toda la parte técnica</div>
-      <p class="incluye-desc">Cámara, sonido e iluminación profesional. Nos desplazamos al lugar del evento con todo el equipo.</p>
+      <p class="incluye-desc">Cámara, sonido e iluminación opcional. Nos desplazamos al lugar del evento con todo el equipo profesional.</p>
     </div>
     <div class="incluye-item">
       <div class="incluye-num">02</div>
@@ -210,15 +219,15 @@
     </div>
   </div>
 </div>
-
+ 
 <div class="aviso">
   <p>
-    <strong>Desplazamiento:</strong> los eventos en la provincia de Barcelona están incluidos en el precio. Para otras ubicaciones se presupuesta el desplazamiento aparte.<br><br>
-    <strong>Dietas:</strong> si el evento incluye comida o cena, las dietas están incluidas sin coste adicional.<br><br>
-    <strong>Presupuesto siempre cerrado</strong> antes de empezar. Sin sorpresas.
+    <strong>Desplazamiento:</strong> los eventos en el área metropolitana de Barcelona están incluidos en el precio. Para otras ubicaciones se presupuesta el desplazamiento aparte.<br><br>
+    <strong>Dietas:</strong> nunca están incluidas. Se presupuestan aparte según el evento.<br><br>
+    Presupuesto cerrado antes de empezar. Sin sorpresas.
   </p>
 </div>
-
+ 
 <section class="cta">
   <p class="eyebrow">¿Tienes un evento próximo?</p>
   <h2 class="cta-title">Cuéntanos<br>qué necesitas.</h2>
@@ -228,7 +237,7 @@
     <a class="btn-ghost" href="mailto:info@pam-audiovisual.com">info@pam-audiovisual.com</a>
   </div>
 </section>
-
+ 
 <footer>
   <div class="footer-logo">PAM <span>·</span> AUDIOVISUAL</div>
   <div class="footer-links">
@@ -238,6 +247,12 @@
   </div>
   <p>© 2026 PAM Audiovisual · Ramon Sales · El Masnou</p>
 </footer>
-
+ 
 </body>
 </html>
+ 
+
+
+
+
+
