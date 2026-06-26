@@ -31,26 +31,25 @@ Podcast · HTML
   .nav-cta { padding: 11px 28px; background: var(--naranja); color: var(--negro); font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: background 0.2s; }
   .nav-cta:hover { background: var(--blanco); }
  
-  .hero { min-height: 90vh; border-bottom: 1px solid #222; display: grid; grid-template-columns: 1fr 1fr; align-items: center; overflow: hidden; }
-  .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 100px 60px; }
-  .hero-right { display: flex; align-items: center; justify-content: center; padding: 60px 60px 60px 0; }
+  /* HERO: texto arriba, vídeo a todo el ancho abajo */
+  .hero { border-bottom: 1px solid #222; }
+  .hero-texto { padding: 100px 60px 60px; }
   .eyebrow { font-size: 14px; letter-spacing: 4px; color: var(--naranja); text-transform: uppercase; margin-bottom: 20px; }
   .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(52px, 7vw, 88px); line-height: 0.95; color: var(--blanco); margin-bottom: 28px; }
   .hero-title span { color: var(--naranja); }
-  .hero-desc { font-size: 18px; color: var(--texto); line-height: 1.8; margin-bottom: 40px; }
- 
+  .hero-desc { font-size: 18px; color: var(--texto); line-height: 1.8; margin-bottom: 40px; max-width: 600px; }
   .precio-bloque { display: inline-flex; flex-direction: column; border-left: 3px solid var(--naranja); padding-left: 20px; margin-bottom: 36px; }
   .precio-val { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: var(--naranja); line-height: 1; }
   .precio-desc { font-size: 14px; color: var(--texto2); letter-spacing: 1px; margin-top: 4px; }
+ 
+  /* VÍDEO: ancho completo, 16:9 */
+  .hero-video { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; overflow: hidden; }
+  .hero-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
  
   .btn-primary { padding: 17px 44px; background: var(--naranja); color: var(--negro); font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: background 0.2s; display: inline-block; }
   .btn-primary:hover { background: var(--blanco); }
   .btn-ghost { padding: 17px 44px; background: transparent; color: var(--blanco); font-size: 13px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; border: 1px solid #444; transition: border-color 0.2s, color 0.2s; display: inline-block; }
   .btn-ghost:hover { border-color: var(--naranja); color: var(--naranja); }
- 
-  .hero-video { background: #000; position: relative; overflow: hidden; border: none; width: 100%; aspect-ratio: 16/9; }
-  .hero-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; pointer-events: none; }
-  .hero-video span { font-size: 13px; letter-spacing: 2px; color: var(--gris3); text-transform: uppercase; }
  
   .bloque-texto { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--gris3); margin-top: 2px; }
   .bloque-item { background: var(--gris); padding: 52px 48px; }
@@ -87,9 +86,8 @@ Podcast · HTML
  
   @media (max-width: 900px) {
     nav { padding: 16px 24px; }
-    .hero { grid-template-columns: 1fr; min-height: auto; }
-    .hero-left { padding: 80px 24px 40px; }
-    .hero-right { padding: 0 24px 60px; }
+    .nav-back { display: none; }
+    .hero-texto { padding: 80px 24px 40px; }
     .bloque-texto { grid-template-columns: 1fr; }
     .formato { grid-template-columns: 1fr; }
     .incluye { padding: 48px 24px; }
@@ -107,7 +105,7 @@ Podcast · HTML
 </nav>
  
 <section class="hero">
-  <div class="hero-left">
+  <div class="hero-texto">
     <p class="eyebrow">Servicio · Podcast a Domicilio</p>
     <h1 class="hero-title">Vosotros el<br>contenido.<br><span>Nosotros el resto.</span></h1>
     <p class="hero-desc">Nos desplazamos a vuestras instalaciones con cámaras, iluminación y sonido profesional. Vosotros preparáis el contenido y os encargáis de conducir la conversación. Nosotros de todo lo técnico.</p>
@@ -118,15 +116,12 @@ Podcast · HTML
     <a class="btn-primary" href="https://cal.eu/ramon-sales/videollamada" target="_blank">Reservar fecha</a>
   </div>
  
-  <div class="hero-right">
-    <div class="hero-video">
-      <iframe
-        id="podcast-video"
-        src="https://www.youtube.com/embed/Ta9Rswd4FnE?autoplay=1&mute=1&loop=1&playlist=Ta9Rswd4FnE&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1"
-        allow="autoplay; encrypted-media"
-        title="Ejemplo Podcast a Domicilio">
-      </iframe>
-    </div>
+  <div class="hero-video">
+    <iframe
+      src="https://www.youtube.com/embed/Ta9Rswd4FnE?autoplay=1&mute=1&loop=1&playlist=Ta9Rswd4FnE&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1"
+      allow="autoplay; encrypted-media"
+      title="Ejemplo Podcast a Domicilio">
+    </iframe>
   </div>
 </section>
  
@@ -191,7 +186,7 @@ Podcast · HTML
   <p class="cta-sub">Una videollamada de 10 minutos para resolver tus dudas y confirmar la fecha de grabación.</p>
   <div class="cta-actions">
     <a class="btn-primary" href="https://cal.eu/ramon-sales/videollamada" target="_blank">Reservar videollamada gratuita</a>
-    <a class="btn-ghost" href="mailto:info@pam-audiovisual.com">info@pam-audiovisual.com</a>
+    <a class="btn-ghost" href="mailto:pad@pam-audiovisual.com">pad@pam-audiovisual.com</a>
   </div>
 </section>
  
