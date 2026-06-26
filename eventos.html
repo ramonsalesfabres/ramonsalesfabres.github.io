@@ -31,29 +31,28 @@ Eventos · HTML
   .nav-cta { padding: 11px 28px; background: var(--naranja); color: var(--negro); font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: background 0.2s; }
   .nav-cta:hover { background: var(--blanco); }
  
-  .hero { min-height: 90vh; border-bottom: 1px solid #222; display: grid; grid-template-columns: 1fr 1fr; align-items: center; overflow: hidden; }
-  .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 100px 60px; }
-  .hero-right { display: flex; align-items: center; justify-content: center; padding: 60px 60px 60px 0; }
+  /* HERO: texto arriba, vídeo a todo el ancho abajo */
+  .hero { border-bottom: 1px solid #222; }
+  .hero-texto { padding: 100px 60px 60px; }
   .eyebrow { font-size: 14px; letter-spacing: 4px; color: var(--naranja); text-transform: uppercase; margin-bottom: 20px; }
   .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(52px, 7vw, 88px); line-height: 0.95; color: var(--blanco); margin-bottom: 28px; }
   .hero-title span { color: var(--naranja); }
-  .hero-desc { font-size: 18px; color: var(--texto); line-height: 1.8; margin-bottom: 40px; }
+  .hero-desc { font-size: 18px; color: var(--texto); line-height: 1.8; margin-bottom: 40px; max-width: 600px; }
  
   .precios-wrap { display: flex; flex-direction: column; gap: 14px; margin-bottom: 36px; }
   .precio-bloque { display: inline-flex; flex-direction: column; border-left: 3px solid var(--naranja); padding-left: 20px; }
   .precio-val { font-family: 'Bebas Neue', sans-serif; font-size: 40px; color: var(--naranja); line-height: 1; }
   .precio-desc { font-size: 14px; color: var(--texto2); letter-spacing: 1px; margin-top: 4px; }
- 
   .precio-nota { font-size: 13px; color: var(--texto2); line-height: 1.7; margin-bottom: 36px; font-style: italic; border-left: 1px solid #333; padding-left: 16px; }
+ 
+  /* VÍDEO: ancho completo, 16:9 */
+  .hero-video { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; overflow: hidden; }
+  .hero-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
  
   .btn-primary { padding: 17px 44px; background: var(--naranja); color: var(--negro); font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: background 0.2s; display: inline-block; }
   .btn-primary:hover { background: var(--blanco); }
   .btn-ghost { padding: 17px 44px; background: transparent; color: var(--blanco); font-size: 13px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; border: 1px solid #444; transition: border-color 0.2s, color 0.2s; display: inline-block; }
   .btn-ghost:hover { border-color: var(--naranja); color: var(--naranja); }
- 
-  .hero-video { background: #000; position: relative; overflow: hidden; border: none; width: 100%; aspect-ratio: 16/9; }
-  .hero-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; pointer-events: none; }
-  .hero-video span { font-size: 13px; letter-spacing: 2px; color: var(--gris3); text-transform: uppercase; }
  
   .tipos { background: var(--gris); padding: 64px 60px; margin-top: 2px; }
   .tipos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 2px; background: var(--gris3); margin-top: 36px; }
@@ -96,9 +95,8 @@ Eventos · HTML
  
   @media (max-width: 900px) {
     nav { padding: 16px 24px; }
-    .hero { grid-template-columns: 1fr; min-height: auto; }
-    .hero-left { padding: 80px 24px 40px; }
-    .hero-right { padding: 0 24px 60px; }
+    .nav-back { display: none; }
+    .hero-texto { padding: 80px 24px 40px; }
     .bloque-texto { grid-template-columns: 1fr; }
     .tipos { padding: 48px 24px; }
     .incluye { padding: 48px 24px; }
@@ -117,7 +115,7 @@ Eventos · HTML
 </nav>
  
 <section class="hero">
-  <div class="hero-left">
+  <div class="hero-texto">
     <p class="eyebrow">Servicio · Resumen de Eventos</p>
     <h1 class="hero-title">Tu evento,<br>en un vídeo<br><span>que impacta.</span></h1>
     <p class="hero-desc">No grabamos el evento entero. Creamos un resumen dinámico y actual — una pieza que engancha desde los primeros segundos y comunica lo mejor de lo que ocurrió.</p>
@@ -138,24 +136,20 @@ Eventos · HTML
     </div>
  
     <p class="precio-nota">
-      Desplazamiento y dietas a parte.* <br>
-      Para ediciones de ritmo muy dinámico, VFX o varios días de rodaje, consultamos precio según el trabajo.<br><br>
-      * Desplazamientos fuera del área metropolitana de Barcelona.<br><br>
+      Desplazamiento y dietas a parte.*<br>
+      * Desplazamientos fuera del área metropolitana de Barcelona.<br>
       Precios para eventos de 1 día. Para eventos de más de 1 día, consultar.
     </p>
  
     <a class="btn-primary" href="https://cal.eu/ramon-sales/videollamada" target="_blank">Pedir presupuesto</a>
   </div>
  
-  <div class="hero-right">
-    <div class="hero-video">
-      <iframe
-        id="eventos-video"
-        src="https://www.youtube.com/embed/Dsp9t0c4HXE?autoplay=1&mute=1&loop=1&playlist=Dsp9t0c4HXE&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1"
-        allow="autoplay; encrypted-media"
-        title="Ejemplo Resumen de Eventos">
-      </iframe>
-    </div>
+  <div class="hero-video">
+    <iframe
+      src="https://www.youtube.com/embed/Dsp9t0c4HXE?autoplay=1&mute=1&loop=1&playlist=Dsp9t0c4HXE&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1"
+      allow="autoplay; encrypted-media"
+      title="Ejemplo Resumen de Eventos">
+    </iframe>
   </div>
 </section>
  
@@ -229,18 +223,17 @@ Eventos · HTML
 <div class="aviso">
   <p>
     <strong>Desplazamiento:</strong> los eventos en el área metropolitana de Barcelona están incluidos en el precio. Para otras ubicaciones se presupuesta el desplazamiento aparte.<br><br>
-    <strong>Dietas:</strong> nunca están incluidas. Se presupuestan aparte según el evento.<br><br>
-    Presupuesto cerrado antes de empezar. Sin sorpresas.
+    <strong>Dietas:</strong> nunca están incluidas. Se presupuestan aparte según el evento.
   </p>
 </div>
  
 <section class="cta">
   <p class="eyebrow">¿Tienes un evento próximo?</p>
   <h2 class="cta-title">Cuéntanos<br>qué necesitas.</h2>
-  <p class="cta-sub">Una videollamada de 10 minutos para valorar tu evento y darte un presupuesto cerrado.</p>
+  <p class="cta-sub">Una videollamada de 10 minutos para valorar tu evento y darte un presupuesto.</p>
   <div class="cta-actions">
     <a class="btn-primary" href="https://cal.eu/ramon-sales/videollamada" target="_blank">Reservar videollamada gratuita</a>
-    <a class="btn-ghost" href="mailto:info@pam-audiovisual.com">info@pam-audiovisual.com</a>
+    <a class="btn-ghost" href="mailto:r.eventos@pam-audiovisual.com">r.eventos@pam-audiovisual.com</a>
   </div>
 </section>
  
