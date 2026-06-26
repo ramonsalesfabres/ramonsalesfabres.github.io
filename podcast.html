@@ -31,8 +31,9 @@ Podcast · HTML
   .nav-cta { padding: 11px 28px; background: var(--naranja); color: var(--negro); font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: background 0.2s; }
   .nav-cta:hover { background: var(--blanco); }
  
-  .hero { min-height: 90vh; border-bottom: 1px solid #222; display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; overflow: hidden; }
+  .hero { min-height: 90vh; border-bottom: 1px solid #222; display: grid; grid-template-columns: 1fr 1fr; align-items: center; overflow: hidden; }
   .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 100px 60px; }
+  .hero-right { display: flex; align-items: center; justify-content: center; padding: 60px 60px 60px 0; }
   .eyebrow { font-size: 14px; letter-spacing: 4px; color: var(--naranja); text-transform: uppercase; margin-bottom: 20px; }
   .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(52px, 7vw, 88px); line-height: 0.95; color: var(--blanco); margin-bottom: 28px; }
   .hero-title span { color: var(--naranja); }
@@ -47,8 +48,8 @@ Podcast · HTML
   .btn-ghost { padding: 17px 44px; background: transparent; color: var(--blanco); font-size: 13px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; border: 1px solid #444; transition: border-color 0.2s, color 0.2s; display: inline-block; }
   .btn-ghost:hover { border-color: var(--naranja); color: var(--naranja); }
  
-  .hero-video { background: #000; position: relative; overflow: hidden; border: none; min-height: 100%; }
-  .hero-video iframe { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; height: 56.25vw; min-height: 100%; min-width: 177.77vh; border: none; pointer-events: none; }
+  .hero-video { background: #000; position: relative; overflow: hidden; border: none; width: 100%; aspect-ratio: 16/9; }
+  .hero-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; pointer-events: none; }
   .hero-video span { font-size: 13px; letter-spacing: 2px; color: var(--gris3); text-transform: uppercase; }
  
   .bloque-texto { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--gris3); margin-top: 2px; }
@@ -87,8 +88,8 @@ Podcast · HTML
   @media (max-width: 900px) {
     nav { padding: 16px 24px; }
     .hero { grid-template-columns: 1fr; min-height: auto; }
-    .hero-left { padding: 80px 24px 60px; }
-    .hero-video { min-height: 56vw; }
+    .hero-left { padding: 80px 24px 40px; }
+    .hero-right { padding: 0 24px 60px; }
     .bloque-texto { grid-template-columns: 1fr; }
     .formato { grid-template-columns: 1fr; }
     .incluye { padding: 48px 24px; }
@@ -117,13 +118,15 @@ Podcast · HTML
     <a class="btn-primary" href="https://cal.eu/ramon-sales/videollamada" target="_blank">Reservar fecha</a>
   </div>
  
-  <div class="hero-video">
-    <iframe
-      id="podcast-video"
-      src="https://www.youtube.com/embed/Ta9Rswd4FnE?autoplay=1&mute=1&loop=1&playlist=Ta9Rswd4FnE&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1"
-      allow="autoplay; encrypted-media"
-      title="Ejemplo Podcast a Domicilio">
-    </iframe>
+  <div class="hero-right">
+    <div class="hero-video">
+      <iframe
+        id="podcast-video"
+        src="https://www.youtube.com/embed/Ta9Rswd4FnE?autoplay=1&mute=1&loop=1&playlist=Ta9Rswd4FnE&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1"
+        allow="autoplay; encrypted-media"
+        title="Ejemplo Podcast a Domicilio">
+      </iframe>
+    </div>
   </div>
 </section>
  
