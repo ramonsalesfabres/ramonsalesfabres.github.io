@@ -23,7 +23,7 @@ Eventos · HTML
   html { scroll-behavior: smooth; }
   body { background: var(--negro); color: var(--blanco); font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 17px; line-height: 1.75; }
  
-  nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 20px 60px; background: rgba(13,13,13,0.97); border-bottom: 1px solid #222; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 20px 60px; background: rgba(13,13,13,0.85); border-bottom: 1px solid rgba(255,255,255,0.08); }
   .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 6px; color: var(--blanco); text-decoration: none; }
   .nav-logo span { color: var(--naranja); }
   .nav-back { font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: var(--texto2); text-decoration: none; transition: color 0.2s; }
@@ -31,27 +31,52 @@ Eventos · HTML
   .nav-cta { padding: 11px 28px; background: var(--naranja); color: var(--negro); font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: background 0.2s; }
   .nav-cta:hover { background: var(--blanco); }
  
-  /* HERO: texto arriba, vídeo a todo el ancho abajo */
-  .hero { border-bottom: 1px solid #222; }
-  .hero-texto { padding: 100px 60px 60px; }
-  .eyebrow { font-size: 14px; letter-spacing: 4px; color: var(--naranja); text-transform: uppercase; margin-bottom: 20px; }
-  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(52px, 7vw, 88px); line-height: 0.95; color: var(--blanco); margin-bottom: 28px; }
+  /* HERO */
+  .hero { position: relative; width: 100%; height: 100vh; overflow: hidden; background: #000; }
+ 
+  .hero-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+  .hero-video iframe { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; height: 56.25vw; min-height: 100%; min-width: 177.77vh; border: none; pointer-events: none; }
+ 
+  .hero-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.45); z-index: 1; }
+ 
+  .hero-texto {
+    position: absolute; inset: 0; z-index: 2;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 0 40px;
+    animation: parpadeo 6s ease-in-out infinite;
+  }
+ 
+  @keyframes parpadeo {
+    0%   { opacity: 1; }
+    45%  { opacity: 1; }
+    50%  { opacity: 0; }
+    95%  { opacity: 0; }
+    100% { opacity: 1; }
+  }
+ 
+  .hero-eyebrow { font-size: 13px; letter-spacing: 4px; color: var(--naranja); text-transform: uppercase; margin-bottom: 16px; }
+  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 8vw, 110px); line-height: 0.95; color: var(--blanco); margin-bottom: 20px; }
   .hero-title span { color: var(--naranja); }
-  .hero-desc { font-size: 18px; color: var(--texto); line-height: 1.8; margin-bottom: 40px; max-width: 600px; }
+  .hero-desc {
+    font-size: clamp(14px, 1.5vw, 17px); color: var(--blanco); line-height: 1.7;
+    max-width: 560px;
+    background: rgba(0,0,0,0.6); padding: 12px 20px;
+  }
  
-  .precios-wrap { display: flex; flex-direction: column; gap: 14px; margin-bottom: 36px; }
-  .precio-bloque { display: inline-flex; flex-direction: column; border-left: 3px solid var(--naranja); padding-left: 20px; }
-  .precio-val { font-family: 'Bebas Neue', sans-serif; font-size: 40px; color: var(--naranja); line-height: 1; }
-  .precio-desc { font-size: 14px; color: var(--texto2); letter-spacing: 1px; margin-top: 4px; }
-  .precio-nota { font-size: 13px; color: var(--texto2); line-height: 1.7; margin-bottom: 36px; font-style: italic; border-left: 1px solid #333; padding-left: 16px; }
- 
-  /* VÍDEO: ancho completo, 16:9 */
-  .hero-video { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; overflow: hidden; }
-  .hero-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+  .hero-bottom {
+    position: absolute; bottom: 0; left: 0; right: 0; z-index: 3;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 60px;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
+  }
+  .precios-wrap { display: flex; gap: 32px; align-items: flex-end; }
+  .precio-bloque { display: flex; flex-direction: column; }
+  .precio-val { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: var(--naranja); line-height: 1; }
+  .precio-desc { font-size: 12px; color: var(--texto2); letter-spacing: 1px; margin-top: 2px; }
  
   .btn-primary { padding: 17px 44px; background: var(--naranja); color: var(--negro); font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: background 0.2s; display: inline-block; }
   .btn-primary:hover { background: var(--blanco); }
-  .btn-ghost { padding: 17px 44px; background: transparent; color: var(--blanco); font-size: 13px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; border: 1px solid #444; transition: border-color 0.2s, color 0.2s; display: inline-block; }
+  .btn-ghost { padding: 17px 44px; background: transparent; color: var(--blanco); font-size: 13px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; border: 1px solid rgba(255,255,255,0.3); transition: all 0.2s; display: inline-block; }
   .btn-ghost:hover { border-color: var(--naranja); color: var(--naranja); }
  
   .tipos { background: var(--gris); padding: 64px 60px; margin-top: 2px; }
@@ -96,7 +121,8 @@ Eventos · HTML
   @media (max-width: 900px) {
     nav { padding: 16px 24px; }
     .nav-back { display: none; }
-    .hero-texto { padding: 80px 24px 40px; }
+    .hero-bottom { padding: 20px 24px; flex-direction: column; align-items: flex-start; gap: 16px; }
+    .precios-wrap { flex-direction: column; gap: 8px; }
     .bloque-texto { grid-template-columns: 1fr; }
     .tipos { padding: 48px 24px; }
     .incluye { padding: 48px 24px; }
@@ -109,52 +135,49 @@ Eventos · HTML
 <body>
  
 <nav>
-  <a class="nav-logo" href="web.html">PAM <span>·</span> AUDIOVISUAL</a>
-  <a class="nav-back" href="web.html">← Volver</a>
+  <a class="nav-logo" href="index.html">PAM <span>·</span> AUDIOVISUAL</a>
+  <a class="nav-back" href="index.html">← Volver</a>
   <a class="nav-cta" href="https://cal.eu/ramon-sales/videollamada" target="_blank">Videollamada gratuita</a>
 </nav>
  
 <section class="hero">
-  <div class="hero-texto">
-    <p class="eyebrow">Servicio · Resumen de Eventos</p>
-    <h1 class="hero-title">Tu evento,<br>en un vídeo<br><span>que impacta.</span></h1>
-    <p class="hero-desc">No grabamos el evento entero. Creamos un resumen dinámico y actual — una pieza que engancha desde los primeros segundos y comunica lo mejor de lo que ocurrió.</p>
- 
-    <div class="precios-wrap">
-      <div class="precio-bloque">
-        <span class="precio-val">700€</span>
-        <span class="precio-desc">Vídeo horizontal · aprox. 3 minutos</span>
-      </div>
-      <div class="precio-bloque">
-        <span class="precio-val">850€</span>
-        <span class="precio-desc">Vídeo horizontal + resumen vertical 1 minuto</span>
-      </div>
-      <div class="precio-bloque">
-        <span class="precio-val">900€</span>
-        <span class="precio-desc">Vídeo horizontal + resumen vertical 1 minuto + 4 reels</span>
-      </div>
-    </div>
- 
-    <p class="precio-nota">
-      Desplazamiento y dietas a parte.*<br>
-      * Desplazamientos fuera del área metropolitana de Barcelona.<br>
-      Precios para eventos de 1 día. Para eventos de más de 1 día, consultar.
-    </p>
- 
-    <a class="btn-primary" href="https://cal.eu/ramon-sales/videollamada" target="_blank">Pedir presupuesto</a>
-  </div>
- 
   <div class="hero-video">
     <iframe
       src="https://www.youtube.com/embed/Dsp9t0c4HXE?autoplay=1&mute=1&loop=1&playlist=Dsp9t0c4HXE&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1"
       allow="autoplay; encrypted-media"
-      title="Ejemplo Resumen de Eventos">
+      title="Resumen de Eventos">
     </iframe>
+  </div>
+ 
+  <div class="hero-overlay"></div>
+ 
+  <div class="hero-texto">
+    <p class="hero-eyebrow">Servicio · Resumen de Eventos</p>
+    <h1 class="hero-title">Tu evento,<br>en un vídeo<br><span>que impacta.</span></h1>
+    <p class="hero-desc">No grabamos el evento entero. Creamos un resumen dinámico — una pieza que engancha desde los primeros segundos y comunica lo mejor de lo que ocurrió.</p>
+  </div>
+ 
+  <div class="hero-bottom">
+    <div class="precios-wrap">
+      <div class="precio-bloque">
+        <span class="precio-val">700€</span>
+        <span class="precio-desc">Vídeo horizontal · aprox. 3 min</span>
+      </div>
+      <div class="precio-bloque">
+        <span class="precio-val">850€</span>
+        <span class="precio-desc">+ resumen vertical 1 min</span>
+      </div>
+      <div class="precio-bloque">
+        <span class="precio-val">900€</span>
+        <span class="precio-desc">+ resumen vertical + 4 reels</span>
+      </div>
+    </div>
+    <a class="btn-primary" href="https://cal.eu/ramon-sales/videollamada" target="_blank">Pedir presupuesto</a>
   </div>
 </section>
  
 <div class="tipos">
-  <p class="eyebrow">Para qué tipo de eventos</p>
+  <p class="bloque-eyebrow">Para qué tipo de eventos</p>
   <h2 style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--blanco);margin-top:8px;">Si tiene importancia, merece un buen vídeo.</h2>
   <div class="tipos-grid">
     <div class="tipo-item">
@@ -194,7 +217,7 @@ Eventos · HTML
 </div>
  
 <div class="incluye">
-  <p class="eyebrow">Nosotros nos encargamos de todo lo técnico</p>
+  <p class="bloque-eyebrow">Nosotros nos encargamos de todo lo técnico</p>
   <h2 style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--blanco);margin-top:8px;">Tú al evento. Nosotros al trabajo.</h2>
   <div class="incluye-grid">
     <div class="incluye-item">
@@ -228,7 +251,7 @@ Eventos · HTML
 </div>
  
 <section class="cta">
-  <p class="eyebrow">¿Tienes un evento próximo?</p>
+  <p class="bloque-eyebrow">¿Tienes un evento próximo?</p>
   <h2 class="cta-title">Cuéntanos<br>qué necesitas.</h2>
   <p class="cta-sub">Una videollamada de 10 minutos para valorar tu evento y darte un presupuesto.</p>
   <div class="cta-actions">
