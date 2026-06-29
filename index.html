@@ -112,12 +112,12 @@ Index · HTML
   @media (max-width: 900px) {
     nav { padding: 16px 24px; }
     .nav-links { display: none; }
-    /* Hero móvil: vídeo vertical a pantalla completa, texto encima */
-    .hero { grid-template-columns: 1fr; min-height: 100vh; position: relative; }
-    .hero-left { position: absolute; inset: 0; z-index: 2; justify-content: flex-end; padding: 40px 24px 80px; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%); }
+    /* Hero móvil: igual que podcast y eventos */
+    .hero { grid-template-columns: 1fr; min-height: 100vh; position: relative; display: block; }
+    .hero-left { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: flex-end; padding: 40px 24px 100px; background: linear-gradient(to top, rgba(0,0,0,0.6) 30%, transparent 100%); }
     .hero-right { display: none; }
-    .hero-right-mobile { display: block; position: absolute; inset: 0; z-index: 1; background: #000; }
-    .hero-right-mobile iframe { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 177.77vh; height: 100vh; min-width: 100%; min-height: 177.77vw; border: none; pointer-events: none; }
+    .hero-right-mobile { display: block; position: absolute; inset: 0; z-index: 1; background: #000; overflow: hidden; }
+    .hero-right-mobile iframe { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 56.25vh; height: 100vh; min-width: 100%; border: none; pointer-events: none; }
     .intro-strip { padding: 20px 24px; }
     .intro-strip .nums { gap: 24px; }
     .section-outer { padding: 60px 24px 0; }
