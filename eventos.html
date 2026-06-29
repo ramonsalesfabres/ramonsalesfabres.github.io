@@ -118,15 +118,19 @@ Eventos · HTML
   .footer-links a:hover { color: var(--naranja); }
   footer p { font-size: 12px; color: #555; letter-spacing: 1px; }
  
+  /* Vídeo vertical móvil */
+  .hero-video-mobile { display: none; }
+  .hero-video-desktop { display: block; }
+ 
   @media (max-width: 900px) {
     nav { padding: 16px 24px; }
     .nav-back { display: none; }
-    /* En móvil: vídeo 16:9 completo, sin recorte, texto arriba */
-    .hero { height: auto; }
-    .hero-video { position: relative; width: 100%; aspect-ratio: 16/9; }
-    .hero-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: none; min-height: unset; min-width: unset; }
-    .hero-texto { position: relative; inset: auto; padding: 80px 24px 24px; background: var(--negro); animation: none; opacity: 1; text-align: left; align-items: flex-start; }
-    .hero-bottom { position: relative; inset: auto; background: var(--negro); border-top: 1px solid #222; padding: 20px 24px; flex-direction: column; align-items: flex-start; gap: 16px; }
+    .hero { height: 100vh; }
+    .hero-video-desktop { display: none; }
+    .hero-video-mobile { display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    .hero-video-mobile iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; pointer-events: none; }
+    .hero-texto { padding: 80px 24px 24px; }
+    .hero-bottom { padding: 20px 24px; flex-direction: column; align-items: flex-start; gap: 16px; }
     .precios-wrap { flex-direction: column; gap: 8px; }
     .bloque-texto { grid-template-columns: 1fr; }
     .tipos { padding: 48px 24px; }
@@ -146,11 +150,19 @@ Eventos · HTML
 </nav>
  
 <section class="hero">
-  <div class="hero-video">
+  <div class="hero-video hero-video-desktop">
     <iframe
       src="https://www.youtube.com/embed/Dsp9t0c4HXE?autoplay=1&mute=1&loop=1&playlist=Dsp9t0c4HXE&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1"
       allow="autoplay; encrypted-media"
       title="Resumen de Eventos">
+    </iframe>
+  </div>
+ 
+  <div class="hero-video-mobile">
+    <iframe
+      src="https://www.youtube.com/embed/77HuvAHXmJ0?autoplay=1&mute=1&loop=1&playlist=77HuvAHXmJ0&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1"
+      allow="autoplay; encrypted-media"
+      title="Resumen de Eventos vertical">
     </iframe>
   </div>
  
