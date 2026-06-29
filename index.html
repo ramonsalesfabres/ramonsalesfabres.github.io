@@ -46,6 +46,9 @@ Index · HTML
   .btn-ghost { padding: 17px 44px; background: transparent; color: var(--blanco); font-size: 13px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; border: 1px solid #444; transition: border-color 0.2s, color 0.2s; display: inline-block; }
   .btn-ghost:hover { border-color: var(--naranja); color: var(--naranja); }
  
+  .hero-top-btn { display: none; }
+  .hero-content { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+ 
   /* VIDEO — sin zoom, capa que tapa bordes YouTube */
   .hero-right { position: relative; overflow: hidden; background: #000; min-height: 100vh; }
   .hero-right iframe {
@@ -110,11 +113,13 @@ Index · HTML
   footer p { font-size: 12px; color: #555; letter-spacing: 1px; }
  
   @media (max-width: 900px) {
-    nav { padding: 16px 24px; }
-    .nav-links { display: none; }
+    nav { display: none; }
     /* Hero móvil: igual que podcast y eventos */
     .hero { grid-template-columns: 1fr; min-height: 100vh; position: relative; display: block; }
-    .hero-left { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: flex-end; padding: 40px 24px 100px; background: linear-gradient(to top, rgba(0,0,0,0.6) 30%, transparent 100%); }
+    .hero-left { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: space-between; padding: 0 0 0 0; background: none; }
+    .hero-top-btn { display: block; width: 100%; padding: 18px; background: var(--naranja); color: var(--negro); font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; text-align: center; }
+    .hero-content { padding: 24px 24px 100px; display: flex; flex-direction: column; justify-content: flex-end; flex: 1; background: linear-gradient(to top, rgba(0,0,0,0.6) 30%, transparent 100%); }
+    .eyebrow { font-size: 12px; }
     .hero-right { display: none; }
     .hero-right-mobile { display: block; position: absolute; inset: 0; z-index: 1; background: #000; overflow: hidden; }
     .hero-right-mobile iframe { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 56.25vh; height: 100vh; min-width: 100%; border: none; pointer-events: none; }
@@ -143,12 +148,15 @@ Index · HTML
  
 <section class="hero">
   <div class="hero-left">
-    <p class="eyebrow">El Masnou · Barcelona · 2026</p>
-    <h1 class="hero-title">Vídeo<br>que<br><span>vende.</span></h1>
-    <p class="hero-desc">Producción audiovisual profesional para empresas que necesitan presencia real en vídeo.</p>
-    <div class="hero-actions">
-      <a class="btn-primary" href="#servicios">Descubre nuestros servicios</a>
-      <a class="btn-ghost" href="https://cal.eu/ramon-sales/videollamada" target="_blank">Hablamos</a>
+    <a class="hero-top-btn" href="https://cal.eu/ramon-sales/videollamada" target="_blank">Videollamada gratuita</a>
+    <div class="hero-content">
+      <p class="eyebrow">El Masnou · Barcelona · 2026</p>
+      <h1 class="hero-title">Vídeo<br>que<br><span>vende.</span></h1>
+      <p class="hero-desc">Producción audiovisual profesional para empresas que necesitan presencia real en vídeo.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#servicios">Descubre nuestros servicios</a>
+        <a class="btn-ghost" href="https://cal.eu/ramon-sales/videollamada" target="_blank">Hablamos</a>
+      </div>
     </div>
   </div>
  
