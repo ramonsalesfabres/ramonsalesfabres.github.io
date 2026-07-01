@@ -124,7 +124,9 @@ Eventos · HTML
  
   @media (max-width: 900px) {
     nav { padding: 16px 24px; }
-    .nav-back { display: none; }
+    .nav-back { display: block; font-size: 11px; }
+    .nav-cta { padding: 8px 16px; font-size: 11px; }
+    .nav-logo { font-size: 16px; letter-spacing: 3px; }
     .hero { height: 100vh; }
     .hero-video-desktop { display: none; }
     .hero-video-mobile { display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
@@ -171,20 +173,19 @@ Eventos · HTML
   <div class="hero-texto">
     <p class="hero-eyebrow">Servicio · Resumen de Eventos</p>
     <h1 class="hero-title">Tu evento,<br>en un vídeo<br><span>que impacta.</span></h1>
-    <p class="hero-desc">Una pieza que engancha desde los primeros segundos y comunica lo mejor de lo que ocurrió.</p>
   </div>
  
   <div class="hero-bottom">
-    <div class="precios-wrap">
-      <div class="precio-bloque">
+    <div class="precios-wrap" style="align-items: flex-start;">
+      <div class="precio-bloque" style="margin-top: 0;">
         <span class="precio-val">700€</span>
         <span class="precio-desc">Vídeo horizontal · aprox. 3 min</span>
       </div>
-      <div class="precio-bloque">
+      <div class="precio-bloque" style="margin-top: 22px;">
         <span class="precio-val">850€</span>
         <span class="precio-desc">+ resumen vertical 1 min</span>
       </div>
-      <div class="precio-bloque">
+      <div class="precio-bloque" style="margin-top: 44px; margin-left: 20px;">
         <span class="precio-val">900€</span>
         <span class="precio-desc">+ resumen vertical + 4 reels</span>
       </div>
@@ -290,6 +291,8 @@ Eventos · HTML
 </body>
 </html>
  
+
+
 
 
 
