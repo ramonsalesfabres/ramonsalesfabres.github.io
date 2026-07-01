@@ -129,7 +129,14 @@ Podcast · HTML
     .hero-video-mobile { display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
     .hero-video-mobile iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; pointer-events: none; }
     .hero-texto { padding: 80px 24px 24px; }
-    .hero-bottom { padding: 20px 24px; flex-direction: column; align-items: flex-start; gap: 16px; }
+    .hero-bottom {
+      position: absolute; top: 64px; bottom: auto; left: 0; right: 0;
+      background: rgba(13,13,13,0.85);
+      flex-direction: column; align-items: flex-start;
+      padding: 16px 24px; gap: 8px;
+    }
+    .hero-bottom .btn-primary { display: none; }
+    .precio-val { font-size: 30px; }
     .bloque-texto { grid-template-columns: 1fr; }
     .formato { grid-template-columns: 1fr; }
     .incluye { padding: 48px 24px; }
