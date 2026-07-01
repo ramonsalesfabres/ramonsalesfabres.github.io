@@ -47,6 +47,9 @@ Index · HTML
   .btn-ghost:hover { border-color: var(--naranja); color: var(--naranja); }
  
   .hero-top-btn { display: none; }
+  .hero-top-bar { display: none; }
+  .menu-btn { display: none; }
+  .mobile-menu { display: none; }
   .hero-content { flex: 1; display: flex; flex-direction: column; justify-content: center; }
  
   /* VIDEO — sin zoom, capa que tapa bordes YouTube */
@@ -117,7 +120,10 @@ Index · HTML
     /* Hero móvil: igual que podcast y eventos */
     .hero { grid-template-columns: 1fr; min-height: 100vh; position: relative; display: block; }
     .hero-left { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: space-between; padding: 0 0 0 0; background: none; }
-    .hero-top-btn { display: block; width: 100%; padding: 18px; background: var(--naranja); color: var(--negro); font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; text-align: center; }
+    .hero-top-bar { display: flex; align-items: stretch; }
+    .hero-top-btn { display: flex; align-items: center; justify-content: center; flex: 1; padding: 18px; background: var(--naranja); color: var(--negro); font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; text-align: center; }
+    .menu-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; width: 60px; background: var(--negro); border: none; cursor: pointer; padding: 0; }
+    .menu-btn span { display: block; width: 22px; height: 2px; background: var(--blanco); }
     .hero-content { padding: 24px 24px 100px; display: flex; flex-direction: column; justify-content: flex-end; flex: 1; background: none; }
     .eyebrow { font-size: 12px; }
     .hero-right { display: none; }
@@ -131,6 +137,15 @@ Index · HTML
     .sobre-texto { padding: 40px 24px; }
     .cta-final { padding: 72px 24px; }
     footer { padding: 24px; flex-direction: column; align-items: flex-start; }
+ 
+    .mobile-menu {
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 32px;
+      position: fixed; inset: 0; z-index: 200; background: rgba(13,13,13,0.98);
+      transform: translateY(-100%); transition: transform 0.3s ease;
+    }
+    .mobile-menu.open { transform: translateY(0); }
+    .mobile-menu a { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--blanco); text-decoration: none; letter-spacing: 1px; }
+    .mobile-menu-close { position: absolute; top: 24px; right: 24px; background: none; border: none; color: var(--blanco); font-size: 24px; cursor: pointer; }
   }
 </style>
 </head>
@@ -148,7 +163,12 @@ Index · HTML
  
 <section class="hero">
   <div class="hero-left">
-    <a class="hero-top-btn" href="https://cal.eu/ramon-sales/videollamada" target="_blank">Videollamada gratuita</a>
+    <div class="hero-top-bar">
+      <button class="menu-btn" onclick="toggleMobileMenu()" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+      <a class="hero-top-btn" href="https://cal.eu/ramon-sales/videollamada" target="_blank">Videollamada gratuita</a>
+    </div>
     <div class="hero-content">
       <p class="eyebrow">El Masnou · Barcelona · 2026</p>
       <h1 class="hero-title">Vídeo<br>que<br><span>vende.</span></h1>
@@ -158,6 +178,13 @@ Index · HTML
         <a class="btn-ghost" href="https://cal.eu/ramon-sales/videollamada" target="_blank">Hablamos</a>
       </div>
     </div>
+  </div>
+ 
+  <div class="mobile-menu" id="mobile-menu">
+    <button class="mobile-menu-close" onclick="toggleMobileMenu()">✕</button>
+    <a href="#servicios" onclick="toggleMobileMenu()">Servicios</a>
+    <a href="#sobre" onclick="toggleMobileMenu()">Ramon Sales</a>
+    <a href="#contacto" onclick="toggleMobileMenu()">Contacto</a>
   </div>
  
   <div class="hero-right">
@@ -274,6 +301,12 @@ Index · HTML
   <p>© 2026 PAM Audiovisual · Ramon Sales · El Masnou</p>
 </footer>
  
+<script>
+  function toggleMobileMenu() {
+    document.getElementById('mobile-menu').classList.toggle('open');
+  }
+</script>
+ 
 </body>
 </html>
  
@@ -284,4 +317,3 @@ Index · HTML
 
 
 
-ContraerContraer
