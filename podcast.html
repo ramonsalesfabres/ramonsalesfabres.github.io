@@ -121,30 +121,45 @@ Podcast · HTML
   /* Vídeo vertical móvil */
   .hero-video-mobile { display: none; }
   .hero-video-desktop { display: block; }
+  .precios-movil { display: none; }
  
   @media (max-width: 900px) {
     nav { padding: 16px 24px; }
     .nav-back { display: block; font-size: 11px; }
     .nav-cta { padding: 8px 16px; font-size: 11px; }
     .nav-logo { font-size: 16px; letter-spacing: 3px; }
-    .hero { height: 78vh; }
+    .hero { height: 72vh; }
     .hero-video-desktop { display: none; }
     .hero-video-mobile { display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
     .hero-video-mobile iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; pointer-events: none; }
     .hero-texto { padding: 80px 24px 24px; }
     .hero-desc { background: rgba(0,0,0,0.2); }
-    .hero-bottom {
-      position: absolute; top: 64px; bottom: auto; left: 0; right: 0;
-      background: none;
-      flex-direction: column; align-items: flex-start;
-      padding: 16px 24px; gap: 6px;
+ 
+    /* Precios: ocultamos la barra normal y la sustituimos por el bloque intermitente */
+    .hero-bottom { display: none; }
+ 
+    .precios-movil {
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      position: absolute; inset: 0; z-index: 2;
+      justify-content: center; text-align: center; padding: 0 24px;
+      animation: parpadeoInverso 6s ease-in-out infinite;
     }
-    .hero-bottom .btn-primary { display: none; }
-    .precios-wrap { flex-direction: column; gap: 4px; align-items: flex-start; }
-    .precio-bloque { width: auto; gap: 4px; }
-    .precio-val { font-size: 18px; background: rgba(0,0,0,0.55); padding: 6px 10px; display: inline-block; }
-    .precio-unidad { font-size: 13px; }
-    .precio-desc { font-size: 11px; text-shadow: 0 2px 6px rgba(0,0,0,0.9); }
+    .precios-movil .precio-bloque {
+      width: auto; flex-direction: column; align-items: center; gap: 2px;
+      background: rgba(0,0,0,0.45); padding: 10px 18px; border-radius: 2px;
+    }
+    .precios-movil .precio-val { font-size: 22px; background: none; padding: 0; }
+    .precios-movil .precio-unidad { font-size: 14px; }
+    .precios-movil .precio-desc { font-size: 11px; margin-left: 0; }
+ 
+    @keyframes parpadeoInverso {
+      0%   { opacity: 0; }
+      45%  { opacity: 0; }
+      50%  { opacity: 1; }
+      95%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
+ 
     .bloque-texto { grid-template-columns: 1fr; }
     .formato { grid-template-columns: 1fr; }
     .incluye { padding: 48px 24px; }
@@ -184,6 +199,21 @@ Podcast · HTML
     <p class="hero-eyebrow">Servicio · Podcast a Domicilio</p>
     <h1 class="hero-title">Vosotros el contenido.<br><span>Nosotros el resto.</span></h1>
     <p class="hero-desc">Nos desplazamos a vuestras instalaciones con cámaras, iluminación y sonido profesional. Vosotros preparáis el contenido. Nosotros de todo lo técnico.</p>
+  </div>
+ 
+  <div class="precios-movil">
+    <div class="precio-bloque">
+      <span class="precio-val">700€</span><span class="precio-unidad">/episodio</span>
+      <span class="precio-desc">Episodio único</span>
+    </div>
+    <div class="precio-bloque">
+      <span class="precio-val">525€</span><span class="precio-unidad">/episodio</span>
+      <span class="precio-desc">2 episodios seguidos · 1.050€ total</span>
+    </div>
+    <div class="precio-bloque">
+      <span class="precio-val">350€</span><span class="precio-unidad">/corto·15min</span>
+      <span class="precio-desc">2 episodios seguidos · 700€ total</span>
+    </div>
   </div>
  
   <div class="hero-bottom">
@@ -275,6 +305,16 @@ Podcast · HTML
   </div>
   <p>© 2026 PAM Audiovisual · Ramon Sales · El Masnou</p>
 </footer>
+ 
+<script>
+  // En móvil, empuja ligeramente el scroll al cargar para ocultar
+  // la barra de direcciones del navegador y que se vea todo el hero
+  if (window.innerWidth <= 900) {
+    window.addEventListener('load', () => {
+      setTimeout(() => window.scrollTo(0, 1), 50);
+    });
+  }
+</script>
  
 </body>
 </html>
