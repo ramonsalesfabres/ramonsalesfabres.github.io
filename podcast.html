@@ -69,6 +69,7 @@
     padding: 24px 60px;
     background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
   }
+  .precios-wrap { display: flex; gap: 28px; align-items: flex-start; }
   .precio-bloque { display: flex; flex-direction: column; }
   .precio-val { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: var(--naranja); line-height: 1; }
   .precio-desc { font-size: 13px; color: var(--texto2); letter-spacing: 1px; margin-top: 4px; }
@@ -134,8 +135,10 @@
       padding: 16px 24px; gap: 6px;
     }
     .hero-bottom .btn-primary { display: none; }
-    .precio-val { font-size: 28px; background: rgba(0,0,0,0.55); padding: 8px 14px; display: inline-block; }
-    .precio-desc { text-shadow: 0 2px 6px rgba(0,0,0,0.9); }
+    .precios-wrap { flex-direction: column; gap: 4px; align-items: flex-start; }
+    .precio-bloque { flex-direction: row; align-items: baseline; gap: 8px; }
+    .precio-val { font-size: 18px; background: rgba(0,0,0,0.55); padding: 6px 10px; display: inline-block; }
+    .precio-desc { font-size: 11px; margin-top: 0; text-shadow: 0 2px 6px rgba(0,0,0,0.9); }
     .bloque-texto { grid-template-columns: 1fr; }
     .formato { grid-template-columns: 1fr; }
     .incluye { padding: 48px 24px; }
@@ -178,21 +181,23 @@
   </div>
  
   <div class="hero-bottom">
-    <div class="precio-bloque">
-      <span style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--naranja);letter-spacing:1px;">700€/episodio · 1.050€/2 episodios</span>
-      <span class="precio-desc">Grabados seguidos, en la misma sesión · Ahorras 350€ · Incluye 8 reels por episodio</span>
+    <div class="precios-wrap">
+      <div class="precio-bloque">
+        <span class="precio-val" style="font-size:28px;">700€<span style="font-size:14px;color:var(--texto2);font-family:'DM Sans',sans-serif;font-weight:300;">/episodio</span></span>
+        <span class="precio-desc">Episodio único</span>
+      </div>
+      <div class="precio-bloque">
+        <span class="precio-val" style="font-size:28px;">525€<span style="font-size:14px;color:var(--texto2);font-family:'DM Sans',sans-serif;font-weight:300;">/episodio</span></span>
+        <span class="precio-desc">2 episodios grabados seguidos · 1.050€ en total</span>
+      </div>
+      <div class="precio-bloque">
+        <span class="precio-val" style="font-size:28px;">350€<span style="font-size:14px;color:var(--texto2);font-family:'DM Sans',sans-serif;font-weight:300;">/episodio corto</span></span>
+        <span class="precio-desc">15 min aprox. · 2 episodios grabados seguidos · 700€ en total</span>
+      </div>
     </div>
     <a class="btn-primary" href="https://cal.eu/ramon-sales/videollamada" target="_blank">Reservar fecha</a>
   </div>
 </section>
- 
-<div class="aviso" style="background: rgba(232,148,58,0.07); border-left: 3px solid var(--naranja); padding: 28px 40px; margin-top: 2px;">
-  <p style="font-size:16px;color:var(--texto);line-height:1.85;">
-    <strong style="color:var(--naranja);">Cómo funciona el precio.</strong> Cada episodio se compone de grabación (350€) y edición (350€): 700€ por episodio suelto.<br><br>
-    Si grabáis <strong style="color:var(--blanco);">2 episodios seguidos, en la misma sesión</strong>, la grabación se paga una sola vez. Resultado: 1.050€ por los 2 episodios en vez de 1.400€ — ahorráis 350€.<br><br>
-    <span style="font-size:14px;color:var(--texto2);">Importante: deben grabarse de forma seguida, sin interrupciones entre sesiones, para que aplique el ahorro en grabación.</span>
-  </p>
-</div>
  
 <div class="bloque-texto">
   <div class="bloque-item">
